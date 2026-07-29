@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { isSelfHosted } from '../common/utils/detect-self-hosted';
 
-const CLOUD_CLAIM_URL = 'https://app.manifest.build/api/v1/waitlist/autofix/claim';
+const CLOUD_CLAIM_URL = 'https://app.tuple.ai/api/v1/waitlist/autofix/claim';
 
 @Injectable()
 export class WaitlistSyncService {

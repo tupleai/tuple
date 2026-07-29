@@ -361,7 +361,7 @@ describe('Subscription providers respect supported capabilities', () => {
     // deepseek is unsupported and anthropic already exists but was deactivated by the user
     expect(res.body.registered).toBe(0);
 
-    // deepseek subscription should not exist in Manifest at all
+    // deepseek subscription should not exist in Tuple at all
     const providers = await auth(api().get('/api/v1/routing/test-agent/providers'))
       .expect(200);
     const deepseek = providers.body.find(

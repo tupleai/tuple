@@ -1,1 +1,1 @@
-FROM docker.io/manifestdotbuild/manifest:6
+FROM docker.io/tupleai/tuple:6

@@ -1,5 +1,5 @@
 import { ProviderClient } from '../provider-client';
-import { ManifestError } from '../../../common/errors/manifest-error';
+import { TupleError } from '../../../common/errors/tuple-error';
 import { buildCustomEndpoint } from '../provider-endpoints';
 import { ThinkingBlockCache, type ThinkingBlockRouteContext } from '../thinking-block-cache';
 import type { ProviderModelRegistryService } from '../../../model-discovery/provider-model-registry.service';
@@ -8,18 +8,18 @@ const mockFetch = jest.fn();
 (globalThis as unknown as { fetch: typeof fetch }).fetch = mockFetch;
 
 describe('ProviderClient', () => {
-  const previousMode = process.env['MANIFEST_MODE'];
+  const previousMode = process.env['TUPLE_MODE'];
   let client: ProviderClient;
 
   beforeEach(() => {
-    process.env['MANIFEST_MODE'] = 'selfhosted';
+    process.env['TUPLE_MODE'] = 'selfhosted';
     client = new ProviderClient();
     mockFetch.mockReset();
   });
 
   afterAll(() => {
-    if (previousMode === undefined) delete process.env['MANIFEST_MODE'];
-    else process.env['MANIFEST_MODE'] = previousMode;
+    if (previousMode === undefined) delete process.env['TUPLE_MODE'];
+    else process.env['TUPLE_MODE'] = previousMode;
   });
 
   const body = {
@@ -29,7 +29,7 @@ describe('ProviderClient', () => {
 
   describe('OpenAI-compatible providers', () => {
     it('refuses to dial a built-in local provider from cloud', async () => {
-      process.env['MANIFEST_MODE'] = 'cloud';
+      process.env['TUPLE_MODE'] = 'cloud';
 
       const request = client.forward({
         provider: 'ollama',
@@ -40,9 +40,9 @@ describe('ProviderClient', () => {
       });
 
       await expect(request).rejects.toMatchObject({ code: 'M303' });
-      await expect(request).rejects.toBeInstanceOf(ManifestError);
+      await expect(request).rejects.toBeInstanceOf(TupleError);
       await expect(request).rejects.toThrow(
-        'Built-in local providers are only available in self-hosted Manifest',
+        'Built-in local providers are only available in self-hosted Tuple',
       );
       expect(mockFetch).not.toHaveBeenCalled();
     });
@@ -194,7 +194,7 @@ describe('ProviderClient', () => {
       const firstBody = JSON.parse(mockFetch.mock.calls[0][1].body);
       const secondBody = JSON.parse(mockFetch.mock.calls[1][1].body);
       const thirdBody = JSON.parse(mockFetch.mock.calls[2][1].body);
-      expect(firstBody.prompt_cache_key).toMatch(/^manifest-[a-f0-9]{32}$/);
+      expect(firstBody.prompt_cache_key).toMatch(/^tuple-[a-f0-9]{32}$/);
       expect(secondBody.prompt_cache_key).toBe(firstBody.prompt_cache_key);
       expect(thirdBody.prompt_cache_key).not.toBe(firstBody.prompt_cache_key);
       expect(firstBody.prompt_cache_key).not.toContain('sk-mi');
@@ -262,7 +262,7 @@ describe('ProviderClient', () => {
 
       const firstBody = JSON.parse(mockFetch.mock.calls[0][1].body);
       const secondBody = JSON.parse(mockFetch.mock.calls[1][1].body);
-      expect(firstBody.prompt_cache_key).toMatch(/^manifest-[a-f0-9]{32}$/);
+      expect(firstBody.prompt_cache_key).toMatch(/^tuple-[a-f0-9]{32}$/);
       expect(secondBody.prompt_cache_key).toBe(firstBody.prompt_cache_key);
       expect(firstBody.prompt_cache_key).not.toContain('sk-kimi');
       expect(firstBody.prompt_cache_key).not.toContain('session-1');
@@ -329,7 +329,7 @@ describe('ProviderClient', () => {
 
       const firstBody = JSON.parse(mockFetch.mock.calls[0][1].body);
       const secondBody = JSON.parse(mockFetch.mock.calls[1][1].body);
-      expect(firstBody.prompt_cache_key).toMatch(/^manifest-[a-f0-9]{32}$/);
+      expect(firstBody.prompt_cache_key).toMatch(/^tuple-[a-f0-9]{32}$/);
       expect(secondBody.prompt_cache_key).toBe(firstBody.prompt_cache_key);
       expect(firstBody.prompt_cache_key).not.toContain('fw-key');
       expect(firstBody.prompt_cache_key).not.toContain('session-1');
@@ -549,8 +549,8 @@ describe('ProviderClient', () => {
           headers: {
             Authorization: 'Bearer sk-or-test',
             'Content-Type': 'application/json',
-            'HTTP-Referer': 'https://manifest.build',
-            'X-Title': 'Manifest',
+            'HTTP-Referer': 'https://tuple.ai',
+            'X-Title': 'Tuple',
           },
         }),
       );
@@ -1782,7 +1782,7 @@ describe('ProviderClient', () => {
     });
   });
 
-  describe('resolveEndpoint - Copilot Responses-only routing (mnfst/manifest#1849)', () => {
+  describe('resolveEndpoint - Copilot Responses-only routing (tupleai/tuple#1849)', () => {
     // GitHub Copilot serves Codex variants only at /responses; /chat/completions
     // returns "Unsupported API for model". Mirrors the OpenAI Responses-only swap.
     const copilotResponsesOnlyModels = [
@@ -2002,7 +2002,7 @@ describe('ProviderClient', () => {
 
       const sentBody = JSON.parse(mockFetch.mock.calls[0][1].body);
       // Forced upstream so handleNonStreamResponse's SSE collector remains
-      // the single source of truth — see mnfst/manifest#1849.
+      // the single source of truth — see tupleai/tuple#1849.
       expect(sentBody.stream).toBe(true);
     });
 
@@ -2953,7 +2953,7 @@ describe('ProviderClient', () => {
       expect(sentBody.max_tokens).toBeUndefined();
     });
 
-    it('adds prompt_cache_key to xAI Responses requests from the Manifest session', async () => {
+    it('adds prompt_cache_key to xAI Responses requests from the Tuple session', async () => {
       mockFetch.mockResolvedValue(new Response('{}', { status: 200 }));
 
       await client.forward({

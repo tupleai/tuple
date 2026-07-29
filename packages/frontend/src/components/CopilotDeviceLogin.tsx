@@ -1,5 +1,5 @@
 import { createSignal, For, onCleanup, Show, type Component } from 'solid-js';
-import { MAX_KEYS_PER_PROVIDER } from 'manifest-shared';
+import { MAX_KEYS_PER_PROVIDER } from 'tuple-shared';
 import { providerIcon } from './ProviderIcon.js';
 import {
   copilotDeviceCode,

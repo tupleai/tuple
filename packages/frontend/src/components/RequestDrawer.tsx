@@ -18,7 +18,7 @@ import {
   isFailedStatus,
   isSuccessStatus,
   type AutofixStatus,
-} from 'manifest-shared';
+} from 'tuple-shared';
 import { formatParamValue } from './MessageDetailsSections.jsx';
 import { providerIcon } from './ProviderIcon.jsx';
 import { AutofixIcon, FallbackIcon } from './message-table-cells.jsx';
@@ -431,7 +431,7 @@ const RequestDrawer: Component<RequestDrawerProps> = (props) => {
                         <div class="drawer__body">
                           <Show when={tab() === 'details'}>
                             <div style="color: hsl(var(--muted-foreground));">
-                              Manifest rejected this request before contacting a provider.
+                              Tuple rejected this request before contacting a provider.
                             </div>
                           </Show>
                         </div>
@@ -580,7 +580,7 @@ const RequestDrawer: Component<RequestDrawerProps> = (props) => {
                                     <div style="font-size: var(--font-size-sm); color: hsl(var(--foreground)); margin-bottom: 8px;">
                                       {isSuccessStatus(att().status)
                                         ? 'This Auto-fix retry recovered the request.'
-                                        : 'Manifest applied a fix and retried, but this attempt failed.'}
+                                        : 'Tuple applied a fix and retried, but this attempt failed.'}
                                     </div>
                                     <Show when={att().autofix_decision?.explanation?.summary}>
                                       <div style="font-size: var(--font-size-xs); color: hsl(var(--muted-foreground)); margin-bottom: 8px;">

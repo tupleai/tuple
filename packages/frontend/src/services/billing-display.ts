@@ -1,4 +1,4 @@
-import { PLAN_LIMITS, type BillingPrice } from 'manifest-shared';
+import { PLAN_LIMITS, type BillingPrice } from 'tuple-shared';
 
 export const FREE_REQUEST_LIMIT = PLAN_LIMITS.free.requestsPerMonth ?? 0;
 export const FREE_REQUEST_LIMIT_LABEL = FREE_REQUEST_LIMIT.toLocaleString('en-US');

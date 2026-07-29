@@ -1,6 +1,6 @@
-# Managed by Manifest's installer. Keep local settings in `.env` or
+# Managed by Tuple's installer. Keep local settings in `.env` or
 # `docker-compose.override.yml` so upgrades can replace this file safely.
-# manifest-compose-version: 1
+# tuple-compose-version: 1
 #
 # First boot: `docker compose up -d` starts the stack. Visit
 # http://localhost:2099 and the app walks you through creating the first
@@ -11,8 +11,8 @@
 # booting. The install script does this automatically.
 #
 # Connecting local LLM servers (Ollama, LM Studio, or any OpenAI-compatible server):
-# Install your server on the host, bind it to 0.0.0.0, and point Manifest
-# at `http://host.docker.internal:<port>/v1`. Manifest auto-allows private
+# Install your server on the host, bind it to 0.0.0.0, and point Tuple
+# at `http://host.docker.internal:<port>/v1`. Tuple auto-allows private
 # and http URLs in the self-hosted version. See DOCKER_README.md for the
 # full flow — no `--profile` flag is needed. Requires Docker Engine 20.10+.
 #
@@ -38,14 +38,14 @@
 # Pin the Compose project name so containers, networks, and volumes have
 # stable, predictable names regardless of the install directory's
 # basename. Without this, the project name would be inherited from the
-# directory (commonly `manifest`) and would silently collide with any
-# other Docker project the user happens to have called `manifest` —
-# including older Manifest installs moved to a different path.
-name: mnfst
+# directory (commonly `tuple`) and would silently collide with any
+# other Docker project the user happens to have called `tuple` —
+# including older Tuple installs moved to a different path.
+name: tuple
 
 services:
-  manifest:
-    image: manifestdotbuild/manifest:${MANIFEST_VERSION:-latest}
+  tuple:
+    image: tupleai/tuple:${TUPLE_VERSION:-latest}
     ports:
       - "${HOST_BIND_ADDRESS:-127.0.0.1}:${HOST_PORT:-${PORT:-2099}}:${PORT:-2099}"
     # Lets the container reach LLM servers running on the host (Ollama,
@@ -59,11 +59,11 @@ services:
       # pin PORT=3001 in .env to stay on the previous port without having
       # to reconfigure reverse proxies, OAuth callbacks, or bookmarks.
       - PORT=${PORT:-2099}
-      - DATABASE_URL=${DATABASE_URL:-postgresql://manifest:manifest@postgres:5432/manifest}
+      - DATABASE_URL=${DATABASE_URL:-postgresql://tuple:tuple@postgres:5432/tuple}
       - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET:?BETTER_AUTH_SECRET must be set in .env}
       # Optional dedicated at-rest encryption key for stored provider/OAuth
       # credentials. When unset, the backend falls back to BETTER_AUTH_SECRET.
-      - MANIFEST_ENCRYPTION_KEY=${MANIFEST_ENCRYPTION_KEY:-}
+      - TUPLE_ENCRYPTION_KEY=${TUPLE_ENCRYPTION_KEY:-}
       - BETTER_AUTH_URL=${BETTER_AUTH_URL:-http://localhost:${HOST_PORT:-${PORT:-2099}}}
       # Defaults to the host-installed Ollama. Override in .env if your
       # Ollama runs elsewhere (e.g. on another host on your LAN).
@@ -84,7 +84,7 @@ services:
       # explicit beats inferred — and a number of rootless / nspawn /
       # exotic runtimes produce neither marker. Setting this avoids
       # silently flipping users back to cloud-mode SSRF rules (issue #1780).
-      - MANIFEST_MODE=${MANIFEST_MODE:-selfhosted}
+      - TUPLE_MODE=${TUPLE_MODE:-selfhosted}
       # Message recordings use this mounted Docker volume automatically when
       # S3-compatible bucket credentials are not present.
       - REQUEST_RECORDING_STORAGE=${REQUEST_RECORDING_STORAGE:-auto}
@@ -112,11 +112,11 @@ services:
       - DISCORD_CLIENT_SECRET=${DISCORD_CLIENT_SECRET:-}
       # Provider OAuth client overrides (optional). Only needed if you have
       # registered your own OAuth app with these providers instead of using
-      # the defaults shipped with Manifest.
+      # the defaults shipped with Tuple.
       - OPENAI_OAUTH_CLIENT_ID=${OPENAI_OAUTH_CLIENT_ID:-}
       - MINIMAX_OAUTH_CLIENT_ID=${MINIMAX_OAUTH_CLIENT_ID:-}
       # Programmatic API access via the X-API-Key header. Optional — the
-      # dashboard uses cookie sessions and agents use their own mnfst_* keys.
+      # dashboard uses cookie sessions and agents use their own tuple_* keys.
       - API_KEY=${API_KEY:-}
       # Rate limiting. Window in ms + max requests per window per client.
       - THROTTLE_TTL=${THROTTLE_TTL:-60000}
@@ -136,7 +136,7 @@ services:
       # Suppresses the boot warning about HSTS on plain-HTTP deployments. Set
       # to 1 for HTTP-only LAN installs; prefer a real https:// BETTER_AUTH_URL
       # anywhere reachable from the internet.
-      - MANIFEST_DISABLE_HSTS=${MANIFEST_DISABLE_HSTS:-}
+      - TUPLE_DISABLE_HSTS=${TUPLE_DISABLE_HSTS:-}
       # Extra browser origins allowed to call the gateway (comma-separated).
       - WINGMAN_CORS_ORIGINS=${WINGMAN_CORS_ORIGINS:-}
       # Error monitoring (opt-in). Sentry stays completely uninitialised
@@ -144,10 +144,10 @@ services:
       - SENTRY_DSN=${SENTRY_DSN:-}
       - SENTRY_ENVIRONMENT=${SENTRY_ENVIRONMENT:-}
       - SENTRY_RELEASE=${SENTRY_RELEASE:-}
-      # Anonymous usage telemetry (opt-out). Set MANIFEST_TELEMETRY_DISABLED=1
+      # Anonymous usage telemetry (opt-out). Set TUPLE_TELEMETRY_DISABLED=1
       # to disable, or point TELEMETRY_ENDPOINT at your own collector. See
-      # https://manifest.build/docs/self-hosted#telemetry for the payload shape.
-      - MANIFEST_TELEMETRY_DISABLED=${MANIFEST_TELEMETRY_DISABLED:-0}
+      # https://tuple.ai/docs/self-hosted#telemetry for the payload shape.
+      - TUPLE_TELEMETRY_DISABLED=${TUPLE_TELEMETRY_DISABLED:-0}
       - TELEMETRY_ENDPOINT=${TELEMETRY_ENDPOINT:-}
     depends_on:
       postgres:
@@ -192,13 +192,13 @@ services:
   postgres:
     image: postgres:16-alpine@sha256:20edbde7749f822887a1a022ad526fde0a47d6b2be9a8364433605cf65099416
     environment:
-      - POSTGRES_USER=manifest
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-manifest}
-      - POSTGRES_DB=manifest
+      - POSTGRES_USER=tuple
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-tuple}
+      - POSTGRES_DB=tuple
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: pg_isready -U manifest
+      test: pg_isready -U tuple
       interval: 5s
       timeout: 3s
       retries: 5
@@ -221,12 +221,12 @@ networks:
 
 volumes:
   # Pin the volume name so existing installs (whose project name was
-  # inherited from the `manifest` directory basename) keep seeing their
-  # historical `manifest_pgdata` volume after we set an explicit
-  # `name: mnfst` project name above. Without this pin, renaming the
+  # inherited from the `tuple` directory basename) keep seeing their
+  # historical `tuple_pgdata` volume after we set an explicit
+  # `name: tuple` project name above. Without this pin, renaming the
   # project would orphan the old volume and the new stack would come up
   # against a fresh empty DB — i.e. data loss.
   pgdata:
-    name: manifest_pgdata
+    name: tuple_pgdata
   recordings:
-    name: manifest_request_recordings
+    name: tuple_request_recordings

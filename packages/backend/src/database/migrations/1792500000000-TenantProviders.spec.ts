@@ -23,16 +23,16 @@ function makeRunner(orphanCount: number): { runner: QueryRunner; queries: string
 
 describe('TenantProviders1792500000000', () => {
   let migration: TenantProviders1792500000000;
-  const originalForce = process.env.MANIFEST_MIGRATION_FORCE;
+  const originalForce = process.env.TUPLE_MIGRATION_FORCE;
 
   beforeEach(() => {
     migration = new TenantProviders1792500000000();
-    delete process.env.MANIFEST_MIGRATION_FORCE;
+    delete process.env.TUPLE_MIGRATION_FORCE;
   });
 
   afterEach(() => {
-    if (originalForce === undefined) delete process.env.MANIFEST_MIGRATION_FORCE;
-    else process.env.MANIFEST_MIGRATION_FORCE = originalForce;
+    if (originalForce === undefined) delete process.env.TUPLE_MIGRATION_FORCE;
+    else process.env.TUPLE_MIGRATION_FORCE = originalForce;
   });
 
   describe('up — no orphans', () => {
@@ -156,8 +156,8 @@ describe('TenantProviders1792500000000', () => {
       expect(queries.some((q) => /DELETE\s+FROM\s+"user_providers"/i.test(q))).toBe(false);
     });
 
-    it('deletes the orphans and continues when MANIFEST_MIGRATION_FORCE=1', async () => {
-      process.env.MANIFEST_MIGRATION_FORCE = '1';
+    it('deletes the orphans and continues when TUPLE_MIGRATION_FORCE=1', async () => {
+      process.env.TUPLE_MIGRATION_FORCE = '1';
       const { runner, queries } = makeRunner(2);
       await migration.up(runner);
 

@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryColumn, OneToMany } from 'typeorm';
 import { Agent } from './agent.entity';
 import { timestampType, timestampDefault } from '../common/utils/postgres-sql';
-import type { BillingEmailPreferences } from 'manifest-shared';
+import type { BillingEmailPreferences } from 'tuple-shared';
 
 @Entity('tenants')
 export class Tenant {

@@ -5,11 +5,11 @@ import {
 } from './provider-availability';
 
 describe('provider availability', () => {
-  const previousMode = process.env['MANIFEST_MODE'];
+  const previousMode = process.env['TUPLE_MODE'];
 
   afterEach(() => {
-    if (previousMode === undefined) delete process.env['MANIFEST_MODE'];
-    else process.env['MANIFEST_MODE'] = previousMode;
+    if (previousMode === undefined) delete process.env['TUPLE_MODE'];
+    else process.env['TUPLE_MODE'] = previousMode;
   });
 
   it('recognizes canonical local providers and their aliases', () => {
@@ -23,16 +23,16 @@ describe('provider availability', () => {
   });
 
   it('allows built-in local providers only in self-hosted mode', () => {
-    process.env['MANIFEST_MODE'] = 'cloud';
+    process.env['TUPLE_MODE'] = 'cloud';
     expect(isProviderAvailableForDeployment('ollama')).toBe(false);
     expect(isProviderAvailableForDeployment('custom:runtime-id')).toBe(true);
 
-    process.env['MANIFEST_MODE'] = 'selfhosted';
+    process.env['TUPLE_MODE'] = 'selfhosted';
     expect(isProviderAvailableForDeployment('ollama')).toBe(true);
   });
 
   it('filters local provider rows in cloud without cloning unchanged arrays', () => {
-    process.env['MANIFEST_MODE'] = 'cloud';
+    process.env['TUPLE_MODE'] = 'cloud';
     const providers = [{ provider: 'openai' }, { provider: 'ollama' }];
     expect(filterProvidersForDeployment(providers)).toEqual([{ provider: 'openai' }]);
 
@@ -41,7 +41,7 @@ describe('provider availability', () => {
   });
 
   it('keeps all provider rows in self-hosted mode', () => {
-    process.env['MANIFEST_MODE'] = 'selfhosted';
+    process.env['TUPLE_MODE'] = 'selfhosted';
     const providers = [{ provider: 'openai' }, { provider: 'ollama' }];
     expect(filterProvidersForDeployment(providers)).toBe(providers);
   });

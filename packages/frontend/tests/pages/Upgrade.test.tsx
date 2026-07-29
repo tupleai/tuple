@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@solidjs/testing-library';
 import { FREE_REQUEST_LIMIT_LABEL } from '../../src/services/billing-display';
-import { FREE_PLAN_REQUESTS_PER_MONTH } from 'manifest-shared';
+import { FREE_PLAN_REQUESTS_PER_MONTH } from 'tuple-shared';
 
 const mockNavigate = vi.fn();
 let mockSearchParams: Record<string, string> = {};
@@ -145,7 +145,7 @@ describe('Upgrade', () => {
   it('continues on Free by navigating to the dashboard', async () => {
     render(() => <Upgrade />);
 
-    const button = await screen.findByText('Use Manifest for free');
+    const button = await screen.findByText('Use Tuple for free');
     fireEvent.click(button);
 
     expect(mockNavigate).toHaveBeenCalledWith('/');

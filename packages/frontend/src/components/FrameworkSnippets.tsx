@@ -79,7 +79,7 @@ const FrameworkSnippets: Component<Props> = (props) => {
   });
 
   const hasFullKey = () => !!props.apiKey;
-  const maskedKey = () => (props.keyPrefix ? `${props.keyPrefix}...` : 'mnfst_YOUR_KEY');
+  const maskedKey = () => (props.keyPrefix ? `${props.keyPrefix}...` : 'tuple_YOUR_KEY');
   const copyKey = () => props.apiKey ?? maskedKey();
   const displayKey = () => {
     if (!hasFullKey()) return maskedKey();

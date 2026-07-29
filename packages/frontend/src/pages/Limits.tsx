@@ -123,7 +123,7 @@ const Limits: Component = () => {
 
   return (
     <div class="container--lg">
-      <Title>{agentDisplayName() ?? agentName()} Limits - Manifest</Title>
+      <Title>{agentDisplayName() ?? agentName()} Limits - Tuple</Title>
       <Meta
         name="description"
         content={`Configure limits and alerts for ${agentDisplayName() ?? agentName()}.`}

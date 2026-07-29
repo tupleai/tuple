@@ -6,7 +6,7 @@ import {
 
 describe("isRemoteWingman", () => {
   it("treats the hosted SPA as remote", () => {
-    expect(isRemoteWingman("https://wingman.manifest.build")).toBe(true);
+    expect(isRemoteWingman("https://wingman.tuple.ai")).toBe(true);
   });
 
   it("treats a local Wingman checkout as not remote", () => {
@@ -20,13 +20,13 @@ describe("resolveWingmanDrawerUrl", () => {
   // makes every call from it to a localhost gateway a local-network request,
   // which Chrome blocks and reports as a CORS failure.
   it("never points the drawer at a public https origin", () => {
-    const url = resolveWingmanDrawerUrl("https://wingman.manifest.build", 3002);
+    const url = resolveWingmanDrawerUrl("https://wingman.tuple.ai", 3002);
     expect(url).toBe("http://localhost:3002");
     expect(url.startsWith("https://")).toBe(false);
   });
 
   it("uses the configured port", () => {
-    expect(resolveWingmanDrawerUrl("https://wingman.manifest.build", 41999)).toBe(
+    expect(resolveWingmanDrawerUrl("https://wingman.tuple.ai", 41999)).toBe(
       "http://localhost:41999",
     );
   });

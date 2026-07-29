@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { FREE_PLAN_REQUESTS_PER_MONTH } from 'manifest-shared';
+import { FREE_PLAN_REQUESTS_PER_MONTH } from 'tuple-shared';
 import { BillingEmailLogService, hasBillingEmailLog } from './billing-email-log.service';
 
 describe('BillingEmailLogService', () => {

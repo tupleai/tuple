@@ -13,7 +13,7 @@ export class ErrorsController {
   constructor(private readonly errorBreakdown: ErrorBreakdownService) {}
 
   /**
-   * Error breakdown split by origin (provider vs. transport vs. Manifest's own
+   * Error breakdown split by origin (provider vs. transport vs. Tuple's own
    * config/policy/internal) and by class. This is the endpoint that answers
    * "how many of my errors did a provider actually throw vs. how many are my
    * own setup problems" — the two must never be conflated.

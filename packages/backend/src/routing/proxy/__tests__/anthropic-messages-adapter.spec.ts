@@ -893,7 +893,7 @@ describe('Anthropic Messages adapter', () => {
     });
 
     it('drops reasoning_content arriving during an open tool_use to keep the tool_use block contiguous', () => {
-      // Manifest's Anthropic-compat layer assumes thinking blocks precede
+      // Tuple's Anthropic-compat layer assumes thinking blocks precede
       // tool_use and replays them in that shape on the next turn. Emitting a
       // post-tool thinking block would give clients a transcript shape
       // (`thinking → tool_use → thinking`) we cannot safely replay, so late

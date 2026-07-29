@@ -1,7 +1,7 @@
 import { Injectable, Logger, Inject, Optional } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { resolveProviderMetadataIdentity, type AuthType } from 'manifest-shared';
+import { resolveProviderMetadataIdentity, type AuthType } from 'tuple-shared';
 import { TenantProvider } from '../entities/tenant-provider.entity';
 import { AgentEnabledProvider } from '../entities/agent-enabled-provider.entity';
 import { CustomProvider } from '../entities/custom-provider.entity';

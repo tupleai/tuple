@@ -7,7 +7,7 @@ import { load } from 'js-yaml';
 import { HEAL_STATUSES, ISSUE_STATUSES, OUTCOME_STATUSES } from '../phoenix.types';
 
 /**
- * Contract test — the anti-drift guardrail. Manifest's hand-written Phoenix types
+ * Contract test — the anti-drift guardrail. Tuple's hand-written Phoenix types
  * (phoenix.types.ts) must stay in lockstep with Phoenix's OpenAPI spec, vendored
  * at ./contract/phoenix-openapi.yaml and refreshed with `npm run contract:refresh`.
  *

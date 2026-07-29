@@ -1,4 +1,4 @@
-import type { BillingEmailPreferences } from 'manifest-shared';
+import type { BillingEmailPreferences } from 'tuple-shared';
 
 export const DEFAULT_BILLING_EMAIL_PREFERENCES: BillingEmailPreferences = {
   usageAlerts: true,

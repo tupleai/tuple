@@ -20,17 +20,17 @@ export interface ResetPasswordEmailProps {
 }
 
 export function ResetPasswordEmail(props: ResetPasswordEmailProps) {
-  const { userName, resetUrl, logoUrl = 'https://app.manifest.build/manifest-logo.png' } = props;
+  const { userName, resetUrl, logoUrl = 'https://app.tuple.ai/tuple-logo.png' } = props;
 
   return (
     <Html>
       <Head />
-      <Preview>Reset your Manifest password</Preview>
+      <Preview>Reset your Tuple password</Preview>
       <Body style={body}>
         <Container style={container}>
           {/* Logo */}
           <Section style={logoSection}>
-            <Img src={logoUrl} alt="Manifest" height="32" style={logoImg} />
+            <Img src={logoUrl} alt="Tuple" height="32" style={logoImg} />
           </Section>
 
           {/* Main content */}
@@ -65,9 +65,9 @@ export function ResetPasswordEmail(props: ResetPasswordEmailProps) {
           <Hr style={divider} />
           <Section style={footer}>
             <Text style={footerMuted}>
-              © 2026 MNFST Inc. All rights reserved.{' '}
-              <Link href="https://manifest.build" style={footerLink}>
-                manifest.build
+              © 2026 Tuple.ai All rights reserved.{' '}
+              <Link href="https://tuple.ai" style={footerLink}>
+                tuple.ai
               </Link>
             </Text>
           </Section>

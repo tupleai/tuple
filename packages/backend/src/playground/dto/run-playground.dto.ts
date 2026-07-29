@@ -19,7 +19,7 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { AUTH_TYPES } from 'manifest-shared';
+import { AUTH_TYPES } from 'tuple-shared';
 
 export class PlaygroundMessageDto {
   @IsString()
@@ -35,7 +35,7 @@ export class PlaygroundMessageDto {
 /**
  * Constraint asserting exactly one of `messages` / `rawRequestBody` is set.
  *
- * `messages` is the chat-completions shape Manifest builds itself; replay
+ * `messages` is the chat-completions shape Tuple builds itself; replay
  * (future) ships `rawRequestBody`, the verbatim recorded payload. Allowing
  * both at once is ambiguous (which one wins?); allowing neither is a
  * silent no-op upstream. Exactly-one is the only safe contract.
@@ -125,7 +125,7 @@ export class RunPlaygroundDto {
 
   /**
    * Extra HTTP headers to attach to the outgoing provider request.
-   * Sanitized server-side — Manifest-managed and transport-layer headers
+   * Sanitized server-side — Tuple-managed and transport-layer headers
    * are silently dropped.
    */
   @IsOptional()

@@ -22,7 +22,7 @@ export interface ErrorPageStats {
   tenants: number;
   volume_7d: number;
   volume_30d: number;
-  recovery_rate: number | null; // 0..1 — share auto-recovered by a Manifest fallback
+  recovery_rate: number | null; // 0..1 — share auto-recovered by a Tuple fallback
   last_seen: string | null; // ISO timestamp
   trend: ErrorPageTrendPoint[];
   variants?: string[]; // distinct message wordings for the same cluster ("Also seen as")
@@ -80,7 +80,7 @@ export class PublicErrorPage {
   body_fix!: string;
 
   @Column('text', { default: '' })
-  body_manifest!: string;
+  body_tuple!: string;
 
   @Column('text', { default: '' })
   sample_message!: string;

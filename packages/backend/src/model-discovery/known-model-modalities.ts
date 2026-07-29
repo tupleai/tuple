@@ -1,4 +1,4 @@
-import type { ModelCapability, ModelModality } from 'manifest-shared';
+import type { ModelCapability, ModelModality } from 'tuple-shared';
 
 /**
  * Hand-curated capability facts for models where both the provider's own

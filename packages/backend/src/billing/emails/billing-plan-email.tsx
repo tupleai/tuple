@@ -78,9 +78,9 @@ function subscriptionCopy(props: SubscriptionPlanEmailProps): {
 } {
   if (props.kind === 'plan_changed') {
     return {
-      preview: `Your Manifest plan changed to ${props.planName}`,
+      preview: `Your Tuple plan changed to ${props.planName}`,
       badge: '',
-      heading: `Your plan is now Manifest ${props.planName}`,
+      heading: `Your plan is now Tuple ${props.planName}`,
       body: (
         <>
           {greeting(props.userName)} your plan has been updated
@@ -98,7 +98,7 @@ function subscriptionCopy(props: SubscriptionPlanEmailProps): {
         '365 days dashboard retention',
         'Basic support (platform issues, billing, licence activation)',
       ],
-      cta: 'Open Manifest',
+      cta: 'Open Tuple',
     };
   }
 
@@ -106,8 +106,8 @@ function subscriptionCopy(props: SubscriptionPlanEmailProps): {
     const end = formatDate(props.periodEnd);
     return {
       preview: end
-        ? `Your Manifest ${props.planName} plan is scheduled to end on ${end}`
-        : `Your Manifest ${props.planName} plan is scheduled to end`,
+        ? `Your Tuple ${props.planName} plan is scheduled to end on ${end}`
+        : `Your Tuple ${props.planName} plan is scheduled to end`,
       badge: '',
       heading: `${props.planName} cancellation confirmed`,
       body: 'multi',
@@ -131,9 +131,9 @@ function subscriptionCopy(props: SubscriptionPlanEmailProps): {
   }
 
   return {
-    preview: `Your Manifest ${props.planName} plan is active`,
+    preview: `Your Tuple ${props.planName} plan is active`,
     badge: '',
-    heading: `Welcome to Manifest ${props.planName}`,
+    heading: `Welcome to Tuple ${props.planName}`,
     body: (
       <>
         {greeting(props.userName)} your <strong>{props.planName}</strong> plan is active. The whole
@@ -145,12 +145,12 @@ function subscriptionCopy(props: SubscriptionPlanEmailProps): {
       '365 days dashboard retention',
       'Basic support (platform issues, billing, licence activation)',
     ],
-    cta: 'Open Manifest',
+    cta: 'Open Tuple',
   };
 }
 
 export function SubscriptionPlanEmail(props: SubscriptionPlanEmailProps) {
-  const logoUrl = props.logoUrl ?? 'https://app.manifest.build/manifest-logo.png';
+  const logoUrl = props.logoUrl ?? 'https://app.tuple.ai/tuple-logo.png';
   const copy = subscriptionCopy(props);
   const accent = props.kind === 'cancellation_confirmed' ? '#ea580c' : '#0f766e';
   const accentBg = props.kind === 'cancellation_confirmed' ? '#fff7ed' : '#ecfdf5';
@@ -162,7 +162,7 @@ export function SubscriptionPlanEmail(props: SubscriptionPlanEmailProps) {
       <Body style={body}>
         <Container style={container}>
           <Section style={logoSection}>
-            <Img src={logoUrl} alt="Manifest" height="32" style={logoImg} />
+            <Img src={logoUrl} alt="Tuple" height="32" style={logoImg} />
           </Section>
 
           <Section style={card}>
@@ -197,14 +197,14 @@ export function SubscriptionPlanEmail(props: SubscriptionPlanEmailProps) {
                 {copy.cta}
               </Button>
               {copy.ctaSecondary && (
-                <Button style={buttonSecondary} href="https://manifest.build/pricing">
+                <Button style={buttonSecondary} href="https://tuple.ai/pricing">
                   {copy.ctaSecondary}
                 </Button>
               )}
             </Section>
 
             <Text style={hint}>
-              This email confirms a Manifest plan change only. Stripe may send payment receipts
+              This email confirms a Tuple plan change only. Stripe may send payment receipts
               separately.
             </Text>
           </Section>
@@ -217,7 +217,7 @@ export function SubscriptionPlanEmail(props: SubscriptionPlanEmailProps) {
 }
 
 export function PlanUsageEmail(props: PlanUsageEmailProps) {
-  const logoUrl = props.logoUrl ?? 'https://app.manifest.build/manifest-logo.png';
+  const logoUrl = props.logoUrl ?? 'https://app.tuple.ai/tuple-logo.png';
   const isLimit = props.kind === 'requests_limit_reached';
   const percentage = Math.min(100, Math.round((props.used / props.limit) * 100));
   const accent = isLimit ? '#dc2626' : '#ea580c';
@@ -230,13 +230,13 @@ export function PlanUsageEmail(props: PlanUsageEmailProps) {
       <Head />
       <Preview>
         {isLimit
-          ? `Your Manifest workspace reached ${formatCount(props.limit)} monthly requests`
-          : `Your Manifest workspace used ${percentage}% of monthly requests`}
+          ? `Your Tuple workspace reached ${formatCount(props.limit)} monthly requests`
+          : `Your Tuple workspace used ${percentage}% of monthly requests`}
       </Preview>
       <Body style={body}>
         <Container style={container}>
           <Section style={logoSection}>
-            <Img src={logoUrl} alt="Manifest" height="32" style={logoImg} />
+            <Img src={logoUrl} alt="Tuple" height="32" style={logoImg} />
           </Section>
 
           <Section style={card}>
@@ -283,9 +283,9 @@ function Footer(props: { preferencesUrl: string }) {
             Manage email preferences
           </Link>
           {' · '}
-          (c) 2026 MNFST Inc.{' '}
-          <Link href="https://manifest.build" style={footerLink}>
-            manifest.build
+          (c) 2026 Tuple.ai{' '}
+          <Link href="https://tuple.ai" style={footerLink}>
+            tuple.ai
           </Link>
         </Text>
       </Section>

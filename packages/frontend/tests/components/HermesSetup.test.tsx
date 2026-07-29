@@ -20,7 +20,7 @@ describe("HermesSetup", () => {
 
   it("renders description text", () => {
     const { container } = render(() => <HermesSetup {...defaultProps} />);
-    expect(container.textContent).toContain("Point Hermes at the Manifest endpoint to route requests across multiple models");
+    expect(container.textContent).toContain("Point Hermes at the Tuple endpoint to route requests across multiple models");
   });
 
   it("renders CLI and Hermes onboard tabs", () => {
@@ -75,52 +75,52 @@ describe("HermesSetup", () => {
 
   it("shows masked key placeholder when no apiKey or keyPrefix", () => {
     const { container } = render(() => <HermesSetup {...defaultProps} />);
-    expect(container.textContent).toContain("mnfst_YOUR_KEY");
+    expect(container.textContent).toContain("tuple_YOUR_KEY");
   });
 
   it("shows key prefix when keyPrefix provided", () => {
     const { container } = render(() => (
-      <HermesSetup {...defaultProps} keyPrefix="mnfst_abc" />
+      <HermesSetup {...defaultProps} keyPrefix="tuple_abc" />
     ));
-    expect(container.textContent).toContain("mnfst_abc...");
+    expect(container.textContent).toContain("tuple_abc...");
   });
 
   it("does not show eye toggle when no apiKey", () => {
     const { container } = render(() => (
-      <HermesSetup {...defaultProps} keyPrefix="mnfst_abc" />
+      <HermesSetup {...defaultProps} keyPrefix="tuple_abc" />
     ));
     expect(container.querySelector('[aria-label="Reveal API key"]')).toBeNull();
   });
 
   it("shows eye toggle on CLI tab when apiKey provided", () => {
     const { container } = render(() => (
-      <HermesSetup {...defaultProps} apiKey="mnfst_full_key" keyPrefix="mnfst_ful" />
+      <HermesSetup {...defaultProps} apiKey="tuple_full_key" keyPrefix="tuple_ful" />
     ));
     expect(container.querySelector('[aria-label="Reveal API key"]')).not.toBeNull();
   });
 
   it("reveals key in CLI when eye toggle clicked", () => {
     const { container } = render(() => (
-      <HermesSetup {...defaultProps} apiKey="mnfst_full_key" keyPrefix="mnfst_ful" />
+      <HermesSetup {...defaultProps} apiKey="tuple_full_key" keyPrefix="tuple_ful" />
     ));
-    expect(container.textContent).not.toContain("mnfst_full_key");
+    expect(container.textContent).not.toContain("tuple_full_key");
     fireEvent.click(container.querySelector('[aria-label="Reveal API key"]')!);
-    expect(container.textContent).toContain("mnfst_full_key");
+    expect(container.textContent).toContain("tuple_full_key");
   });
 
   it("hides key again on second CLI eye toggle click", () => {
     const { container } = render(() => (
-      <HermesSetup {...defaultProps} apiKey="mnfst_full_key" keyPrefix="mnfst_ful" />
+      <HermesSetup {...defaultProps} apiKey="tuple_full_key" keyPrefix="tuple_ful" />
     ));
     fireEvent.click(container.querySelector('[aria-label="Reveal API key"]')!);
-    expect(container.textContent).toContain("mnfst_full_key");
+    expect(container.textContent).toContain("tuple_full_key");
     fireEvent.click(container.querySelector('[aria-label="Hide API key"]')!);
-    expect(container.textContent).not.toContain("mnfst_full_key");
+    expect(container.textContent).not.toContain("tuple_full_key");
   });
 
   it("shows CLI copy button", () => {
     const { container } = render(() => (
-      <HermesSetup {...defaultProps} apiKey="mnfst_full_key" keyPrefix="mnfst_ful" />
+      <HermesSetup {...defaultProps} apiKey="tuple_full_key" keyPrefix="tuple_ful" />
     ));
     const cliBlock = container.querySelector(".setup-cli-block");
     const copyBtn = cliBlock!.querySelector('[aria-label="Copy to clipboard"]');
@@ -129,7 +129,7 @@ describe("HermesSetup", () => {
 
   it("copies yaml config when copy button in code block is clicked", () => {
     const { container } = render(() => (
-      <HermesSetup {...defaultProps} apiKey="mnfst_test_key" keyPrefix="mnfst_te" />
+      <HermesSetup {...defaultProps} apiKey="tuple_test_key" keyPrefix="tuple_te" />
     ));
     const codeBlock = container.querySelector(".setup-cli-block");
     const copyBtn = codeBlock?.querySelector('[aria-label="Copy to clipboard"]');
@@ -154,7 +154,7 @@ describe("HermesSetup", () => {
 
   it("renders EyeIcon with closed state by default", () => {
     const { container } = render(() => (
-      <HermesSetup {...defaultProps} apiKey="mnfst_test" keyPrefix="mnfst_t" />
+      <HermesSetup {...defaultProps} apiKey="tuple_test" keyPrefix="tuple_t" />
     ));
     const eyeBtn = container.querySelector('[aria-label="Reveal API key"]');
     expect(eyeBtn).not.toBeNull();
@@ -164,7 +164,7 @@ describe("HermesSetup", () => {
 
   it("renders EyeIcon with open state when key revealed", () => {
     const { container } = render(() => (
-      <HermesSetup {...defaultProps} apiKey="mnfst_test" keyPrefix="mnfst_t" />
+      <HermesSetup {...defaultProps} apiKey="tuple_test" keyPrefix="tuple_t" />
     ));
     fireEvent.click(container.querySelector('[aria-label="Reveal API key"]')!);
     const eyeBtn = container.querySelector('[aria-label="Hide API key"]');
@@ -175,9 +175,9 @@ describe("HermesSetup", () => {
 
   it("shows masked key in code block when no apiKey", () => {
     const { container } = render(() => (
-      <HermesSetup {...defaultProps} keyPrefix="mnfst_pre" />
+      <HermesSetup {...defaultProps} keyPrefix="tuple_pre" />
     ));
-    expect(container.textContent).toContain("mnfst_pre...");
+    expect(container.textContent).toContain("tuple_pre...");
   });
 
   // --- Hermes onboard (wizard) tab tests ---
@@ -225,7 +225,7 @@ describe("HermesSetup", () => {
 
   it("shows eye toggle on wizard API Key field when apiKey provided", () => {
     const { container } = render(() => (
-      <HermesSetup {...defaultProps} apiKey="mnfst_wiz" keyPrefix="mnfst_wi" />
+      <HermesSetup {...defaultProps} apiKey="tuple_wiz" keyPrefix="tuple_wi" />
     ));
     const segment = container.querySelector(".setup-segment--full");
     fireEvent.click(segment!.querySelectorAll(".setup-segment__btn")[1]);
@@ -235,18 +235,18 @@ describe("HermesSetup", () => {
 
   it("reveals API key in wizard field when eye toggle clicked", () => {
     const { container } = render(() => (
-      <HermesSetup {...defaultProps} apiKey="mnfst_wiz_full" keyPrefix="mnfst_wi" />
+      <HermesSetup {...defaultProps} apiKey="tuple_wiz_full" keyPrefix="tuple_wi" />
     ));
     const segment = container.querySelector(".setup-segment--full");
     fireEvent.click(segment!.querySelectorAll(".setup-segment__btn")[1]);
-    expect(container.textContent).not.toContain("mnfst_wiz_full");
+    expect(container.textContent).not.toContain("tuple_wiz_full");
     fireEvent.click(container.querySelector('[aria-label="Reveal API key"]')!);
-    expect(container.textContent).toContain("mnfst_wiz_full");
+    expect(container.textContent).toContain("tuple_wiz_full");
   });
 
   it("shows wizard copy button when key is hidden", () => {
     const { container } = render(() => (
-      <HermesSetup {...defaultProps} apiKey="mnfst_wiz" keyPrefix="mnfst_wi" />
+      <HermesSetup {...defaultProps} apiKey="tuple_wiz" keyPrefix="tuple_wi" />
     ));
     const segment = container.querySelector(".setup-segment--full");
     fireEvent.click(segment!.querySelectorAll(".setup-segment__btn")[1]);
@@ -291,7 +291,7 @@ describe("HermesSetup", () => {
     const writeText = vi.fn().mockResolvedValue(undefined);
     vi.stubGlobal("navigator", { clipboard: { writeText } });
     const { container } = render(() => (
-      <HermesSetup {...defaultProps} apiKey="mnfst_clip_key" keyPrefix="mnfst_cli" />
+      <HermesSetup {...defaultProps} apiKey="tuple_clip_key" keyPrefix="tuple_cli" />
     ));
     fireEvent.click(container.querySelector('[aria-label="Reveal API key"]')!);
     const cliBlock = container.querySelector(".setup-cli-block");
@@ -300,27 +300,27 @@ describe("HermesSetup", () => {
     await vi.waitFor(() => {
       expect(writeText).toHaveBeenCalled();
       const copiedText = writeText.mock.calls[0][0] as string;
-      expect(copiedText).toContain("mnfst_clip_key");
+      expect(copiedText).toContain("tuple_clip_key");
       expect(copiedText).toContain("provider: custom");
     });
   });
 
   it("wizard tab uses custom base URL", () => {
     const { container } = render(() => (
-      <HermesSetup {...defaultProps} baseUrl="https://app.manifest.build/v1" />
+      <HermesSetup {...defaultProps} baseUrl="https://app.tuple.ai/v1" />
     ));
     const segment = container.querySelector(".setup-segment--full");
     fireEvent.click(segment!.querySelectorAll(".setup-segment__btn")[1]);
-    expect(container.textContent).toContain("https://app.manifest.build/v1");
+    expect(container.textContent).toContain("https://app.tuple.ai/v1");
   });
 
   it("wizard and CLI tabs have independent key reveal state", () => {
     const { container } = render(() => (
-      <HermesSetup {...defaultProps} apiKey="mnfst_independent" keyPrefix="mnfst_in" />
+      <HermesSetup {...defaultProps} apiKey="tuple_independent" keyPrefix="tuple_in" />
     ));
     // Reveal key on CLI tab
     fireEvent.click(container.querySelector('[aria-label="Reveal API key"]')!);
-    expect(container.textContent).toContain("mnfst_independent");
+    expect(container.textContent).toContain("tuple_independent");
     // Switch to wizard tab -- key should be masked there
     const segment = container.querySelector(".setup-segment--full");
     fireEvent.click(segment!.querySelectorAll(".setup-segment__btn")[1]);
@@ -329,13 +329,13 @@ describe("HermesSetup", () => {
     const apiKeyField = Array.from(fields).find((f) =>
       f.textContent?.includes("API Key")
     );
-    expect(apiKeyField?.textContent).toContain("mnfst_in...");
-    expect(apiKeyField?.textContent).not.toContain("mnfst_independent");
+    expect(apiKeyField?.textContent).toContain("tuple_in...");
+    expect(apiKeyField?.textContent).not.toContain("tuple_independent");
   });
 
   it("CLI tab api_key field has eye toggle and copy button", () => {
     const { container } = render(() => (
-      <HermesSetup {...defaultProps} apiKey="mnfst_cli_field" keyPrefix="mnfst_cl" />
+      <HermesSetup {...defaultProps} apiKey="tuple_cli_field" keyPrefix="tuple_cl" />
     ));
     const fields = container.querySelectorAll(".setup-onboard-fields__row");
     const apiKeyField = Array.from(fields).find((f) =>

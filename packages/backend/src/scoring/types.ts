@@ -31,9 +31,9 @@ export interface ScorerInput {
 
 // ── Output types ──
 
-import type { Tier as _Tier } from 'manifest-shared';
-export { TIERS } from 'manifest-shared';
-export type { Tier } from 'manifest-shared';
+import type { Tier as _Tier } from 'tuple-shared';
+export { TIERS } from 'tuple-shared';
+export type { Tier } from 'tuple-shared';
 type Tier = _Tier;
 
 export type ScoringReason =

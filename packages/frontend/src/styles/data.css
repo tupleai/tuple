@@ -200,7 +200,7 @@
   display: inline-flex;
 }
 
-/* When a status badge is itself a link (a Manifest limit → the limits page)
+/* When a status badge is itself a link (a Tuple limit → the limits page)
    keep the badge look: inherit the badge colour, no underline until hover. */
 a.status-badge {
   text-decoration: none;
@@ -1058,7 +1058,7 @@ table.msg-detail__table td {
  * Dedicated style hook for Model Parameter values. Mirrors `__log-body`
  * today (multi-line JSON.stringify output needs whitespace preservation
  * and word-break for unbreakable tokens), but lives separately so when we
- * add a "source: user override / manifest default / client request"
+ * add a "source: user override / tuple default / client request"
  * column or badge, we can adjust without touching shared log/header
  * cells.
  */
@@ -1331,7 +1331,7 @@ table.msg-detail__table td {
   margin-top: 2px;
 }
 
-/* Documented Manifest error code (M100, M300, …) linking to its docs page. */
+/* Documented Tuple error code (M100, M300, …) linking to its docs page. */
 .msg-detail__error-code {
   font-family: var(--font-mono);
   font-weight: 600;

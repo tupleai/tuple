@@ -47,7 +47,7 @@ describe('header-tiers API client', () => {
     const fetchMock = setupFetch({ id: 'ht-new' });
     const input = {
       name: 'Premium',
-      header_key: 'x-manifest-tier',
+      header_key: 'x-tuple-tier',
       header_value: 'premium',
       badge_color: 'indigo' as const,
     };

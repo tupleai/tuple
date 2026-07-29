@@ -23,7 +23,7 @@ export class AddPublicErrorPages1797000000000 implements MigrationInterface {
         "h1" varchar NOT NULL,
         "body_what" text NOT NULL DEFAULT '',
         "body_fix" text NOT NULL DEFAULT '',
-        "body_manifest" text NOT NULL DEFAULT '',
+        "body_tuple" text NOT NULL DEFAULT '',
         "sample_message" text NOT NULL DEFAULT '',
         "faq" jsonb NOT NULL DEFAULT '[]'::jsonb,
         "stats" jsonb NOT NULL DEFAULT '{}'::jsonb,

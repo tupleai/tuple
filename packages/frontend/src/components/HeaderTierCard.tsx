@@ -33,7 +33,7 @@ import HeaderTierSnippetModal from './HeaderTierSnippetModal.js';
 import RouteKeyChip from './RouteKeyChip.js';
 import KeyPickerModal from './KeyPickerModal.js';
 import { toast } from '../services/toast-store.js';
-import { modelParamsScopeForHeaderTier } from 'manifest-shared';
+import { modelParamsScopeForHeaderTier } from 'tuple-shared';
 
 function providerIdForModel(model: string, apiModels: AvailableModel[]): string | undefined {
   const m =

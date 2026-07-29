@@ -187,8 +187,8 @@ describe('ProviderClient — strict header contract on auth-critical paths', () 
     expect(sentHeaders).toEqual({
       Authorization: 'Bearer sk-or-key',
       'Content-Type': 'application/json',
-      'HTTP-Referer': 'https://manifest.build',
-      'X-Title': 'Manifest',
+      'HTTP-Referer': 'https://tuple.ai',
+      'X-Title': 'Tuple',
     });
     expect(sentHeaders).not.toHaveProperty('x-api-key');
   });

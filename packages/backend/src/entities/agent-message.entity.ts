@@ -89,9 +89,9 @@ export class AgentMessage {
   error_http_status!: number | null;
 
   /**
-   * The documented Manifest error code behind this row ('M100', 'M300', …),
+   * The documented Tuple error code behind this row ('M100', 'M300', …),
    * NULL for provider/transport failures and successes. Lets the dashboard deep
-   * link to https://manifest.build/docs/errors/<code>. The catalogue lives in
+   * link to https://tuple.ai/docs/errors/<code>. The catalogue lives in
    * common/errors/error-codes.ts.
    */
   @Column('varchar', { length: 8, nullable: true })
@@ -100,9 +100,9 @@ export class AgentMessage {
   /**
    * WHO caused a failed row: 'provider' | 'transport' | 'config' | 'policy' |
    * 'internal' | 'request'. NULL on successful rows. Separates a provider's own
-   * error (a reliability event) from Manifest's own config/policy/internal
+   * error (a reliability event) from Tuple's own config/policy/internal
    * rejections and the caller's malformed requests (`request`) — none of which
-   * are provider failures. Derived by classifyMessageError() in manifest-shared,
+   * are provider failures. Derived by classifyMessageError() in tuple-shared,
    * the single source of truth shared with the backfill migration.
    */
   @Column('varchar', { nullable: true })

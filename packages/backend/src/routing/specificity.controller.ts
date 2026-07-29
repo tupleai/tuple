@@ -19,7 +19,7 @@ import {
   responseModeFromDto,
 } from './dto/routing.dto';
 import { SetSpecificityOverrideDto, ToggleSpecificityDto } from './dto/specificity.dto';
-import { SPECIFICITY_CATEGORIES } from 'manifest-shared';
+import { SPECIFICITY_CATEGORIES } from 'tuple-shared';
 
 @Controller('api/v1/routing')
 export class SpecificityController {

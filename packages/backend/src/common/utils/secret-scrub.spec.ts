@@ -43,8 +43,8 @@ describe('scrubSecrets', () => {
     expect(out).toContain('[REDACTED]');
   });
 
-  it('redacts Manifest mnfst_ keys', () => {
-    const out = scrubSecrets('bad token mnfst_abcdefghij12345');
+  it('redacts Tuple tuple_ keys', () => {
+    const out = scrubSecrets('bad token tuple_abcdefghij12345');
     expect(out).not.toContain('abcdefghij12345');
     expect(out).toContain('[REDACTED]');
   });

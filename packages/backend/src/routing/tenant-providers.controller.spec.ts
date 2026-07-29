@@ -3,16 +3,16 @@ import type { TenantContext } from '../common/decorators/tenant-context.decorato
 import type { TenantProvider } from '../entities/tenant-provider.entity';
 
 describe('TenantProvidersController', () => {
-  const previousMode = process.env['MANIFEST_MODE'];
+  const previousMode = process.env['TUPLE_MODE'];
   const ctx: TenantContext = { tenantId: 'tenant-1', userId: 'user-1' };
 
   beforeEach(() => {
-    process.env['MANIFEST_MODE'] = 'cloud';
+    process.env['TUPLE_MODE'] = 'cloud';
   });
 
   afterAll(() => {
-    if (previousMode === undefined) delete process.env['MANIFEST_MODE'];
-    else process.env['MANIFEST_MODE'] = previousMode;
+    if (previousMode === undefined) delete process.env['TUPLE_MODE'];
+    else process.env['TUPLE_MODE'] = previousMode;
   });
 
   const makeProvider = (id: string, label: string): TenantProvider =>

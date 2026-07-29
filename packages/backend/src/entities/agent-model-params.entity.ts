@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryColumn, Index } from 'typeorm';
-import type { AuthType, RequestParamDefaults } from 'manifest-shared';
+import type { AuthType, RequestParamDefaults } from 'tuple-shared';
 import { timestampType, timestampDefault } from '../common/utils/postgres-sql';
 
 /**

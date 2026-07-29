@@ -60,7 +60,7 @@ beforeAll(async () => {
     ],
   );
 
-  // A request whose model the CALLER pinned in the request body: Manifest's
+  // A request whose model the CALLER pinned in the request body: Tuple's
   // routing never chose it (routing_reason='direct'). It must stay visible on
   // the cross-harness overview but disappear from the harness's own.
   await ds.query(

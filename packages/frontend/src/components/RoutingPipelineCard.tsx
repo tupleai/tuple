@@ -29,7 +29,7 @@ export function buildPipelineHelp(
     steps.push({
       num: n++,
       name: 'Task-specific routing',
-      desc: 'Manifest semantically analyzes the query, and if it matches an active task-specific tier (coding, image generation\u2026), it is routed to the corresponding model.',
+      desc: 'Tuple semantically analyzes the query, and if it matches an active task-specific tier (coding, image generation\u2026), it is routed to the corresponding model.',
     });
   }
 
@@ -45,14 +45,14 @@ export function buildPipelineHelp(
       </>
     ),
     desc: complexity
-      ? 'Manifest semantically analyzes the query, scores its complexity, and assigns it to a tier ranging from \u201csimple\u201d to \u201creasoning\u201d.'
+      ? 'Tuple semantically analyzes the query, scores its complexity, and assigns it to a tier ranging from \u201csimple\u201d to \u201creasoning\u201d.'
       : 'All remaining requests go to the default model and its fallbacks.',
   });
 
   return (
     <div class="routing-pipeline-help-steps">
       <p class="routing-pipeline-help-summary">
-        Routing is a powerful technique that allows Manifest to intercept queries on the fly and
+        Routing is a powerful technique that allows Tuple to intercept queries on the fly and
         redirect them to the corresponding model.
       </p>
       <p class="routing-pipeline-help-summary">

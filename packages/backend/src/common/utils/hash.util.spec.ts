@@ -48,10 +48,10 @@ describe('verifyKey', () => {
   });
 
   it('verifies legacy format (64-char hex without colon)', () => {
-    // Legacy format: scrypt with static salt 'manifest-api-key-salt'
+    // Legacy format: scrypt with static salt 'tuple-api-key-salt'
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { scryptSync: scryptLegacy } = require('crypto');
-    const legacyHash = scryptLegacy('legacy-key', 'manifest-api-key-salt', 32).toString('hex');
+    const legacyHash = scryptLegacy('legacy-key', 'tuple-api-key-salt', 32).toString('hex');
     expect(legacyHash).toHaveLength(64);
     expect(legacyHash).not.toContain(':');
     expect(verifyKey('legacy-key', legacyHash)).toBe(true);
@@ -61,7 +61,7 @@ describe('verifyKey', () => {
 
 describe('keyPrefix', () => {
   it('returns first 12 characters', () => {
-    expect(keyPrefix('mnfst_abcdefghij')).toBe('mnfst_abcdef');
+    expect(keyPrefix('tuple_abcdefghij')).toBe('tuple_abcdef');
   });
 
   it('returns full string when shorter than 12 chars', () => {

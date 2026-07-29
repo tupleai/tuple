@@ -1,7 +1,7 @@
 import { Injectable, Logger, Optional } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import type { AuthType, ModelRoute } from 'manifest-shared';
+import type { AuthType, ModelRoute } from 'tuple-shared';
 import { TenantProvider } from '../../entities/tenant-provider.entity';
 import { AgentEnabledProvider } from '../../entities/agent-enabled-provider.entity';
 import { ModelPricingCacheService } from '../../model-prices/model-pricing-cache.service';
@@ -13,7 +13,7 @@ import {
   expandProviderNames,
   inferProviderFromModelName,
 } from '../../common/utils/provider-aliases';
-import { isManifestUsableProvider } from '../../common/utils/subscription-support';
+import { isTupleUsableProvider } from '../../common/utils/subscription-support';
 
 /**
  * Sentinel id for the built-in Ollama tile. getProviderKeys() short-circuits
@@ -252,7 +252,7 @@ export class ProviderKeyService {
 
     const scopedRecords = await this.filterProvidersForAgent(records, agentId);
     const matches = scopedRecords.filter(
-      (r) => isManifestUsableProvider(r) && names.has(r.provider.toLowerCase()),
+      (r) => isTupleUsableProvider(r) && names.has(r.provider.toLowerCase()),
     );
     if (matches.length === 0) return [];
 
@@ -341,7 +341,7 @@ export class ProviderKeyService {
         }),
         agentId,
       )
-    ).filter(isManifestUsableProvider);
+    ).filter(isTupleUsableProvider);
     if (pricing) {
       const names = expandProviderNames([pricing.provider]);
       if (records.find((r) => names.has(r.provider.toLowerCase()))) return true;
@@ -397,7 +397,7 @@ export class ProviderKeyService {
         }),
         agentId,
       )
-    ).filter(isManifestUsableProvider);
+    ).filter(isTupleUsableProvider);
     return records.some(
       (r) =>
         providerNames.has(r.provider.toLowerCase()) &&

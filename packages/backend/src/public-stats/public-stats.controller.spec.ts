@@ -474,7 +474,7 @@ describe('PublicStatsController', () => {
     });
   });
 
-  describe('disabled via MANIFEST_PUBLIC_STATS', () => {
+  describe('disabled via TUPLE_PUBLIC_STATS', () => {
     // jest.resetModules() inside freshImport gives this suite a different
     // `NotFoundException` reference than the one imported above, so assert
     // on the HTTP status instead of the class identity.
@@ -687,7 +687,7 @@ describe('PublicStatsController', () => {
       const result = controller.getFreeProviders();
       const json = JSON.stringify(result);
 
-      expect(json).not.toContain('mnfst_');
+      expect(json).not.toContain('tuple_');
       expect(json).not.toContain('sk-');
       expect(json).not.toContain('password');
       expect(json).not.toContain('secret');

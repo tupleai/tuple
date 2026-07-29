@@ -59,9 +59,9 @@ export interface Snippet {
   code: string;
 }
 
-const STORAGE_KEY = 'manifest_setup_framework';
-const TOOLKIT_STORAGE_KEY = 'manifest_setup_toolkit';
-const OPENAI_LANG_STORAGE_KEY = 'manifest_setup_openai_lang';
+const STORAGE_KEY = 'tuple_setup_framework';
+const TOOLKIT_STORAGE_KEY = 'tuple_setup_toolkit';
+const OPENAI_LANG_STORAGE_KEY = 'tuple_setup_openai_lang';
 
 export function getStoredFramework(): FrameworkId {
   try {
@@ -289,13 +289,13 @@ export function getTypeScriptSnippets(
       code: `import { createOpenAI } from "@ai-sdk/openai";
 import { generateText } from "ai";
 
-const manifest = createOpenAI({
+const tuple = createOpenAI({
   baseURL: "${baseUrl}",
   apiKey: "${apiKey}",${vercelHeaders}
 });
 
 const { text } = await generateText({
-  model: manifest("auto"),
+  model: tuple("auto"),
   prompt: "Hello",
 });`,
     },
@@ -318,7 +318,7 @@ const response = await client.responses.create({
 }
 
 export function getOpenClawSnippet(baseUrl: string, apiKey: string): string {
-  // Manifest's cloud proxy speaks OpenAI Chat Completions
+  // Tuple's cloud proxy speaks OpenAI Chat Completions
   // (`/v1/chat/completions`). OpenClaw's `openai-responses` parser reads
   // assistant text from the Responses API shape (`output[].content[].text`),
   // which doesn't match — chat bubbles render empty even though tokens are
@@ -328,10 +328,10 @@ export function getOpenClawSnippet(baseUrl: string, apiKey: string): string {
     baseUrl,
     api: 'openai-completions',
     apiKey,
-    models: [{ id: 'auto', name: 'Manifest Auto' }],
+    models: [{ id: 'auto', name: 'Tuple Auto' }],
   });
-  return `openclaw config set models.providers.manifest '${providerJson}'
-openclaw config set agents.defaults.model.primary manifest/auto
+  return `openclaw config set models.providers.tuple '${providerJson}'
+openclaw config set agents.defaults.model.primary tuple/auto
 openclaw gateway restart`;
 }
 
@@ -339,7 +339,7 @@ openclaw gateway restart`;
  * The JSON block to paste into ~/.claude/settings.json. Claude Code reads
  * `env` keys from settings.json on every startup, so this is the persistent
  * configuration path — no shell rc edits, no Node required, no command-line
- * gymnastics. Pin the default model to Manifest's `auto` route so Claude
+ * gymnastics. Pin the default model to Tuple's `auto` route so Claude
  * Code does not send its built-in Anthropic model IDs to the gateway.
  * Anthropic SDK auto-appends /v1/messages to baseURL, so we strip a trailing
  * /v1 from the rendered URL.
@@ -378,8 +378,8 @@ export function getNanobotConfigSnippet(baseUrl: string, apiKey: string): string
 }
 
 export function getOpenClawDisableSnippet(model: string): string {
-  return `openclaw config unset models.providers.manifest
-openclaw config unset agents.defaults.models.manifest/auto
+  return `openclaw config unset models.providers.tuple
+openclaw config unset agents.defaults.models.tuple/auto
 openclaw config set agents.defaults.model.primary ${model}
 openclaw gateway restart`;
 }

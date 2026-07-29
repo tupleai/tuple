@@ -19,10 +19,10 @@ import { RoutingCacheService } from './routing-cache.service';
 import { randomUUID } from 'crypto';
 import { encrypt, decrypt, getEncryptionSecret } from '../../common/utils/crypto.util';
 import {
-  isManifestUsableProvider,
+  isTupleUsableProvider,
   isSupportedSubscriptionProvider,
 } from '../../common/utils/subscription-support';
-import { MAX_KEYS_PER_PROVIDER, type AuthType, type ModelRoute } from 'manifest-shared';
+import { MAX_KEYS_PER_PROVIDER, type AuthType, type ModelRoute } from 'tuple-shared';
 import {
   QWEN_REGION_VALIDATION_MESSAGE,
   detectQwenRegion,
@@ -141,7 +141,7 @@ export class ProviderService {
     await this.cleanupUnsupportedSubscriptionProviders(tenantId);
     const providers = filterProvidersForDeployment(
       (await this.providerRepo.find({ where: { tenant_id: tenantId } })).filter(
-        isManifestUsableProvider,
+        isTupleUsableProvider,
       ),
     );
     this.routingCache.setProviders(tenantId, providers);
@@ -1114,7 +1114,7 @@ export class ProviderService {
     }
 
     const stillHasOtherKeys = matching.some(
-      (r) => r.id !== target.id && r.is_active && isManifestUsableProvider(r),
+      (r) => r.id !== target.id && r.is_active && isTupleUsableProvider(r),
     );
 
     if (!stillHasOtherKeys) {
@@ -1157,7 +1157,7 @@ export class ProviderService {
       where: { tenant_id: tenantId, is_active: true },
     });
     const unsupported = activeProviders.filter(
-      (record) => record.auth_type === 'subscription' && !isManifestUsableProvider(record),
+      (record) => record.auth_type === 'subscription' && !isTupleUsableProvider(record),
     );
     if (unsupported.length === 0) return;
 
@@ -1170,7 +1170,7 @@ export class ProviderService {
 
     const unsupportedIds = new Set(unsupported.map((record) => record.id));
     const remainingActive = activeProviders.filter((record) => !unsupportedIds.has(record.id));
-    const usableProviders = remainingActive.filter(isManifestUsableProvider);
+    const usableProviders = remainingActive.filter(isTupleUsableProvider);
 
     const removedProviders = Array.from(
       new Set(

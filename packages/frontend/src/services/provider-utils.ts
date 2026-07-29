@@ -1,4 +1,4 @@
-import { resolveProviderMetadataIdentity } from 'manifest-shared';
+import { resolveProviderMetadataIdentity } from 'tuple-shared';
 import { PROVIDERS, type ProviderDef } from './providers.js';
 
 export function getProvider(id: string): ProviderDef | undefined {

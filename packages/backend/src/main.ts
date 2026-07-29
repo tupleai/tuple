@@ -31,7 +31,7 @@ export async function bootstrap() {
 
   const app = await NestFactory.create(AppModule, {
     bodyParser: false,
-    logger: new ConsoleLogger({ prefix: 'Manifest' }),
+    logger: new ConsoleLogger({ prefix: 'Tuple' }),
   });
   app.enableShutdownHooks();
   app.useGlobalFilters(new SpaFallbackFilter(process.env['BETTER_AUTH_URL']));
@@ -42,7 +42,7 @@ export async function bootstrap() {
 
   // The Wingman drawer is a dev-only affordance — `frame-src` only loosens
   // up when NODE_ENV !== 'production' to allow the hosted Wingman SPA
-  // (https://wingman.manifest.build) and locally-running Wingman builds
+  // (https://wingman.tuple.ai) and locally-running Wingman builds
   // at `WINGMAN_PORT` (defaults to backend port + 1). Docker / cloud
   // builds keep the strict 'self'-only frame policy.
   const backendPort = Number(process.env['PORT']) || 3001;
@@ -80,7 +80,7 @@ export async function bootstrap() {
   app.use(compression({ filter: shouldCompress }));
 
   // CORS: the dashboard is same-origin, but the hosted Wingman gateway tester
-  // (https://wingman.manifest.build) is a legitimate cross-origin caller of the
+  // (https://wingman.tuple.ai) is a legitimate cross-origin caller of the
   // gateway routes, so both dev and production allow its origin. Dev also allows
   // the Vite frontend on :3000 and the local Wingman build at `WINGMAN_PORT`;
   // production allows the hosted Wingman origin plus any `WINGMAN_CORS_ORIGINS` a
@@ -201,7 +201,7 @@ export async function bootstrap() {
 
   // Re-add body parsing for NestJS routes. The OpenAI-compatible proxy has a
   // separate parser because clients may legitimately send large inline image
-  // payloads. Regular Manifest API/auth routes stay small.
+  // payloads. Regular Tuple API/auth routes stay small.
   expressApp.use('/v1', createProxyBodyBudgetMiddleware());
   expressApp.use('/v1', express.json({ limit: PROXY_BODY_LIMIT }));
   expressApp.use('/v1', express.urlencoded({ extended: true, limit: PROXY_BODY_LIMIT }));
@@ -231,11 +231,11 @@ export async function bootstrap() {
     host !== '127.0.0.1' &&
     host !== 'localhost' &&
     host !== '::1' &&
-    process.env['MANIFEST_DISABLE_HSTS'] !== '1'
+    process.env['TUPLE_DISABLE_HSTS'] !== '1'
   ) {
     logger.warn(
       'HSTS is disabled. Set BETTER_AUTH_URL to your https:// origin to enable it, or set ' +
-        'MANIFEST_DISABLE_HSTS=1 to silence this warning for HTTP-only LAN deployments.',
+        'TUPLE_DISABLE_HSTS=1 to silence this warning for HTTP-only LAN deployments.',
     );
   }
 
@@ -243,7 +243,7 @@ export async function bootstrap() {
 }
 
 // Only auto-start when run directly (not when embedded)
-if (!process.env['MANIFEST_EMBEDDED']) {
+if (!process.env['TUPLE_EMBEDDED']) {
   bootstrap().catch((err) => {
     // The server never came up. The most common cause is a failed database
     // migration — TypeORM logs the specific "Migration X failed, error: ..."
@@ -251,9 +251,9 @@ if (!process.env['MANIFEST_EMBEDDED']) {
     // exit non-zero, rather than leaving an unhandled rejection (or, before
     // the toRetry change, a misleading "Unable to connect to the database").
     new Logger('Bootstrap').fatal(
-      'Manifest failed to start — see the error above. A failed database migration is the most ' +
+      'Tuple failed to start — see the error above. A failed database migration is the most ' +
         'common cause; if it reports provider/config rows that "cannot be re-scoped", back up your ' +
-        'database and re-run with MANIFEST_MIGRATION_FORCE=1.',
+        'database and re-run with TUPLE_MIGRATION_FORCE=1.',
       err instanceof Error ? err.stack : String(err),
     );
     process.exit(1);

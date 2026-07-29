@@ -63,17 +63,17 @@ describe('agents API client', () => {
   });
 
   it('getAgentKey GETs the agent key endpoint', async () => {
-    const fetchMock = setupFetch({ keyPrefix: 'mnfst_abc' });
+    const fetchMock = setupFetch({ keyPrefix: 'tuple_abc' });
     const out = await agents.getAgentKey('demo');
-    expect(out).toEqual({ keyPrefix: 'mnfst_abc' });
+    expect(out).toEqual({ keyPrefix: 'tuple_abc' });
     const url = fetchMock.mock.calls[0][0] as string;
     expect(url).toContain('/api/v1/agents/demo/key');
   });
 
   it('rotateAgentKey POSTs to the rotate endpoint', async () => {
-    const fetchMock = setupFetch({ apiKey: 'mnfst_new' });
+    const fetchMock = setupFetch({ apiKey: 'tuple_new' });
     const out = await agents.rotateAgentKey('demo');
-    expect(out).toEqual({ apiKey: 'mnfst_new' });
+    expect(out).toEqual({ apiKey: 'tuple_new' });
     const [url, init] = fetchMock.mock.calls[0];
     expect(url).toContain('/api/v1/agents/demo/rotate-key');
     expect((init as RequestInit).method).toBe('POST');
@@ -128,7 +128,7 @@ describe('agents API client', () => {
   it('duplicateAgent POSTs the new name to the duplicate endpoint', async () => {
     const fetchMock = setupFetch({
       agent: { id: '1', name: 'demo-copy', display_name: 'Demo Copy' },
-      apiKey: 'mnfst_new',
+      apiKey: 'tuple_new',
       copied: { providers: 0, customProviders: 0, tierAssignments: 0, specificityAssignments: 0, modelParams: 0 },
     });
     const out = await agents.duplicateAgent('demo', 'demo-copy');
@@ -148,7 +148,7 @@ describe('agents API client', () => {
         agent_category: 'coding',
         agent_platform: 'openclaw',
       },
-      apiKey: 'mnfst_xxx',
+      apiKey: 'tuple_xxx',
     });
     const out = await agents.createAgent({
       name: 'new-agent',

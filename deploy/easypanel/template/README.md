@@ -1,19 +1,19 @@
 # Easypanel Template
 
-This directory contains the Manifest template files intended for the upstream
+This directory contains the Tuple template files intended for the upstream
 [`easypanel-io/templates`](https://github.com/easypanel-io/templates)
 repository.
 
 To submit upstream, copy these files into:
 
 ```text
-templates/manifest/index.ts
-templates/manifest/meta.yaml
+templates/tuple/index.ts
+templates/tuple/meta.yaml
 ```
 
 The template provisions:
 
-- Manifest app service from `manifestdotbuild/manifest:6`.
+- Tuple app service from `tupleai/tuple:6`.
 - PostgreSQL 16 service.
-- Generated database password, Better Auth secret, and Manifest encryption key.
+- Generated database password, Better Auth secret, and Tuple encryption key.
 - HTTPS domain proxy on port `2099`.

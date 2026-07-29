@@ -40,7 +40,7 @@ function makeState(completed: boolean, transitionFinalized = false) {
 
 describe('RequestBackfillBootService', () => {
   const originalEnv = process.env['NODE_ENV'];
-  const originalMode = process.env['MANIFEST_MODE'];
+  const originalMode = process.env['TUPLE_MODE'];
   const originalBackfillUrl = process.env['BACKFILL_DATABASE_URL'];
   const originalMigrationUrl = process.env['MIGRATION_DATABASE_URL'];
   const originalUnpooledUrl = process.env['DATABASE_UNPOOLED_URL'];
@@ -52,8 +52,8 @@ describe('RequestBackfillBootService', () => {
 
   afterEach(() => {
     process.env['NODE_ENV'] = originalEnv;
-    if (originalMode === undefined) delete process.env['MANIFEST_MODE'];
-    else process.env['MANIFEST_MODE'] = originalMode;
+    if (originalMode === undefined) delete process.env['TUPLE_MODE'];
+    else process.env['TUPLE_MODE'] = originalMode;
     if (originalBackfillUrl === undefined) delete process.env['BACKFILL_DATABASE_URL'];
     else process.env['BACKFILL_DATABASE_URL'] = originalBackfillUrl;
     if (originalMigrationUrl === undefined) delete process.env['MIGRATION_DATABASE_URL'];
@@ -72,7 +72,7 @@ describe('RequestBackfillBootService', () => {
 
   it('uses a separate direct DataSource in cloud production', async () => {
     process.env['NODE_ENV'] = 'production';
-    process.env['MANIFEST_MODE'] = 'cloud';
+    process.env['TUPLE_MODE'] = 'cloud';
     process.env['MIGRATION_DATABASE_URL'] = 'postgres://direct/cloud';
     const appDataSource = { createQueryRunner: jest.fn() } as unknown as DataSource;
     const directState = makeState(true);
@@ -108,7 +108,7 @@ describe('RequestBackfillBootService', () => {
 
   it('closes a Cloud direct pool that finishes connecting during shutdown', async () => {
     process.env['NODE_ENV'] = 'production';
-    process.env['MANIFEST_MODE'] = 'cloud';
+    process.env['TUPLE_MODE'] = 'cloud';
     process.env['MIGRATION_DATABASE_URL'] = 'postgres://direct/cloud';
     let finishInitialize!: () => void;
     const directDataSource = {
@@ -143,7 +143,7 @@ describe('RequestBackfillBootService', () => {
   it('retries a self-hosted startup failure without requiring a restart or direct URL', async () => {
     jest.useFakeTimers();
     process.env['NODE_ENV'] = 'production';
-    process.env['MANIFEST_MODE'] = 'selfhosted';
+    process.env['TUPLE_MODE'] = 'selfhosted';
     delete process.env['BACKFILL_DATABASE_URL'];
     delete process.env['MIGRATION_DATABASE_URL'];
     delete process.env['DATABASE_UNPOOLED_URL'];
@@ -177,7 +177,7 @@ describe('RequestBackfillBootService', () => {
   it('stops retrying a self-hosted failure during shutdown', async () => {
     jest.useFakeTimers();
     process.env['NODE_ENV'] = 'production';
-    process.env['MANIFEST_MODE'] = 'selfhosted';
+    process.env['TUPLE_MODE'] = 'selfhosted';
     const state = makeState(false);
     state.countBy.mockRejectedValue(new Error('db down'));
     const service = new RequestBackfillBootService(
@@ -203,7 +203,7 @@ describe('RequestBackfillBootService', () => {
   it('recreates the Cloud direct pool after a transient coordinator failure', async () => {
     jest.useFakeTimers();
     process.env['NODE_ENV'] = 'production';
-    process.env['MANIFEST_MODE'] = 'cloud';
+    process.env['TUPLE_MODE'] = 'cloud';
     process.env['MIGRATION_DATABASE_URL'] = 'postgres://direct/cloud';
     const failedState = makeState(false);
     failedState.countBy.mockRejectedValue(new Error('connection reset'));
@@ -695,7 +695,7 @@ describe('RequestBackfillBootService', () => {
   it('waits through the rolling-deploy grace window before finalizing the transition', async () => {
     jest.useFakeTimers();
     process.env['NODE_ENV'] = 'production';
-    process.env['MANIFEST_MODE'] = 'selfhosted';
+    process.env['TUPLE_MODE'] = 'selfhosted';
     const ds = {
       query: jest.fn().mockResolvedValue([{ present: true }]),
       createQueryRunner: jest.fn(),
@@ -723,7 +723,7 @@ describe('RequestBackfillBootService', () => {
   it('reports a self-hosted tail failure and stops the timer on shutdown', async () => {
     jest.useFakeTimers();
     process.env['NODE_ENV'] = 'production';
-    process.env['MANIFEST_MODE'] = 'selfhosted';
+    process.env['TUPLE_MODE'] = 'selfhosted';
     const ds = {
       query: jest.fn().mockResolvedValue([{ present: true }]),
       createQueryRunner: jest.fn(),

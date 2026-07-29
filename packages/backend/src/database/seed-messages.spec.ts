@@ -1,5 +1,5 @@
 import { Logger } from '@nestjs/common';
-import { classifyMessageError } from 'manifest-shared';
+import { classifyMessageError } from 'tuple-shared';
 import { getSeedConnections, seedAgentMessages, seedConnectionId } from './seed-messages';
 
 function makeMockRepo() {
@@ -475,7 +475,7 @@ describe('seedAgentMessages', () => {
       expect(origins.has('provider')).toBe(true);
       expect(origins.has('config')).toBe(true);
       expect(origins.has('transport')).toBe(true);
-      // A Manifest software-limit hit (policy) is seeded too, distinct from provider errors.
+      // A Tuple software-limit hit (policy) is seeded too, distinct from provider errors.
       expect(origins.has('policy')).toBe(true);
     });
 
@@ -495,7 +495,7 @@ describe('seedAgentMessages', () => {
       expect(superseded.length).toBeGreaterThan(0);
     });
 
-    it('surfaces internal (Manifest) errors alongside the other origins', async () => {
+    it('surfaces internal (Tuple) errors alongside the other origins', async () => {
       await seedAgentMessages(mockRepo as never, 'user-1', logger);
       const messages = collectInsertedMessages(mockRepo);
       const origins = new Set(messages.map((m) => m.error_origin as string | null));

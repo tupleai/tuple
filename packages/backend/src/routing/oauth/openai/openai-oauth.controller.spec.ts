@@ -131,7 +131,7 @@ describe('OpenaiOauthController', () => {
     it('uses BETTER_AUTH_URL from config when set, ignoring Host header', async () => {
       resolveAgent.resolve.mockResolvedValue({ id: 'agent-id-1', tenant_id: 'tenant-1' } as never);
       oauthService.generateAuthorizationUrl.mockResolvedValue('https://auth.openai.com/oauth/...');
-      configService.get.mockReturnValue('https://manifest.example.com');
+      configService.get.mockReturnValue('https://tuple.example.com');
 
       const req = {
         protocol: 'http',
@@ -147,7 +147,7 @@ describe('OpenaiOauthController', () => {
       expect(oauthService.generateAuthorizationUrl).toHaveBeenCalledWith(
         'agent-id-1',
         'tenant-1',
-        'https://manifest.example.com',
+        'https://tuple.example.com',
         'user-1',
       );
     });
@@ -375,7 +375,7 @@ describe('OpenaiOauthController', () => {
       const cspCall = res.setHeader.mock.calls.find((c) => c[0] === 'Content-Security-Policy');
       expect(cspCall).toBeDefined();
       expect(cspCall![1]).toMatch(/^default-src 'none'; script-src 'nonce-[A-Za-z0-9+/=]+'$/);
-      expect(res.send).toHaveBeenCalledWith(expect.stringContaining('manifest-oauth-success'));
+      expect(res.send).toHaveBeenCalledWith(expect.stringContaining('tuple-oauth-success'));
       expect(res.send).toHaveBeenCalledWith(expect.stringContaining('Login successful'));
       expect(res.send).toHaveBeenCalledWith(expect.stringContaining('BroadcastChannel'));
       // Script tag should include the nonce
@@ -390,7 +390,7 @@ describe('OpenaiOauthController', () => {
       const cspCall = res.setHeader.mock.calls.find((c) => c[0] === 'Content-Security-Policy');
       expect(cspCall).toBeDefined();
       expect(cspCall![1]).toMatch(/^default-src 'none'; script-src 'nonce-[A-Za-z0-9+/=]+'$/);
-      expect(res.send).toHaveBeenCalledWith(expect.stringContaining('manifest-oauth-error'));
+      expect(res.send).toHaveBeenCalledWith(expect.stringContaining('tuple-oauth-error'));
       expect(res.send).toHaveBeenCalledWith(expect.stringContaining('Login failed'));
       expect(res.send).toHaveBeenCalledWith(expect.stringContaining('BroadcastChannel'));
     });

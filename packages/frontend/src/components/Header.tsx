@@ -28,12 +28,12 @@ import DuplicateAgentModal from './DuplicateAgentModal.jsx';
 
 const DevAutofixToggle = __DEV_MODE__ ? lazy(() => import('./DevAutofixToggle.jsx')) : null;
 
-const GITHUB_REPO = 'mnfst/manifest';
+const GITHUB_REPO = 'tupleai/tuple';
 const STAR_DISMISSED_KEY = 'github-star-dismissed';
 const STAR_CACHE_KEY = 'github-star-count';
 const STAR_CACHE_TS_KEY = 'github-star-ts';
 const STAR_CACHE_TTL = 3600000; // 1 hour
-const DOCS_BASE_URL = 'https://manifest.build/docs';
+const DOCS_BASE_URL = 'https://tuple.ai/docs';
 
 interface HeaderProps {
   showMobileNavToggle?: boolean;
@@ -144,20 +144,20 @@ const Header: Component<HeaderProps> = (props) => {
       <div class="header__left">
         <A href="/" class="header__logo">
           <img
-            src="/logotype-white.svg"
-            alt="Manifest"
+            src="/logotype-light.png"
+            alt="Tuple"
             width="104"
             class="header__logo-img header__logo-img--light"
           />
           <img
-            src="/logotype-dark.svg"
+            src="/logotype-dark.png"
             alt=""
             width="104"
             class="header__logo-img header__logo-img--dark"
           />
         </A>
         <Show when={isSelfHosted()}>
-          <span class="header__mode-badge" title="Running on the self-hosted version of Manifest">
+          <span class="header__mode-badge" title="Running on the self-hosted version of Tuple">
             Self-hosted
           </span>
         </Show>

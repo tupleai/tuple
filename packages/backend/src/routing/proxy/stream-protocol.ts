@@ -1,5 +1,5 @@
 import type { EventSourceMessage } from 'eventsource-parser';
-import { TRANSPORT_NETWORK_HTTP_STATUS, TRANSPORT_TIMEOUT_HTTP_STATUS } from 'manifest-shared';
+import { TRANSPORT_NETWORK_HTTP_STATUS, TRANSPORT_TIMEOUT_HTTP_STATUS } from 'tuple-shared';
 import type { ProviderWireFormat } from './proxy-types';
 
 export type StreamFailureReason =

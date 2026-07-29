@@ -32,8 +32,8 @@ export function DoctorReleaseEmail(props: DoctorReleaseProps) {
   const {
     appUrl,
     tutorialUrl,
-    logoUrl = 'https://app.manifest.build/manifest-logo.png',
-    autofixIconUrl = 'https://app.manifest.build/autofix-icon-email.png',
+    logoUrl = 'https://app.tuple.ai/tuple-logo.png',
+    autofixIconUrl = 'https://app.tuple.ai/autofix-icon-email.png',
   } = props;
 
   return (
@@ -45,7 +45,7 @@ export function DoctorReleaseEmail(props: DoctorReleaseProps) {
       <Body style={body}>
         <Container style={container}>
           <Section style={logoSection}>
-            <Img src={logoUrl} alt="Manifest" height="32" style={logoImg} />
+            <Img src={logoUrl} alt="Tuple" height="32" style={logoImg} />
           </Section>
 
           <Section style={card}>
@@ -66,7 +66,7 @@ export function DoctorReleaseEmail(props: DoctorReleaseProps) {
 
             <Text style={paragraph}>
               From now on, when a provider rejects one of your requests with a fixable error, a
-              renamed parameter, an unsupported field, a deprecated model, Manifest repairs the
+              renamed parameter, an unsupported field, a deprecated model, Tuple repairs the
               request and sends it again. Your agent gets its answer. You see the whole story in
               your dashboard: the failure, the fix, the retry.
             </Text>
@@ -90,7 +90,7 @@ export function DoctorReleaseEmail(props: DoctorReleaseProps) {
             <Hr style={hr} />
 
             <Text style={footer}>
-              You are receiving this email because you joined the Auto-fix waitlist on Manifest.
+              You are receiving this email because you joined the Auto-fix waitlist on Tuple.
             </Text>
           </Section>
         </Container>

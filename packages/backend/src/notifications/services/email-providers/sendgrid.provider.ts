@@ -13,7 +13,7 @@ export class SendGridProvider implements EmailProvider {
 
   constructor(config: EmailProviderConfig) {
     this.apiKey = config.apiKey;
-    this.defaultFrom = config.fromEmail ?? 'noreply@manifest.build';
+    this.defaultFrom = config.fromEmail ?? 'noreply@tuple.ai';
   }
 
   async send(opts: SendEmailOptions): Promise<boolean> {

@@ -29,7 +29,7 @@ describe('use-overview-range', () => {
 
   describe('RANGE_STORAGE_KEY', () => {
     it('is the expected localStorage key string', () => {
-      expect(RANGE_STORAGE_KEY).toBe('manifest_chart_range');
+      expect(RANGE_STORAGE_KEY).toBe('tuple_chart_range');
     });
   });
 

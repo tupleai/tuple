@@ -34,7 +34,7 @@ export function isBlockedHeaderKey(key: string): boolean {
   const lower = key.trim().toLowerCase();
   if (!lower) return false;
   if (BLOCKED_EXACT.has(lower)) return true;
-  return lower.startsWith('x-manifest-');
+  return lower.startsWith('x-tuple-');
 }
 
 export function toHeaderRecord(entries: HeaderEntry[]): Record<string, string> {
@@ -107,8 +107,8 @@ const RequestHeadersPopover: Component<Props> = (props) => {
         </header>
 
         <p class="playground-headers__hint">
-          Added to every provider call for this playground. Manifest-managed headers (Authorization,
-          Content-Type, x-manifest-*) are ignored.
+          Added to every provider call for this playground. Tuple-managed headers (Authorization,
+          Content-Type, x-tuple-*) are ignored.
         </p>
 
         <Show when={props.entries.length === 0}>
@@ -154,7 +154,7 @@ const RequestHeadersPopover: Component<Props> = (props) => {
                   </button>
                   <Show when={blocked()}>
                     <p class="playground-headers__warning">
-                      {entry.key.trim()} is managed by Manifest and will be dropped.
+                      {entry.key.trim()} is managed by Tuple and will be dropped.
                     </p>
                   </Show>
                 </div>

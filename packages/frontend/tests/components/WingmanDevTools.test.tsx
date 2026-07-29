@@ -11,8 +11,8 @@ declare global {
   var __DEV_MODE__: boolean;
 }
 
-const STORAGE_OPEN = "manifest:wingman:open";
-const STORAGE_HEIGHT = "manifest:wingman:height";
+const STORAGE_OPEN = "tuple:wingman:open";
+const STORAGE_HEIGHT = "tuple:wingman:height";
 
 describe("WingmanDevTools", () => {
   let originalOpen: typeof window.open;
@@ -73,7 +73,7 @@ describe("WingmanDevTools", () => {
       ".wingman-drawer__frame",
     ) as HTMLIFrameElement;
     expect(iframe).not.toBeNull();
-    expect(iframe.src.startsWith("https://wingman.manifest.build/")).toBe(true);
+    expect(iframe.src.startsWith("https://wingman.tuple.ai/")).toBe(true);
     expect(iframe.src).toContain(
       "baseUrl=" + encodeURIComponent("http://localhost:11096"),
     );

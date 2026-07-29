@@ -190,7 +190,7 @@ describe('LocalServerDetailView', () => {
     ));
 
     await waitFor(() => {
-      expect(container.textContent).toContain('Running Manifest in Docker');
+      expect(container.textContent).toContain('Running Tuple in Docker');
       // CLI tab must be clicked to see the bind command
       expect(container.textContent).toContain('GUI');
       expect(container.textContent).toContain('CLI');

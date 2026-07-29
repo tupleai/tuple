@@ -160,7 +160,7 @@ const PlanPicker: Component<PlanPickerProps> = (props) => {
           fallback={
             <a
               class="auth-form__submit plan-picker__cta"
-              href="https://manifest.build/pricing"
+              href="https://tuple.ai/pricing"
               target="_blank"
               rel="noopener noreferrer"
             >

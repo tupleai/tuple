@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryColumn, Index } from 'typeorm';
 import { timestampType, timestampDefault } from '../common/utils/postgres-sql';
-import type { ModelRoute, ResponseMode, OutputModality, TierColor } from 'manifest-shared';
+import type { ModelRoute, ResponseMode, OutputModality, TierColor } from 'tuple-shared';
 
 @Entity('header_tiers')
 @Index(['agent_id', 'sort_order'])

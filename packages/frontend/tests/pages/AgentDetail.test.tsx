@@ -47,7 +47,7 @@ describe("AgentDetail", () => {
 
   it("renders the page title with the agent name", () => {
     const { container } = render(() => <AgentDetail>{null}</AgentDetail>);
-    expect(container.querySelector("title")?.textContent).toBe("my-agent | Manifest");
+    expect(container.querySelector("title")?.textContent).toBe("my-agent | Tuple");
   });
 
   it("renders a back-link to /harnesses", () => {
@@ -167,7 +167,7 @@ describe("AgentDetail", () => {
     mockParams.agentName = "my%20agent";
     mockPathname = "/harnesses/my%20agent";
     const { container } = render(() => <AgentDetail>{null}</AgentDetail>);
-    expect(container.querySelector("title")?.textContent).toBe("my agent | Manifest");
+    expect(container.querySelector("title")?.textContent).toBe("my agent | Tuple");
     expect(container.querySelector("h1")?.textContent?.trim()).toBe("my agent");
   });
 
@@ -187,7 +187,7 @@ describe("AgentDetail", () => {
   it("uses resolved display name in title when agentDisplayName is set", () => {
     mockAgentDisplayName = "My Cool Agent";
     const { container } = render(() => <AgentDetail>{null}</AgentDetail>);
-    expect(container.querySelector("title")?.textContent).toBe("My Cool Agent | Manifest");
+    expect(container.querySelector("title")?.textContent).toBe("My Cool Agent | Tuple");
   });
 
   it("renders the H1 with the display name when agentDisplayName is set", () => {
@@ -199,7 +199,7 @@ describe("AgentDetail", () => {
   it("falls back to decoded slug in title when agentDisplayName is null", () => {
     mockAgentDisplayName = null;
     const { container } = render(() => <AgentDetail>{null}</AgentDetail>);
-    expect(container.querySelector("title")?.textContent).toBe("my-agent | Manifest");
+    expect(container.querySelector("title")?.textContent).toBe("my-agent | Tuple");
   });
 
   it("renders the H1 with the decoded slug when agentDisplayName is null", () => {

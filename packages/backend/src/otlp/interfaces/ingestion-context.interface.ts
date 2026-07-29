@@ -16,6 +16,6 @@ export interface IngestionContext {
  * downstream may mistake this for a passing auth check. Only the proxy's
  * exception filter reads it, to record the rejection as a message row.
  */
-export interface RequestWithManifestErrorContext {
-  manifestErrorContext?: IngestionContext;
+export interface RequestWithTupleErrorContext {
+  tupleErrorContext?: IngestionContext;
 }

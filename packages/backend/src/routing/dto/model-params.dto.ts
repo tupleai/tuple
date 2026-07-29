@@ -8,7 +8,7 @@ import {
   type ValidatorConstraintInterface,
 } from 'class-validator';
 
-import { AUTH_TYPES, type AuthType, type RequestParamDefaults } from 'manifest-shared';
+import { AUTH_TYPES, type AuthType, type RequestParamDefaults } from 'tuple-shared';
 
 export type ModelParamsBodyDto = RequestParamDefaults;
 

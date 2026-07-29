@@ -12,7 +12,7 @@ import {
 } from './query-helpers';
 
 /**
- * Request-level volume metrics (mnfst/manifest#2511).
+ * Request-level volume metrics (tupleai/tuple#2511).
  *
  * Grouping is a lens, not a filter: the Overview's Requests chart must stack
  * to the same total in all three views (By request status / By provider /
@@ -307,7 +307,7 @@ export class RequestVolumeService {
     const range = params.range ?? '7d';
     const keyExpr =
       dim === 'provider'
-        ? `CASE WHEN t.provider LIKE 'custom:%' THEN 'custom' ELSE COALESCE(t.provider, 'manifest') END`
+        ? `CASE WHEN t.provider LIKE 'custom:%' THEN 'custom' ELSE COALESCE(t.provider, 'tuple') END`
         : `t.${dim}`;
     const sql = `${this.terminalCte(params.agentName)}
       SELECT ${keyExpr} AS key,

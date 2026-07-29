@@ -1,4 +1,4 @@
-import type { ModelModality } from 'manifest-shared';
+import type { ModelModality } from 'tuple-shared';
 import type { DiscoveredModel } from '../../model-discovery/model-fetcher';
 
 const FEATURE_CAPABILITIES = ['stream', 'tools'] as const;

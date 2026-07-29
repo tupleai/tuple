@@ -16,7 +16,7 @@ import ModelParamsAffordance from '../components/ModelParamsAffordance.jsx';
 import RouteKeyChip from '../components/RouteKeyChip.js';
 import { setFallbacks as setFallbacksApi } from '../services/api.js';
 import { toast } from '../services/toast-store.js';
-import { modelParamsScopeForTier } from 'manifest-shared';
+import { modelParamsScopeForTier } from 'tuple-shared';
 import type {
   TierAssignment,
   AvailableModel,

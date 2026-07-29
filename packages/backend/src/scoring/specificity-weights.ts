@@ -1,4 +1,4 @@
-import type { SpecificityCategory } from 'manifest-shared';
+import type { SpecificityCategory } from 'tuple-shared';
 
 /**
  * Per-keyword weights used by specificity detection. Keywords not in this map

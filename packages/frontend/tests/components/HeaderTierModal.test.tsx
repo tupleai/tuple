@@ -17,7 +17,7 @@ vi.mock("../../src/services/toast-store.js", () => ({
   toast: { error: (...args: unknown[]) => mockToastError(...args), success: vi.fn(), warning: vi.fn() },
 }));
 
-vi.mock("manifest-shared", () => ({
+vi.mock("tuple-shared", () => ({
   TIER_COLORS: ["indigo", "rose", "amber", "emerald"],
 }));
 
@@ -60,7 +60,7 @@ const existingTier: HeaderTier = {
   id: "ht-1",
   agent_id: "agent-1",
   name: "Premium",
-  header_key: "x-manifest-tier",
+  header_key: "x-tuple-tier",
   header_value: "premium",
   badge_color: "indigo",
   sort_order: 0,
@@ -202,7 +202,7 @@ describe("HeaderTierModal", () => {
       const keyInput = container.querySelector("#header-tier-key") as HTMLInputElement;
       const valueInput = container.querySelector("#header-tier-value") as HTMLInputElement;
       fireEvent.input(nameInput, { target: { value: "Premium" } });
-      fireEvent.input(keyInput, { target: { value: "x-manifest-tier" } });
+      fireEvent.input(keyInput, { target: { value: "x-tuple-tier" } });
       fireEvent.input(valueInput, { target: { value: "premium" } });
 
       const submitBtn = Array.from(container.querySelectorAll("button")).find((b) =>
@@ -213,7 +213,7 @@ describe("HeaderTierModal", () => {
       await waitFor(() => {
         expect(mockCreateHeaderTier).toHaveBeenCalledWith("demo", {
           name: "Premium",
-          header_key: "x-manifest-tier",
+          header_key: "x-tuple-tier",
           header_value: "premium",
           badge_color: "indigo",
         });
@@ -391,7 +391,7 @@ describe("HeaderTierModal", () => {
         target: { value: "Different" },
       });
       fireEvent.input(container.querySelector("#header-tier-key") as HTMLInputElement, {
-        target: { value: "x-manifest-tier" },
+        target: { value: "x-tuple-tier" },
       });
       fireEvent.input(container.querySelector("#header-tier-value") as HTMLInputElement, {
         target: { value: "premium" },
@@ -453,7 +453,7 @@ describe("HeaderTierModal", () => {
         "Premium",
       );
       expect((container.querySelector("#header-tier-key") as HTMLInputElement).value).toBe(
-        "x-manifest-tier",
+        "x-tuple-tier",
       );
       expect((container.querySelector("#header-tier-value") as HTMLInputElement).value).toBe(
         "premium",
@@ -482,7 +482,7 @@ describe("HeaderTierModal", () => {
       await waitFor(() => {
         expect(mockUpdateHeaderTier).toHaveBeenCalledWith("demo", existingTier.id, {
           name: "Premium",
-          header_key: "x-manifest-tier",
+          header_key: "x-tuple-tier",
           header_value: "premium",
           badge_color: "indigo",
         });

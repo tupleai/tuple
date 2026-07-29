@@ -8,7 +8,7 @@ import {
 } from '../services/api.js';
 import { inferProviderName } from '../services/routing-utils.js';
 import { getModelDisplayName } from '../services/model-display.js';
-import { AUTOFIX_STATUS_LABELS, manifestErrorDocsUrl, isSuccessStatus } from 'manifest-shared';
+import { AUTOFIX_STATUS_LABELS, tupleErrorDocsUrl, isSuccessStatus } from 'tuple-shared';
 import { formatErrorClass, formatErrorOrigin } from '../services/formatters.js';
 import { isPlanRequestLimitMessage } from '../services/message-error-taxonomy.js';
 import { ModelParamsSection, RequestHeadersSection } from './MessageDetailsSections.jsx';
@@ -134,9 +134,9 @@ export function AutofixSection(props: {
     const summary = explanation()?.summary;
     if (summary) return summary;
     if (!isOriginal())
-      return 'Manifest caught an error, repaired the request, and retried it successfully.';
+      return 'Tuple caught an error, repaired the request, and retried it successfully.';
     return props.sibling
-      ? 'This request failed. Manifest repaired it automatically and retried.'
+      ? 'This request failed. Tuple repaired it automatically and retried.'
       : 'This request failed. Auto-fix tried but could not find a repair.';
   };
   // One row per edit: Phoenix's per-op detail when present, else our local fallback.
@@ -389,7 +389,7 @@ export default function MessageDetails(props: MessageDetailsProps): JSX.Element 
                               <td class="error-autofix-row__meta-value">
                                 <a
                                   class="msg-detail__error-code"
-                                  href={manifestErrorDocsUrl(m.error_code!)}
+                                  href={tupleErrorDocsUrl(m.error_code!)}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                 >
@@ -411,12 +411,12 @@ export default function MessageDetails(props: MessageDetailsProps): JSX.Element 
                                     'The LLM provider rejected the request.'}
                                   {m.error_origin === 'transport' &&
                                     'Network or connection failure.'}
-                                  {m.error_origin === 'config' && 'Manifest configuration issue.'}
+                                  {m.error_origin === 'config' && 'Tuple configuration issue.'}
                                   {m.error_origin === 'policy' &&
-                                    'A Manifest usage limit was reached.'}
-                                  {m.error_origin === 'internal' && 'An unexpected Manifest error.'}
+                                    'A Tuple usage limit was reached.'}
+                                  {m.error_origin === 'internal' && 'An unexpected Tuple error.'}
                                   {m.error_origin === 'request' &&
-                                    'Your agent sent a request Manifest could not route. No provider was called.'}
+                                    'Your agent sent a request Tuple could not route. No provider was called.'}
                                 </span>
                               </td>
                             </tr>
@@ -442,7 +442,7 @@ export default function MessageDetails(props: MessageDetailsProps): JSX.Element 
                                   {m.error_class === 'no_provider_key' &&
                                     'No API key is configured for this provider.'}
                                   {m.error_class === 'plan_request_limit_exceeded' &&
-                                    'The Manifest Free plan monthly request quota was reached.'}
+                                    'The Tuple Free plan monthly request quota was reached.'}
                                 </span>
                               </td>
                             </tr>

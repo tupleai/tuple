@@ -121,23 +121,23 @@ describe('Custom Providers URL validation (e2e)', () => {
 
   describe('POST — service-layer SSRF guard (cloud mode)', () => {
     // Flip SKIP_SSRF_VALIDATION per-test so the NODE_ENV=test short-circuit
-    // is bypassed and the real cloud-mode behavior runs. MANIFEST_MODE is
+    // is bypassed and the real cloud-mode behavior runs. TUPLE_MODE is
     // forced to "cloud" so a Docker auto-detect doesn't switch modes.
     let originalSkip: string | undefined;
     let originalMode: string | undefined;
 
     beforeEach(() => {
       originalSkip = process.env['SKIP_SSRF_VALIDATION'];
-      originalMode = process.env['MANIFEST_MODE'];
+      originalMode = process.env['TUPLE_MODE'];
       process.env['SKIP_SSRF_VALIDATION'] = 'false';
-      process.env['MANIFEST_MODE'] = 'cloud';
+      process.env['TUPLE_MODE'] = 'cloud';
     });
 
     afterEach(() => {
       if (originalSkip === undefined) delete process.env['SKIP_SSRF_VALIDATION'];
       else process.env['SKIP_SSRF_VALIDATION'] = originalSkip;
-      if (originalMode === undefined) delete process.env['MANIFEST_MODE'];
-      else process.env['MANIFEST_MODE'] = originalMode;
+      if (originalMode === undefined) delete process.env['TUPLE_MODE'];
+      else process.env['TUPLE_MODE'] = originalMode;
     });
 
     it('rejects plaintext http:// to a public host in cloud mode as 400', async () => {
@@ -153,7 +153,7 @@ describe('Custom Providers URL validation (e2e)', () => {
         })
         .expect(400);
 
-      // The error message hints at MANIFEST_MODE=selfhosted; the "https"
+      // The error message hints at TUPLE_MODE=selfhosted; the "https"
       // substring is the user-actionable key. Loose-match it so message
       // refactors that preserve intent don't fail the test.
       const body = res.body as { message?: string };
@@ -184,7 +184,7 @@ describe('Custom Providers URL validation (e2e)', () => {
       // The one URL family blocked in both modes: cloud metadata
       // (169.254.169.254 etc.). Flipping into self-hosted proves the
       // override path doesn't reopen the IMDS hole.
-      process.env['MANIFEST_MODE'] = 'selfhosted';
+      process.env['TUPLE_MODE'] = 'selfhosted';
       const res = await request(app.getHttpServer())
         .post(`/api/v1/routing/${agentName}/custom-providers`)
         .set(headers)
@@ -240,9 +240,9 @@ describe('Custom Providers URL validation (e2e)', () => {
 
     it('rejects plaintext http to a public host on update in cloud mode', async () => {
       const originalSkip = process.env['SKIP_SSRF_VALIDATION'];
-      const originalMode = process.env['MANIFEST_MODE'];
+      const originalMode = process.env['TUPLE_MODE'];
       process.env['SKIP_SSRF_VALIDATION'] = 'false';
-      process.env['MANIFEST_MODE'] = 'cloud';
+      process.env['TUPLE_MODE'] = 'cloud';
       try {
         await request(app.getHttpServer())
           .put(`/api/v1/routing/${agentName}/custom-providers/${createdId}`)
@@ -252,8 +252,8 @@ describe('Custom Providers URL validation (e2e)', () => {
       } finally {
         if (originalSkip === undefined) delete process.env['SKIP_SSRF_VALIDATION'];
         else process.env['SKIP_SSRF_VALIDATION'] = originalSkip;
-        if (originalMode === undefined) delete process.env['MANIFEST_MODE'];
-        else process.env['MANIFEST_MODE'] = originalMode;
+        if (originalMode === undefined) delete process.env['TUPLE_MODE'];
+        else process.env['TUPLE_MODE'] = originalMode;
       }
     });
 

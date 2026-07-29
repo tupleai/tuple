@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Patch, Post, Res } from '@nestjs/common';
 import type { Response as ExpressResponse } from 'express';
-import type { PlaygroundHistoryRunDetail, PlaygroundHistoryRunSummary } from 'manifest-shared';
+import type { PlaygroundHistoryRunDetail, PlaygroundHistoryRunSummary } from 'tuple-shared';
 import { TenantCtx, TenantContext } from '../common/decorators/tenant-context.decorator';
 import { PlaygroundService } from './playground.service';
 import { PlaygroundHistoryService } from './playground-history.service';

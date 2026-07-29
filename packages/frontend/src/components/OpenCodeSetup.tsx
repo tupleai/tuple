@@ -12,21 +12,21 @@ function getOpenCodeConfig(baseUrl: string, apiKey: string): string {
   return `{
   "$schema": "https://opencode.ai/config.json",
   "provider": {
-    "manifest": {
+    "tuple": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "Manifest",
+      "name": "Tuple",
       "options": {
         "baseURL": "${baseUrl}",
         "apiKey": "${apiKey}"
       },
       "models": {
         "auto": {
-          "name": "Manifest Auto"
+          "name": "Tuple Auto"
         }
       }
     }
   },
-  "model": "manifest/auto"
+  "model": "tuple/auto"
 }`;
 }
 
@@ -62,7 +62,7 @@ const EyeIcon: Component<{ open: boolean }> = (props) => (
 const OpenCodeSetup: Component<Props> = (props) => {
   const [keyRevealed, setKeyRevealed] = createSignal(false);
 
-  const placeholderKey = 'mnfst_YOUR_KEY';
+  const placeholderKey = 'tuple_YOUR_KEY';
   const hasFullKey = () => !!props.apiKey;
   const masked = () => (props.keyPrefix ? `${props.keyPrefix}...` : placeholderKey);
   const copyKey = () => props.apiKey ?? placeholderKey;

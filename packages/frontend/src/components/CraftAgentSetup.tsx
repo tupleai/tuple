@@ -41,7 +41,7 @@ const CraftAgentSetup: Component<Props> = (props) => {
   const [keyRevealed, setKeyRevealed] = createSignal(false);
 
   const hasFullKey = () => !!props.apiKey;
-  const masked = () => (props.keyPrefix ? `${props.keyPrefix}...` : 'mnfst_YOUR_KEY');
+  const masked = () => (props.keyPrefix ? `${props.keyPrefix}...` : 'tuple_YOUR_KEY');
   const copyKey = () => props.apiKey ?? masked();
   const visibleKey = () => (keyRevealed() && props.apiKey ? props.apiKey : masked());
 
@@ -49,7 +49,7 @@ const CraftAgentSetup: Component<Props> = (props) => {
     <div class="setup-agents-card">
       <p class="setup-method__hint">
         In Craft, add an API-key connection and choose the{' '}
-        <code class="setup-model-hint__code">Manifest</code> provider preset. Use model{' '}
+        <code class="setup-model-hint__code">Tuple</code> provider preset. Use model{' '}
         <code class="setup-model-hint__code">auto</code> and paste this API key:
       </p>
 

@@ -1,6 +1,6 @@
 import { DataSource, Repository } from 'typeorm';
 import { Logger } from '@nestjs/common';
-import type { ModelRoute } from 'manifest-shared';
+import type { ModelRoute } from 'tuple-shared';
 import { auth } from '../auth/auth.instance';
 import { Tenant } from '../entities/tenant.entity';
 import { Agent } from '../entities/agent.entity';
@@ -12,12 +12,12 @@ import { SpecificityAssignment } from '../entities/specificity-assignment.entity
 import { hashKey, keyPrefix } from '../common/utils/hash.util';
 import { getSeedConnections } from './seed-messages';
 
-const OLD_USER_EMAIL = 'olduser@manifest.build';
-const OLD_USER_PASSWORD = 'manifest';
+const OLD_USER_EMAIL = 'olduser@tuple.ai';
+const OLD_USER_PASSWORD = 'tuple';
 const OLD_TENANT_ID = 'seed-tenant-old-001';
 const OLD_AGENT_ID = 'seed-agent-old-001';
 const OLD_OTLP_KEY_ID = 'seed-otlp-key-old-001';
-const OLD_OTLP_KEY = 'mnfst_dev-otlp-key-old-001';
+const OLD_OTLP_KEY = 'tuple_dev-otlp-key-old-001';
 
 /** Public so tests / logs / docs share one source of truth for the cohort logins. */
 export const COHORT_SEED = {
@@ -63,7 +63,7 @@ export interface CohortSeedDeps {
  * - **clean** — the existing admin demo agent. Its providers are enabled so the
  *   routing page renders, but no complexity / task-specific config is seeded, so
  *   the dashboard shows the simplified Default + Custom surface only.
- * - **legacy** — a brand-new `olduser@manifest.build` + agent that is "invested"
+ * - **legacy** — a brand-new `olduser@tuple.ai` + agent that is "invested"
  *   in the deprecated surfaces (complexity routing on with per-tier overrides +
  *   active task-specific categories), so the dashboard keeps showing them.
  *

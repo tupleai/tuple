@@ -11,7 +11,7 @@ describe('UserDiscoveryBanner', () => {
     window.localStorage.clear();
   });
 
-  it('renders the discovery offer and links to the Calendly slot', () => {
+  it('renders the discovery offer and links to support', () => {
     const { container } = render(() => <UserDiscoveryBanner />);
 
     expect(container.querySelector('.overview-discovery-banner')).not.toBeNull();

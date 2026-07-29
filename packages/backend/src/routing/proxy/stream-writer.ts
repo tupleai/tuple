@@ -254,7 +254,7 @@ const MAX_SSE_BUFFER_SIZE = DEFAULT_MAX_SSE_BUFFER_SIZE;
  * bytes are written unchanged, so SSE framing (`event:` headers, multi-line
  * `data:` payloads, blank-line separators) is preserved end-to-end. Used by
  * the `/v1/messages` → Anthropic passthrough path where translation must
- * NOT touch the wire format but Manifest still needs to extract usage and
+ * NOT touch the wire format but Tuple still needs to extract usage and
  * cache thinking blocks.
  *
  * The tap receives the same parsed-event shape `pipeStream` would have

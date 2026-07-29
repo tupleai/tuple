@@ -17,7 +17,7 @@ import {
   type ErrorClass,
   type MessageTier,
   type SpecificityCategory,
-} from 'manifest-shared';
+} from 'tuple-shared';
 
 // `success` / `failed` are the canonical filter values; `ok` and the specific
 // legacy error values (`error` / `rate_limited` / `fallback_error`) plus `errors`
@@ -38,11 +38,11 @@ export const MESSAGE_TRIGGER_FILTER_VALUES = ['none', 'fallback', 'autofix'] as 
 export type MessageTriggerFilter = (typeof MESSAGE_TRIGGER_FILTER_VALUES)[number];
 
 /**
- * Error-origin filter for the Messages log. The real origins plus a `manifest`
- * shorthand for "all of config/policy/internal" (the HTTP-200 Manifest stubs
+ * Error-origin filter for the Messages log. The real origins plus a `tuple`
+ * shorthand for "all of config/policy/internal" (the HTTP-200 Tuple stubs
  * that are hidden from the log by default).
  */
-export const MESSAGE_ORIGIN_FILTER_VALUES = [...ERROR_ORIGINS, 'manifest'] as const;
+export const MESSAGE_ORIGIN_FILTER_VALUES = [...ERROR_ORIGINS, 'tuple'] as const;
 export type MessageOriginFilter = (typeof MESSAGE_ORIGIN_FILTER_VALUES)[number];
 
 export class MessagesQueryDto {

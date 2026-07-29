@@ -54,7 +54,7 @@ beforeAll(async () => {
   process.env['REQUEST_RECORDING_STORAGE'] = 'auto';
   process.env['REQUEST_RECORDING_RETENTION_DAYS'] = '1';
   if (expectedBackend === 'filesystem') {
-    filesystemRoot = await mkdtemp(join(tmpdir(), 'manifest-recordings-e2e-'));
+    filesystemRoot = await mkdtemp(join(tmpdir(), 'tuple-recordings-e2e-'));
     process.env['REQUEST_RECORDING_FILESYSTEM_PATH'] = filesystemRoot;
   }
 

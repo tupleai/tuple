@@ -19,7 +19,7 @@ import { PROVIDERS } from '../services/providers.js';
 import { getModelDisplayName } from '../services/model-display.js';
 import { providerIcon, customProviderLogo } from './ProviderIcon.jsx';
 import { authBadgeFor, authLabel } from './AuthBadge.js';
-import { platformIcon, isSuccessStatus } from 'manifest-shared';
+import { platformIcon, isSuccessStatus } from 'tuple-shared';
 import { isPlanRequestLimitMessage } from '../services/message-error-taxonomy.js';
 
 const MONO = 'font-family: var(--font-mono);';
@@ -375,7 +375,7 @@ const ERROR_DESCRIPTORS: Record<string, string> = {
   transport: 'Transport',
   config: 'Setup',
   policy: 'Custom limit',
-  internal: 'Manifest error',
+  internal: 'Tuple error',
   request: 'Bad request',
 };
 
@@ -423,7 +423,7 @@ function describeStatusPill(item: MessageRow): {
 export function StatusCell(item: MessageRow, _agentName: string | undefined): JSX.Element {
   const pill = describeStatusPill(item);
 
-  // A Manifest software limit is one red pill linking to its agent's limits page.
+  // A Tuple software limit is one red pill linking to its agent's limits page.
   if (pill.limitAgent) {
     const planLimit = isPlanLimitBlock(item);
     return (
@@ -438,7 +438,7 @@ export function StatusCell(item: MessageRow, _agentName: string | undefined): JS
           title={
             planLimit
               ? 'Free plan request limit reached - upgrade to Pro'
-              : 'Manifest usage limit reached - open your limits'
+              : 'Tuple usage limit reached - open your limits'
           }
         >
           {pill.label}

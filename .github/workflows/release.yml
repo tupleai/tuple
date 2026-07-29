@@ -36,7 +36,7 @@ jobs:
         run: |
           # Skip the version-PR step only when we can PROVE nothing will be
           # released. A changeset that targets only ignored packages
-          # (manifest-backend / -frontend / -shared) makes `changeset version` a
+          # (tuple-backend / -frontend / -shared) makes `changeset version` a
           # no-op; changesets/action would then push an empty branch and fail
           # with "No commits between main and changeset-release/main", aborting
           # this job before the publish steps below ever run. Skipping (not
@@ -75,11 +75,11 @@ jobs:
           # clobbering an existing Docker tag and a GitHub Release. See the
           # 5.47.0 re-publish incident during PR #1557 merge for the
           # failure mode this guards against.
-          CURR=$(git show "${AFTER_SHA}:packages/manifest/package.json" 2>/dev/null | jq -r .version 2>/dev/null || echo "")
+          CURR=$(git show "${AFTER_SHA}:packages/tuple/package.json" 2>/dev/null | jq -r .version 2>/dev/null || echo "")
           # Compare against the push base so multi-commit pushes are handled
           # correctly. On first push to a branch, BEFORE_SHA is all zeros.
           if [ -n "$BEFORE_SHA" ] && [ "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ]; then
-            PREV=$(git show "${BEFORE_SHA}:packages/manifest/package.json" 2>/dev/null | jq -r .version 2>/dev/null || echo "")
+            PREV=$(git show "${BEFORE_SHA}:packages/tuple/package.json" 2>/dev/null | jq -r .version 2>/dev/null || echo "")
           else
             PREV=""
           fi
@@ -103,13 +103,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          VERSION=$(jq -r .version packages/manifest/package.json)
-          TAG="manifest@${VERSION}"
+          VERSION=$(jq -r .version packages/tuple/package.json)
+          TAG="tuple@${VERSION}"
 
           # Extract changelog section for this version
           BODY=$(awk -v ver="## ${VERSION}" \
             '$0 == ver { found=1; next } found && /^## / { exit } found { print }' \
-            packages/manifest/CHANGELOG.md)
+            packages/tuple/CHANGELOG.md)
 
           # Add emoji headers
           BODY=$(echo "$BODY" | sed \
@@ -121,7 +121,7 @@ jobs:
           git push origin "$TAG" 2>/dev/null || true
 
           gh release create "$TAG" \
-            --title "manifest v${VERSION}" \
+            --title "tuple v${VERSION}" \
             --notes "${BODY:-No changelog}" \
             --verify-tag
 

@@ -10,7 +10,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
  * `fallback_from_model`) and the corresponding `custom_providers.name`
  * normalizes to a first-class tile-only entry in the shared provider
  * registry. Normalization here mirrors `normalizeProviderName` in
- * manifest-shared: lowercase + strip whitespace/dots/underscores/hyphens.
+ * tuple-shared: lowercase + strip whitespace/dots/underscores/hyphens.
  *
  * The list of canonical tile ids is hard-coded on purpose — migrations
  * run before application code and cannot import runtime modules safely.

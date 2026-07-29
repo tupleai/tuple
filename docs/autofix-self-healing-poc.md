@@ -36,7 +36,7 @@
 > that actually rejects `max_tokens` (real OpenAI Responses key, or a localhost
 > mock provider in self-hosted mode). Nothing committed.
 
-> Manifest intercepts a request that failed with a *repairable* error, ships the
+> Tuple intercepts a request that failed with a *repairable* error, ships the
 > failed request + full provider response to an external **healing service**, gets a
 > patched request back, and re-sends it **once** — **before**
 > the normal fallback chain runs. The attempt is recorded on the
@@ -65,7 +65,7 @@ The marketing copy is the product promise we're now building the engine for:
 
 > **"Auto-fix repairs failing requests before they reach the model"**
 > Real-time fix · Zero downtime · Observability · Notifications
-> — <https://manifest.build/autofix/>
+> — <https://tuple.ai/autofix/>
 
 **Naming:** display name is **"Auto-fix"**; backend prefix is `autofix_` (matches
 `autofix_waitlist_at`). The waitlist shell stays as-is and is independent of the
@@ -141,7 +141,7 @@ it's the single safety net after Auto-fix gives up.
 
 ## 4. The healing service (external, mocked first)
 
-Manifest talks to the healing service through a **stable internal port** so proxy
+Tuple talks to the healing service through a **stable internal port** so proxy
 code never depends on the wire format:
 
 ```ts
@@ -176,17 +176,17 @@ are the source of truth):
 - **`PATCH /api/heal-attempts/{healAttemptId}`** — after resending the `healedBody`,
   report the retry outcome `{ retryStatusCode, error? }` (`error` required on ≥400).
   Phoenix decides succeeded/failed itself (cleared target vs. same error recurring) —
-  we don't send a verdict. Manifest fires this **fire-and-forget** so it never
+  we don't send a verdict. Tuple fires this **fire-and-forget** so it never
   delays the client.
 
-`provider` + `api` (`chat_completions|responses|messages` — exactly Manifest's
+`provider` + `api` (`chat_completions|responses|messages` — exactly Tuple's
 `apiMode`) are the fingerprint dimensions. `traceId` (**required**) is the stable
-per-logical-request id — Manifest reuses the message-link group id and sends it as
+per-logical-request id — Tuple reuses the message-link group id and sends it as
 Phoenix's `traceId` so Phoenix can group the heal-attempt timeline across retries.
 The provider error is normalised to `{ message, type, param, code }` by
 `provider-error-normalizer.ts`.
 
-`POST /api/heal` request (Manifest → Phoenix):
+`POST /api/heal` request (Tuple → Phoenix):
 
 ```jsonc
 {
@@ -199,7 +199,7 @@ The provider error is normalised to `{ message, type, param, code }` by
 }
 ```
 
-`POST /api/heal` response (Phoenix → Manifest), discriminated on `status`:
+`POST /api/heal` response (Phoenix → Tuple), discriminated on `status`:
 
 ```jsonc
 {
@@ -364,7 +364,7 @@ the healer · track the full chain and label Auto-fix requests.)*
 
 - **Data footprint / trust boundary.** We now (a) send full request + response bodies
   to an external service and (b) store them on Auto-fix messages — both new for
-  Manifest. Fine against an in-process/same-infra mock; before the real external
+  Tuple. Fine against an in-process/same-infra mock; before the real external
   service, this needs the care of the error-cluster CMS boundary (scrub + consent +
   retention). Scope storage to Auto-fix messages only; scrub + truncate. Flagging, not
   hardening, for the POC.

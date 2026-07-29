@@ -9,8 +9,8 @@ describe("CloudEmailInfo", () => {
   });
 
   it("displays the user email", () => {
-    const { container } = render(() => <CloudEmailInfo email="user@manifest.build" />);
-    expect(container.textContent).toContain("user@manifest.build");
+    const { container } = render(() => <CloudEmailInfo email="user@tuple.ai" />);
+    expect(container.textContent).toContain("user@tuple.ai");
   });
 
   it("renders the mail icon", () => {

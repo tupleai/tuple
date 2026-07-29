@@ -47,7 +47,7 @@ describe('MessageTable status labels', () => {
     expect(link.getAttribute('title')).toBe('Free plan request limit reached - upgrade to Pro');
   });
 
-  it('keeps other Manifest policy failures labelled as custom limits', () => {
+  it('keeps other Tuple policy failures labelled as custom limits', () => {
     renderStatus({
       error_origin: 'policy',
       error_class: 'limit_exceeded',
@@ -56,6 +56,6 @@ describe('MessageTable status labels', () => {
 
     const link = screen.getByText('Failed') as HTMLAnchorElement;
     expect(link.getAttribute('href')).toBe('/harnesses/demo-agent/limits');
-    expect(link.getAttribute('title')).toBe('Manifest usage limit reached - open your limits');
+    expect(link.getAttribute('title')).toBe('Tuple usage limit reached - open your limits');
   });
 });

@@ -2,7 +2,7 @@
  * ╔══════════════════════════════════════════════════════════════════════╗
  * ║              PROVIDER REGISTRY — Single Source of Truth             ║
  * ╠══════════════════════════════════════════════════════════════════════╣
- * ║  The canonical provider list lives in `manifest-shared/providers`.  ║
+ * ║  The canonical provider list lives in `tuple-shared/providers`.  ║
  * ║  This module re-exports it under the historical backend-facing      ║
  * ║  names + the derived lookup maps used across the backend.           ║
  * ║                                                                    ║
@@ -22,7 +22,7 @@ import {
   SHARED_PROVIDER_BY_ID,
   SHARED_PROVIDER_BY_ID_OR_ALIAS,
   type SharedProviderEntry,
-} from 'manifest-shared';
+} from 'tuple-shared';
 
 export type ProviderRegistryEntry = SharedProviderEntry;
 

@@ -114,7 +114,7 @@ describe('PayloadBuilderService', () => {
 
     expect(payload.schema_version).toBe(1);
     expect(payload.install_id).toBe('inst-123');
-    expect(payload.manifest_version).toBe('5.47.0');
+    expect(payload.tuple_version).toBe('5.47.0');
     expect(payload.platform).toBe(process.platform);
     expect(payload.arch).toBe(process.arch);
   });

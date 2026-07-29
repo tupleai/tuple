@@ -17,8 +17,8 @@ vi.mock("../../src/services/agent-platform-store.js", () => ({
   agentCategory: () => null,
 }));
 
-vi.mock("manifest-shared", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("manifest-shared")>();
+vi.mock("tuple-shared", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("tuple-shared")>();
   return { ...actual, platformIcon: () => undefined };
 });
 
@@ -45,7 +45,7 @@ const testModels = {
 describe("RoutingInstructionModal", () => {
   beforeEach(() => {
     mockGetModelPrices.mockResolvedValue(testModels);
-    mockGetAgentKey.mockResolvedValue({ keyPrefix: "mnfst_abc", apiKey: "mnfst_abc123" });
+    mockGetAgentKey.mockResolvedValue({ keyPrefix: "tuple_abc", apiKey: "tuple_abc123" });
   });
 
   it("renders nothing when open is false", () => {
@@ -90,8 +90,8 @@ describe("RoutingInstructionModal", () => {
     ));
     expect(container.querySelector(".modal-terminal")).not.toBeNull();
     expect(container.textContent).toContain("<provider/model>");
-    expect(container.textContent).toContain("openclaw config unset models.providers.manifest");
-    expect(container.textContent).toContain("openclaw config unset agents.defaults.models.manifest/auto");
+    expect(container.textContent).toContain("openclaw config unset models.providers.tuple");
+    expect(container.textContent).toContain("openclaw config unset agents.defaults.models.tuple/auto");
   });
 
   it("explains that this restores direct model access in disable mode", () => {
@@ -209,8 +209,8 @@ describe("RoutingInstructionModal", () => {
       <RoutingInstructionModal open={true} mode="disable" agentName="test-agent" onClose={() => {}} />
     ));
     // The disableCmd function interpolates the selected model (or placeholder)
-    expect(container.textContent).toContain("openclaw config unset models.providers.manifest");
-    expect(container.textContent).toContain("openclaw config unset agents.defaults.models.manifest/auto");
+    expect(container.textContent).toContain("openclaw config unset models.providers.tuple");
+    expect(container.textContent).toContain("openclaw config unset agents.defaults.models.tuple/auto");
     expect(container.textContent).toContain("openclaw config set agents.defaults.model.primary <provider/model>");
     expect(container.textContent).toContain("openclaw gateway restart");
   });
@@ -227,8 +227,8 @@ describe("RoutingInstructionModal", () => {
     });
     // Verify the copied text contains all four disable commands
     const copiedText = (navigator.clipboard.writeText as ReturnType<typeof vi.fn>).mock.calls[0][0];
-    expect(copiedText).toContain("openclaw config unset models.providers.manifest");
-    expect(copiedText).toContain("openclaw config unset agents.defaults.models.manifest/auto");
+    expect(copiedText).toContain("openclaw config unset models.providers.tuple");
+    expect(copiedText).toContain("openclaw config unset agents.defaults.models.tuple/auto");
     expect(copiedText).toContain("openclaw config set agents.defaults.model.primary");
     expect(copiedText).toContain("openclaw gateway restart");
   });
@@ -270,7 +270,7 @@ describe("RoutingInstructionModal", () => {
     await vi.waitFor(() => {
       const el = container.querySelector('[data-testid="setup-add-provider"]');
       expect(el).not.toBeNull();
-      expect(el!.getAttribute("data-api-key")).toBe("mnfst_abc123");
+      expect(el!.getAttribute("data-api-key")).toBe("tuple_abc123");
     });
   });
 
@@ -278,11 +278,11 @@ describe("RoutingInstructionModal", () => {
     const { container } = render(() => (
       <RoutingInstructionModal open={true} mode="disable" agentName="test-agent" onClose={() => {}} />
     ));
-    expect(container.textContent).toContain("openclaw config unset models.providers.manifest");
+    expect(container.textContent).toContain("openclaw config unset models.providers.tuple");
   });
 
   it("passes null apiKey to SetupStepAddProvider when full key unavailable", async () => {
-    mockGetAgentKey.mockResolvedValue({ keyPrefix: "mnfst_abc", apiKey: null });
+    mockGetAgentKey.mockResolvedValue({ keyPrefix: "tuple_abc", apiKey: null });
     const { container } = render(() => (
       <RoutingInstructionModal open={true} mode="enable" agentName="test-agent" onClose={() => {}} />
     ));
@@ -294,14 +294,14 @@ describe("RoutingInstructionModal", () => {
   });
 
   it("passes full apiKey to SetupStepAddProvider when available", async () => {
-    mockGetAgentKey.mockResolvedValue({ keyPrefix: "mnfst_abc", apiKey: "mnfst_abc123full" });
+    mockGetAgentKey.mockResolvedValue({ keyPrefix: "tuple_abc", apiKey: "tuple_abc123full" });
     const { container } = render(() => (
       <RoutingInstructionModal open={true} mode="enable" agentName="test-agent" onClose={() => {}} />
     ));
     await vi.waitFor(() => {
       const el = container.querySelector('[data-testid="setup-add-provider"]');
       expect(el).not.toBeNull();
-      expect(el!.getAttribute("data-api-key")).toBe("mnfst_abc123full");
+      expect(el!.getAttribute("data-api-key")).toBe("tuple_abc123full");
     });
   });
 
@@ -312,7 +312,7 @@ describe("RoutingInstructionModal", () => {
     await vi.waitFor(() => {
       const el = container.querySelector('[data-testid="setup-add-provider"]');
       expect(el).not.toBeNull();
-      expect(el!.getAttribute("data-api-key")).toBe("mnfst_abc123");
+      expect(el!.getAttribute("data-api-key")).toBe("tuple_abc123");
       expect(el!.getAttribute("data-platform")).toBe("openclaw");
     });
   });

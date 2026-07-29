@@ -3,7 +3,7 @@ jest.mock('./billing.config', () => ({
 }));
 
 import { DataSource } from 'typeorm';
-import { FREE_PLAN_REQUESTS_PER_MONTH } from 'manifest-shared';
+import { FREE_PLAN_REQUESTS_PER_MONTH } from 'tuple-shared';
 import { BillingUsageEmailService } from './billing-usage-email.service';
 import { isBillingEnabled } from './billing.config';
 import { PlanService } from './plan.service';

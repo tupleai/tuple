@@ -3,7 +3,7 @@ import {
   CANONICAL_LOCAL_IDS,
   SHARED_PROVIDER_BY_ID_OR_ALIAS,
   normalizeProviderName,
-} from 'manifest-shared';
+} from 'tuple-shared';
 import type { AuthType, CustomProviderData } from '../services/api.js';
 import { customProviderColor } from '../services/formatters.js';
 import type { ProviderDef } from '../services/providers.js';

@@ -1,6 +1,6 @@
 export type AuthMethod = 'email' | 'google' | 'github' | 'discord';
 
-const STORAGE_KEY = 'manifest:last-auth-method';
+const STORAGE_KEY = 'tuple:last-auth-method';
 const VALID: ReadonlySet<AuthMethod> = new Set(['email', 'google', 'github', 'discord']);
 
 export const getLastAuthMethod = (): AuthMethod | null => {

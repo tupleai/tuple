@@ -12,7 +12,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
  *
  * On all three, `user_id` is demoted to a nullable `created_by_user_id`
  * audit column. Orphan rows (user without a tenant) abort the migration
- * unless MANIFEST_MIGRATION_FORCE=1 deletes them.
+ * unless TUPLE_MIGRATION_FORCE=1 deletes them.
  */
 export class TenantScopedConfigs1792600000000 implements MigrationInterface {
   private async rescopeTable(queryRunner: QueryRunner, table: string): Promise<void> {
@@ -30,13 +30,13 @@ export class TenantScopedConfigs1792600000000 implements MigrationInterface {
     );
     const orphanCount = Number(orphans[0]?.count ?? 0);
     if (orphanCount > 0) {
-      if (process.env.MANIFEST_MIGRATION_FORCE === '1') {
+      if (process.env.TUPLE_MIGRATION_FORCE === '1') {
         await queryRunner.query(`DELETE FROM "${table}" WHERE "tenant_id" IS NULL`);
       } else {
         throw new Error(
           `TenantScopedConfigs migration: ${orphanCount} ${table} row(s) reference a user ` +
             `with no tenant and cannot be re-scoped. Inspect them (SELECT * FROM ${table} ` +
-            `WHERE tenant_id IS NULL) or re-run with MANIFEST_MIGRATION_FORCE=1 to delete them.`,
+            `WHERE tenant_id IS NULL) or re-run with TUPLE_MIGRATION_FORCE=1 to delete them.`,
         );
       }
     }

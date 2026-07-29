@@ -26,7 +26,7 @@ export const MAX_CACHE_ENTRIES = 10_000;
  * DeepSeek-compatible reasoning providers require assistant tool-call turns to
  * be replayed with the same `reasoning_content` they returned. Generic
  * OpenAI-compatible SDKs often drop that provider-specific field when they
- * rebuild conversation history, so Manifest caches tool turns by the first tool
+ * rebuild conversation history, so Tuple caches tool turns by the first tool
  * call id. Normal assistant turns are intentionally not cached for replay:
  * DeepSeek does not require them, and content-based matching can attach
  * reasoning to the wrong visible turn.

@@ -455,7 +455,7 @@ export interface ErrorBreakdownResponse {
   total_errors: number;
   provider_errors: number;
   transport_errors: number;
-  manifest_errors: number;
+  tuple_errors: number;
   auto_fixed: number;
   by_origin: Record<string, number>;
   by_class: Record<string, number>;

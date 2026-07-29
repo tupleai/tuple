@@ -5,7 +5,7 @@ import type {
   ModelRoute,
   ResponseMode,
   OutputModality,
-} from 'manifest-shared';
+} from 'tuple-shared';
 import { BASE_URL, fetchJson, fetchMutate, parseErrorMessage, routingPath } from './core.js';
 
 export type { AuthType, ModelCapability, ModelModality, ModelRoute, ResponseMode, OutputModality };
@@ -226,7 +226,7 @@ export function updateRecording(agentName: string, body: { enabled?: boolean }) 
  * `agent_model_params` table — see `services/api/model-params.ts` for the
  * CRUD client.
  */
-export type { RequestParamDefaults } from 'manifest-shared';
+export type { RequestParamDefaults } from 'tuple-shared';
 
 export interface TierAssignment {
   id: string;

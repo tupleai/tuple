@@ -1,6 +1,6 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import type { Repository } from 'typeorm';
-import type { ModelRoute, TierColor } from 'manifest-shared';
+import type { ModelRoute, TierColor } from 'tuple-shared';
 import { HeaderTierService, RESERVED_HEADER_KEYS } from '../header-tier.service';
 import { HeaderTier } from '../../../entities/header-tier.entity';
 import type { DiscoveredModel } from '../../../model-discovery/model-fetcher';

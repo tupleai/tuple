@@ -223,8 +223,8 @@ const ResetPassword: Component = () => {
 
   return (
     <>
-      <Title>Reset Password - Manifest</Title>
-      <Meta name="description" content="Reset your Manifest account password." />
+      <Title>Reset Password - Tuple</Title>
+      <Meta name="description" content="Reset your Tuple account password." />
       <Show when={token()} fallback={<RequestResetForm />}>
         {(t) => <SetNewPasswordForm token={t()} />}
       </Show>

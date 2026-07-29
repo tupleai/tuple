@@ -8,7 +8,7 @@ import { Agent } from '../entities/agent.entity';
 import { AgentApiKey } from '../entities/agent-api-key.entity';
 import { ApiKey } from '../entities/api-key.entity';
 import { AgentMessage } from '../entities/agent-message.entity';
-import { ManifestRequest } from '../entities/request.entity';
+import { TupleRequest } from '../entities/request.entity';
 import { TenantProvider } from '../entities/tenant-provider.entity';
 import { AgentEnabledProvider } from '../entities/agent-enabled-provider.entity';
 import { TierAssignment } from '../entities/tier-assignment.entity';
@@ -20,8 +20,8 @@ import type { StoredAttemptRecording } from '../routing/proxy/attempt-recording.
 import { getSeedConnections, seedAgentMessages, seedConnectionId } from './seed-messages';
 import { seedRoutingCohorts } from './seed-cohorts';
 
-const SEED_API_KEY = 'dev-api-key-manifest-001';
-const SEED_OTLP_KEY = 'mnfst_dev-otlp-key-001';
+const SEED_API_KEY = 'dev-api-key-tuple-001';
+const SEED_OTLP_KEY = 'tuple_dev-otlp-key-001';
 const SEED_TENANT_ID = 'seed-tenant-001';
 const SEED_AGENT_ID = 'seed-agent-001';
 const SEED_RECORDED_REQUEST_ID = 'seed-req-recording-001';
@@ -124,8 +124,8 @@ export class DatabaseSeederService implements OnModuleInit {
     @InjectRepository(AgentApiKey) private readonly agentKeyRepo: Repository<AgentApiKey>,
     @InjectRepository(ApiKey) private readonly apiKeyRepo: Repository<ApiKey>,
     @InjectRepository(AgentMessage) private readonly messageRepo: Repository<AgentMessage>,
-    @InjectRepository(ManifestRequest)
-    private readonly requestRepo: Repository<ManifestRequest>,
+    @InjectRepository(TupleRequest)
+    private readonly requestRepo: Repository<TupleRequest>,
     @InjectRepository(TenantProvider) private readonly providerRepo: Repository<TenantProvider>,
     @InjectRepository(AgentEnabledProvider)
     private readonly enabledProviderRepo: Repository<AgentEnabledProvider>,
@@ -174,7 +174,7 @@ export class DatabaseSeederService implements OnModuleInit {
       await this.seedRecordedRequest();
       this.logger.log('Seeded demo data (SEED_DATA=true, dev/test only)');
       this.logger.warn(
-        'SECURITY: Default seed credentials are active (admin@manifest.build). Do NOT use in production.',
+        'SECURITY: Default seed credentials are active (admin@tuple.ai). Do NOT use in production.',
       );
     } catch (err) {
       this.logger.error(
@@ -191,19 +191,19 @@ export class DatabaseSeederService implements OnModuleInit {
   }
 
   private async seedAdminUser() {
-    const existing = await this.checkBetterAuthUser('admin@manifest.build');
+    const existing = await this.checkBetterAuthUser('admin@tuple.ai');
     if (existing) return;
 
     await auth.api.signUpEmail({
       body: {
-        email: 'admin@manifest.build',
-        password: 'manifest',
+        email: 'admin@tuple.ai',
+        password: 'tuple',
         name: 'Admin',
       },
     });
 
     await this.dataSource.query(`UPDATE "user" SET "emailVerified" = true WHERE email = $1`, [
-      'admin@manifest.build',
+      'admin@tuple.ai',
     ]);
   }
 
@@ -240,7 +240,7 @@ export class DatabaseSeederService implements OnModuleInit {
   private async getAdminUserId(): Promise<string | null> {
     try {
       const rows = await this.dataSource.query(`SELECT id FROM "user" WHERE email = $1`, [
-        'admin@manifest.build',
+        'admin@tuple.ai',
       ]);
       return rows.length > 0 ? String(rows[0].id) : null;
     } catch (err) {
@@ -261,7 +261,7 @@ export class DatabaseSeederService implements OnModuleInit {
       name: userId,
       owner_user_id: userId,
       organization_name: 'Demo Organization',
-      email: 'admin@manifest.build',
+      email: 'admin@tuple.ai',
       is_active: true,
     });
 

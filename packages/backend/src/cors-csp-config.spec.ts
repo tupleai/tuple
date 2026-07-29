@@ -12,7 +12,7 @@ import {
 
 describe('HOSTED_WINGMAN_ORIGIN', () => {
   it('points at the hosted Wingman SPA', () => {
-    expect(HOSTED_WINGMAN_ORIGIN).toBe('https://wingman.manifest.build');
+    expect(HOSTED_WINGMAN_ORIGIN).toBe('https://wingman.tuple.ai');
   });
 });
 
@@ -52,7 +52,7 @@ describe('buildProdAllowedOrigins', () => {
     expect(
       buildProdAllowedOrigins({
         extraOrigins:
-          ' https://wingman.acme.dev , https://wingman.manifest.build ,https://tools.acme.dev',
+          ' https://wingman.acme.dev , https://wingman.tuple.ai ,https://tools.acme.dev',
       }),
     ).toEqual([HOSTED_WINGMAN_ORIGIN, 'https://wingman.acme.dev', 'https://tools.acme.dev']);
   });

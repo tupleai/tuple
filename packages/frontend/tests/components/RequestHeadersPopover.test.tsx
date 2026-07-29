@@ -9,11 +9,11 @@ import RequestHeadersPopover, {
 } from '../../src/components/playground/RequestHeadersPopover';
 
 describe('isBlockedHeaderKey', () => {
-  it('flags Manifest-managed and transport-layer headers case-insensitively', () => {
+  it('flags Tuple-managed and transport-layer headers case-insensitively', () => {
     expect(isBlockedHeaderKey('Authorization')).toBe(true);
     expect(isBlockedHeaderKey('cookie')).toBe(true);
     expect(isBlockedHeaderKey('Content-Type')).toBe(true);
-    expect(isBlockedHeaderKey('X-Manifest-Trace')).toBe(true);
+    expect(isBlockedHeaderKey('X-Tuple-Trace')).toBe(true);
   });
 
   it('lets normal provider headers through', () => {
@@ -67,7 +67,7 @@ describe('RequestHeadersPopover', () => {
     expect(entries().length).toBe(2);
   });
 
-  it('shows an inline warning when the user types a Manifest-managed key', () => {
+  it('shows an inline warning when the user types a Tuple-managed key', () => {
     const initial: HeaderEntry = { id: '1', key: 'Authorization', value: 'Bearer x' };
     const { container } = render(() => (
       <RequestHeadersPopover

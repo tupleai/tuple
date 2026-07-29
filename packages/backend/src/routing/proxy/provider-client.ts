@@ -37,7 +37,7 @@ import { OpencodeGoCatalogService } from '../../model-discovery/opencode-go-cata
 import { ProviderModelRegistryService } from '../../model-discovery/provider-model-registry.service';
 import { qualifyChatGptResponse } from './chatgpt-response-qualifier';
 import { isProviderAvailableForDeployment } from '../../common/utils/provider-availability';
-import { ManifestError } from '../../common/errors/manifest-error';
+import { TupleError } from '../../common/errors/tuple-error';
 import { MANAGED_FREE_PROVIDER_BY_ID } from '../../common/constants/managed-free-providers';
 
 export interface ForwardResult {
@@ -55,7 +55,7 @@ export interface ForwardResult {
     body: Record<string, unknown>,
     attempt?: ProviderAttemptRef,
   ) => Promise<ForwardResult>;
-  /** False only when Manifest produced a response without invoking provider transport. */
+  /** False only when Tuple produced a response without invoking provider transport. */
   providerCallStarted?: boolean;
   /** Persisted provider-call identity, when request tracking is available. */
   attempt?: ProviderAttemptRef;
@@ -170,7 +170,7 @@ function structuredOutputToolName(
 
 function buildPromptCacheKey(sessionKey: string): string {
   const digest = createHash('sha256').update(sessionKey).digest('hex').slice(0, 32);
-  return `manifest-${digest}`;
+  return `tuple-${digest}`;
 }
 
 function applyXaiResponsesPromptCacheKey(
@@ -261,7 +261,7 @@ export class ProviderClient {
     } = opts;
 
     if (!customEndpoint && !isProviderAvailableForDeployment(provider)) {
-      throw new ManifestError('M303', HttpStatus.BAD_REQUEST);
+      throw new TupleError('M303', HttpStatus.BAD_REQUEST);
     }
 
     const { endpoint, endpointKey } = await this.resolveEndpoint(
@@ -635,7 +635,7 @@ export class ProviderClient {
         ctx.apiMode === 'responses'
           ? // ChatGPT subscription tokens hit the Codex Responses backend, which
             // requires instruction text, list-shaped input, and upstream SSE even
-            // when Manifest returns a non-streaming JSON response to the caller.
+            // when Tuple returns a non-streaming JSON response to the caller.
             // It also rejects sampling/metadata/cache fields the OpenAI SDK
             // routinely sends, so we drop those before forwarding.
             toNativeResponsesRequest(body, bareModel, {
@@ -668,7 +668,7 @@ export class ProviderClient {
       // Force upstream streaming for copilot-responses so the SSE collector in
       // handleNonStreamResponse stays the single source of truth. Without this,
       // an explicit `stream: false` from the caller could hand us a plain JSON
-      // body that our SSE parser would silently drop (mnfst/manifest#1849).
+      // body that our SSE parser would silently drop (tupleai/tuple#1849).
       if (endpointKey === 'copilot-responses') {
         requestBody.stream = true;
       }

@@ -770,7 +770,7 @@ describe('ProviderSelectModal', () => {
       });
       expect(window.open).toHaveBeenCalledWith(
         'https://auth.openai.com/oauth/authorize?test=1',
-        'manifest-oauth',
+        'tuple-oauth',
         'width=500,height=700',
       );
 
@@ -1346,8 +1346,8 @@ describe('ProviderSelectModal', () => {
 
       // Simulate the done page sending via BroadcastChannel
       await new Promise((r) => setTimeout(r, 50));
-      const bc = new BroadcastChannel('manifest-oauth');
-      bc.postMessage({ type: 'manifest-oauth-success' });
+      const bc = new BroadcastChannel('tuple-oauth');
+      bc.postMessage({ type: 'tuple-oauth-success' });
       bc.close();
 
       await waitFor(() => {
@@ -1378,8 +1378,8 @@ describe('ProviderSelectModal', () => {
       await new Promise((r) => setTimeout(r, 500));
 
       // OAuth flow completes and done page sends BroadcastChannel message
-      const bc = new BroadcastChannel('manifest-oauth');
-      bc.postMessage({ type: 'manifest-oauth-success' });
+      const bc = new BroadcastChannel('tuple-oauth');
+      bc.postMessage({ type: 'tuple-oauth-success' });
       bc.close();
 
       await waitFor(() => {
@@ -1407,7 +1407,7 @@ describe('ProviderSelectModal', () => {
       // Simulate the done page sending a postMessage
       await new Promise((r) => setTimeout(r, 50));
       window.dispatchEvent(
-        new MessageEvent('message', { data: { type: 'manifest-oauth-success' } }),
+        new MessageEvent('message', { data: { type: 'tuple-oauth-success' } }),
       );
 
       await waitFor(() => {
@@ -1441,7 +1441,7 @@ describe('ProviderSelectModal', () => {
       });
 
       // Error message arrives — paste field still visible, no crash
-      window.dispatchEvent(new MessageEvent('message', { data: { type: 'manifest-oauth-error' } }));
+      window.dispatchEvent(new MessageEvent('message', { data: { type: 'tuple-oauth-error' } }));
       await new Promise((r) => setTimeout(r, 50));
       expect(
         screen.getByPlaceholderText('http://localhost:1455/auth/callback?code=...'),

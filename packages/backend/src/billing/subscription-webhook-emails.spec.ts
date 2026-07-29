@@ -1,8 +1,8 @@
 jest.mock('./billing-email-sender', () => ({
   formatPlanName: (plan: string | null | undefined) =>
     plan === 'pro' ? 'Pro' : plan === 'free' ? 'Free' : plan,
-  getBillingAppUrl: () => 'https://app.manifest.build',
-  getBillingEmailFrom: () => 'noreply@manifest.build',
+  getBillingAppUrl: () => 'https://app.tuple.ai',
+  getBillingEmailFrom: () => 'noreply@tuple.ai',
   sendSubscriptionPlanEmail: jest.fn().mockResolvedValue(true),
 }));
 
@@ -72,7 +72,7 @@ describe('subscription webhook billing emails', () => {
     expect(sendSubscriptionPlanEmail).toHaveBeenCalledWith(
       'owner@example.com',
       expect.objectContaining({ kind: 'subscription_confirmed', planName: 'Pro' }),
-      'noreply@manifest.build',
+      'noreply@tuple.ai',
     );
   });
 
@@ -138,7 +138,7 @@ describe('subscription webhook billing emails', () => {
         kind: 'plan_changed',
         previousPlanName: 'Free',
       }),
-      'noreply@manifest.build',
+      'noreply@tuple.ai',
     );
   });
 
@@ -157,7 +157,7 @@ describe('subscription webhook billing emails', () => {
     expect(sendSubscriptionPlanEmail).toHaveBeenCalledWith(
       'owner@example.com',
       expect.objectContaining({ kind: 'cancellation_confirmed' }),
-      'noreply@manifest.build',
+      'noreply@tuple.ai',
     );
   });
 
@@ -224,7 +224,7 @@ describe('subscription webhook billing emails', () => {
       expect.objectContaining({
         periodEnd: cancelDate.toISOString(),
       }),
-      'noreply@manifest.build',
+      'noreply@tuple.ai',
     );
   });
 
@@ -251,7 +251,7 @@ describe('subscription webhook billing emails', () => {
       expect.objectContaining({
         periodEnd: endedDate.toISOString(),
       }),
-      'noreply@manifest.build',
+      'noreply@tuple.ai',
     );
   });
 

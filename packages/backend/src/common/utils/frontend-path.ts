@@ -10,7 +10,7 @@ function hasIndex(dir: string): boolean {
  * embedded npm package layouts. Returns `null` if no valid directory found.
  */
 export function resolveFrontendDir(): string | null {
-  const envDir = process.env['MANIFEST_FRONTEND_DIR'];
+  const envDir = process.env['TUPLE_FRONTEND_DIR'];
   if (envDir && hasIndex(envDir)) return envDir;
 
   // Monorepo: dist/common/utils/ → ../../../../frontend/dist

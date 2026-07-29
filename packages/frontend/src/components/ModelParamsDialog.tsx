@@ -7,7 +7,7 @@ import {
   type JsonValue,
   type ModelParamGroup,
   type ProviderParamSpec,
-} from 'manifest-shared';
+} from 'tuple-shared';
 import { createEffect, createSignal, For, Show, type Component } from 'solid-js';
 import { Portal } from 'solid-js/web';
 import type { RequestParamDefaults } from '../services/api.js';
@@ -28,7 +28,7 @@ interface Props {
 
 type DraftState = Record<string, JsonValue>;
 
-const UNSET_OPTION_VALUE = '__manifest_param_unset__';
+const UNSET_OPTION_VALUE = '__tuple_param_unset__';
 
 const GROUP_LABELS: Record<ModelParamGroup, string> = {
   generation_length: 'Generation length',

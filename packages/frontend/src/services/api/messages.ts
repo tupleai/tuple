@@ -1,5 +1,5 @@
 import { fetchJson, fetchMutate } from './core.js';
-import type { AutofixStatus } from 'manifest-shared';
+import type { AutofixStatus } from 'tuple-shared';
 
 /** A deterministic edit Phoenix applied to heal a request. */
 export interface AutofixOperation {
@@ -40,7 +40,7 @@ export interface MessageDetailResponse {
     status: string;
     autofix_status: AutofixStatus | null;
     error_message: string | null;
-    /** Documented Manifest error code ('M100', 'M300', …). Null for provider failures. */
+    /** Documented Tuple error code ('M100', 'M300', …). Null for provider failures. */
     error_code: string | null;
     /** WHO caused a failure: provider | transport | config | policy | internal | request. Null on success. */
     error_origin: string | null;

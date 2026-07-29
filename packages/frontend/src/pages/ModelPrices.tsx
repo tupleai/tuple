@@ -182,7 +182,7 @@ const ModelPrices: Component = () => {
 
   return (
     <div class="container--full">
-      <Title>Model Prices - Manifest</Title>
+      <Title>Model Prices - Tuple</Title>
       <Meta
         name="description"
         content="Compare per-token pricing across all major LLM providers."

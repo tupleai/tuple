@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: manifest
+    name: tuple
     runtime: image
     image:
-      url: docker.io/manifestdotbuild/manifest:6
+      url: docker.io/tupleai/tuple:6
     plan: free
     numInstances: 1
     healthCheckPath: /api/v1/health
@@ -13,23 +13,23 @@ services:
         value: 2099
       - key: DATABASE_URL
         fromDatabase:
-          name: manifest-postgres
+          name: tuple-postgres
           property: connectionString
       - key: BETTER_AUTH_SECRET
         generateValue: true
-      - key: MANIFEST_ENCRYPTION_KEY
+      - key: TUPLE_ENCRYPTION_KEY
         generateValue: true
       - key: BETTER_AUTH_URL
         fromService:
           type: web
-          name: manifest
+          name: tuple
           envVarKey: RENDER_EXTERNAL_URL
-      - key: MANIFEST_MODE
+      - key: TUPLE_MODE
         value: selfhosted
 
 databases:
-  - name: manifest-postgres
+  - name: tuple-postgres
     plan: free
-    databaseName: manifest
-    user: manifest
+    databaseName: tuple
+    user: tuple
     ipAllowList: []

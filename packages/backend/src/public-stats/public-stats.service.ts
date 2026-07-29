@@ -9,7 +9,7 @@ import {
   normalizeProviderName,
   type AgentCategory,
   type AgentPlatform,
-} from 'manifest-shared';
+} from 'tuple-shared';
 import { AgentMessage } from '../entities/agent-message.entity';
 import { Agent } from '../entities/agent.entity';
 import { ModelPricingCacheService } from '../model-prices/model-pricing-cache.service';

@@ -55,7 +55,7 @@ export function ThresholdAlertEmail(props: ThresholdAlertProps) {
     period,
     timestamp,
     agentUrl,
-    logoUrl = 'https://app.manifest.build/manifest-logo.png',
+    logoUrl = 'https://app.tuple.ai/tuple-logo.png',
     alertType = 'hard',
     periodResetDate,
   } = props;
@@ -77,7 +77,7 @@ export function ThresholdAlertEmail(props: ThresholdAlertProps) {
         <Container style={container}>
           {/* Logo */}
           <Section style={logoSection}>
-            <Img src={logoUrl} alt="Manifest" height="32" style={logoImg} />
+            <Img src={logoUrl} alt="Tuple" height="32" style={logoImg} />
           </Section>
 
           {/* Main content */}
@@ -159,12 +159,12 @@ export function ThresholdAlertEmail(props: ThresholdAlertProps) {
           <Hr style={divider} />
           <Section style={footer}>
             <Text style={footerNote}>
-              You are receiving this because you set up a notification rule in Manifest.
+              You are receiving this because you set up a notification rule in Tuple.
             </Text>
             <Text style={footerMuted}>
-              © 2026 MNFST Inc. All rights reserved.{' '}
-              <Link href="https://manifest.build" style={footerLink}>
-                manifest.build
+              © 2026 Tuple.ai All rights reserved.{' '}
+              <Link href="https://tuple.ai" style={footerLink}>
+                tuple.ai
               </Link>
             </Text>
           </Section>

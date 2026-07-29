@@ -1,7 +1,7 @@
 import { createEffect, createSignal, onCleanup, Show, type Component } from 'solid-js';
 
-const STORAGE_OPEN = 'manifest:wingman:open';
-const STORAGE_HEIGHT = 'manifest:wingman:height';
+const STORAGE_OPEN = 'tuple:wingman:open';
+const STORAGE_HEIGHT = 'tuple:wingman:height';
 const MIN_HEIGHT_VH = 20;
 const MAX_HEIGHT_VH = 90;
 const DEFAULT_HEIGHT_VH = 50;
@@ -45,7 +45,7 @@ const WingmanDevTools: Component = () => {
   // origin directly makes every request a local-network request, which Chrome
   // blocks (see wingman-dev-proxy.ts). The literal is only a fallback for a
   // build that didn't define it.
-  const HOSTED_WINGMAN_URL = 'https://wingman.manifest.build';
+  const HOSTED_WINGMAN_URL = 'https://wingman.tuple.ai';
   const deriveWingmanBase = (): string => __WINGMAN_URL__ || HOSTED_WINGMAN_URL;
 
   const iframeSrc = () =>

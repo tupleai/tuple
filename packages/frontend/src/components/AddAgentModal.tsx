@@ -5,7 +5,7 @@ import { createAgent, getGlobalProviders } from '../services/api.js';
 import { toast } from '../services/toast-store.js';
 import { markAgentCreated, markSetupPending } from '../services/recent-agents.js';
 import { refreshAgents } from '../services/sse.js';
-import { type AgentCategory, type AgentPlatform, PLATFORMS_BY_CATEGORY } from 'manifest-shared';
+import { type AgentCategory, type AgentPlatform, PLATFORMS_BY_CATEGORY } from 'tuple-shared';
 
 /**
  * "Connect Harness" modal extracted from Workspace so it can be reused by other

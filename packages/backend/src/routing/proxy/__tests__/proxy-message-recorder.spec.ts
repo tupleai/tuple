@@ -156,7 +156,7 @@ describe('ProxyMessageRecorder', () => {
       );
     });
 
-    it('stamps error_code when completing a pending attempt with a Manifest body', async () => {
+    it('stamps error_code when completing a pending attempt with a Tuple body', async () => {
       const attempt: ProviderAttemptRef = {
         id: 'attempt-m102',
         attemptNumber: 1,
@@ -169,7 +169,7 @@ describe('ProxyMessageRecorder', () => {
       await recorder.completePendingProviderFailure(
         attempt,
         401,
-        '[🦚 Manifest M102] openai subscription credentials could not be refreshed.',
+        '[↗ Tuple M102] openai subscription credentials could not be refreshed.',
         true,
       );
 
@@ -652,11 +652,11 @@ describe('ProxyMessageRecorder', () => {
     });
   });
 
-  describe('recordManifestBlockedRequest', () => {
+  describe('recordTupleBlockedRequest', () => {
     it('persists the error code and the rendered message a user can act on', async () => {
-      await recorder.recordManifestBlockedRequest(ctx, {
+      await recorder.recordTupleBlockedRequest(ctx, {
         errorMessage:
-          '[🦚 Manifest M100] No anthropic API key yet. Add one here: https://x/routing',
+          '[↗ Tuple M100] No anthropic API key yet. Add one here: https://x/routing',
         errorCode: 'M100',
         reason: 'no_provider_key',
         model: 'auto',
@@ -666,31 +666,31 @@ describe('ProxyMessageRecorder', () => {
         status: 'failed',
         error_code: 'M100',
         error_message:
-          '[🦚 Manifest M100] No anthropic API key yet. Add one here: https://x/routing',
+          '[↗ Tuple M100] No anthropic API key yet. Add one here: https://x/routing',
         error_origin: 'config',
         error_class: 'no_provider_key',
         // No provider was contacted and no tier chosen — the row must not claim
-        // otherwise (this used to say provider='manifest', routing_tier='simple').
+        // otherwise (this used to say provider='tuple', routing_tier='simple').
         provider: null,
         routing_tier: null,
         error_http_status: null,
       });
     });
 
-    it('leaves error_code null when a Manifest row carries no documented code', async () => {
-      await recorder.recordManifestBlockedRequest(ctx, {
+    it('leaves error_code null when a Tuple row carries no documented code', async () => {
+      await recorder.recordTupleBlockedRequest(ctx, {
         errorMessage: 'something went sideways',
-        reason: 'manifest_internal_error',
+        reason: 'tuple_internal_error',
       });
       expect(insertMock.mock.calls[0][0].error_code).toBeNull();
     });
 
     it('records a malformed caller body on the request origin', async () => {
-      await recorder.recordManifestBlockedRequest(ctx, {
+      await recorder.recordTupleBlockedRequest(ctx, {
         httpStatus: 400,
-        errorMessage: '[🦚 Manifest M300] `messages` array is required.',
+        errorMessage: '[↗ Tuple M300] `messages` array is required.',
         errorCode: 'M300',
-        reason: 'manifest_invalid_request',
+        reason: 'tuple_invalid_request',
       });
 
       expect(insertMock.mock.calls[0][0]).toMatchObject({
@@ -704,8 +704,8 @@ describe('ProxyMessageRecorder', () => {
 
     it('keeps the failed row and stamps the decision when a heal did not clear the block', async () => {
       const before = Date.now();
-      await recorder.recordManifestBlockedRequest(ctx, {
-        errorMessage: '[🦚 Manifest M302] Model "ghost" is not available for this agent.',
+      await recorder.recordTupleBlockedRequest(ctx, {
+        errorMessage: '[↗ Tuple M302] Model "ghost" is not available for this agent.',
         errorCode: 'M302',
         reason: 'model_not_available',
         autofix: {
@@ -745,8 +745,8 @@ describe('ProxyMessageRecorder', () => {
 
     it('finalizes the real provider retry when a patched M302 still fails', async () => {
       const completeFailure = jest.fn().mockResolvedValue(undefined);
-      await recorder.recordManifestBlockedRequest(ctx, {
-        errorMessage: '[🦚 Manifest M302] Model "ghost" is not available for this agent.',
+      await recorder.recordTupleBlockedRequest(ctx, {
+        errorMessage: '[↗ Tuple M302] Model "ghost" is not available for this agent.',
         errorCode: 'M302',
         reason: 'model_not_available',
         attempt: {
@@ -799,9 +799,9 @@ describe('ProxyMessageRecorder', () => {
     });
 
     it('records an expired key as a setup error against its agent', async () => {
-      await recorder.recordManifestBlockedRequest(ctx, {
+      await recorder.recordTupleBlockedRequest(ctx, {
         httpStatus: 401,
-        errorMessage: '[🦚 Manifest M004] This key has expired.',
+        errorMessage: '[↗ Tuple M004] This key has expired.',
         errorCode: 'M004',
         reason: 'key_expired',
       });
@@ -814,34 +814,34 @@ describe('ProxyMessageRecorder', () => {
     });
 
     it('keeps the three rate limits on separate cooldowns', async () => {
-      await recorder.recordManifestBlockedRequest(ctx, {
+      await recorder.recordTupleBlockedRequest(ctx, {
         httpStatus: 429,
         errorMessage: 'per-user',
-        reason: 'manifest_rate_limited',
+        reason: 'tuple_rate_limited',
       });
-      await recorder.recordManifestBlockedRequest(ctx, {
+      await recorder.recordTupleBlockedRequest(ctx, {
         httpStatus: 429,
         errorMessage: 'per-ip',
-        reason: 'manifest_ip_rate_limited',
+        reason: 'tuple_ip_rate_limited',
       });
-      await recorder.recordManifestBlockedRequest(ctx, {
+      await recorder.recordTupleBlockedRequest(ctx, {
         httpStatus: 429,
         errorMessage: 'concurrency',
-        reason: 'manifest_concurrency_limited',
+        reason: 'tuple_concurrency_limited',
       });
 
       // Three distinct limits fired, so three rows. One shared cooldown would
       // have swallowed the second and third.
       expect(insertMock).toHaveBeenCalledTimes(3);
       expect(insertMock.mock.calls.map((c) => c[0].routing_reason)).toEqual([
-        'manifest_rate_limited',
-        'manifest_ip_rate_limited',
-        'manifest_concurrency_limited',
+        'tuple_rate_limited',
+        'tuple_ip_rate_limited',
+        'tuple_concurrency_limited',
       ]);
     });
 
-    it('records plan-limit blocks as Manifest policy rows', async () => {
-      await recorder.recordManifestBlockedRequest(ctx, {
+    it('records plan-limit blocks as Tuple policy rows', async () => {
+      await recorder.recordTupleBlockedRequest(ctx, {
         httpStatus: 402,
         errorMessage: 'Free plan request limit reached',
         reason: 'plan_request_limit_exceeded',
@@ -870,11 +870,11 @@ describe('ProxyMessageRecorder', () => {
       expect(emitMock).toHaveBeenCalledWith('tenant-1', 'message', 'user-1');
     });
 
-    it('records local proxy rate limits as Manifest policy rate-limit rows', async () => {
-      await recorder.recordManifestBlockedRequest(ctx, {
+    it('records local proxy rate limits as Tuple policy rate-limit rows', async () => {
+      await recorder.recordTupleBlockedRequest(ctx, {
         httpStatus: 429,
         errorMessage: 'Too many requests',
-        reason: 'manifest_rate_limited',
+        reason: 'tuple_rate_limited',
       });
 
       expect(insertMock).toHaveBeenCalledTimes(1);
@@ -882,26 +882,26 @@ describe('ProxyMessageRecorder', () => {
         status: 'failed',
         error_message: 'Too many requests',
         error_http_status: 429,
-        routing_reason: 'manifest_rate_limited',
+        routing_reason: 'tuple_rate_limited',
         error_origin: 'policy',
         error_class: 'rate_limit',
         superseded: false,
       });
     });
 
-    it('records each rate-limited Manifest Request independently', async () => {
-      await recorder.recordManifestBlockedRequest(ctx, {
+    it('records each rate-limited Tuple Request independently', async () => {
+      await recorder.recordTupleBlockedRequest(ctx, {
         httpStatus: 429,
         errorMessage: 'Too many requests',
-        reason: 'manifest_rate_limited',
+        reason: 'tuple_rate_limited',
       });
       insertMock.mockClear();
       emitMock.mockClear();
 
-      await recorder.recordManifestBlockedRequest(ctx, {
+      await recorder.recordTupleBlockedRequest(ctx, {
         httpStatus: 429,
         errorMessage: 'Too many requests again',
-        reason: 'manifest_rate_limited',
+        reason: 'tuple_rate_limited',
       });
 
       expect(insertMock).toHaveBeenCalledTimes(1);
@@ -946,7 +946,7 @@ describe('ProxyMessageRecorder', () => {
       );
     });
 
-    it('stamps error_code on mid-chain Manifest credential failures', async () => {
+    it('stamps error_code on mid-chain Tuple credential failures', async () => {
       const failures = [
         {
           model: 'claude-sonnet-4',
@@ -955,7 +955,7 @@ describe('ProxyMessageRecorder', () => {
           errorBody: JSON.stringify({
             error: {
               message:
-                '[🦚 Manifest M100] No anthropic API key yet. Add one here: https://x/routing See https://manifest.build/docs/errors/M100',
+                '[↗ Tuple M100] No anthropic API key yet. Add one here: https://x/routing See https://tuple.ai/docs/errors/M100',
             },
           }),
           fallbackIndex: 0,
@@ -976,7 +976,7 @@ describe('ProxyMessageRecorder', () => {
 
     it('classifies a mid-chain credential failure as config origin despite a tier routing_reason', async () => {
       // The row carries a synthetic 401 and the tier reason ('scored'), but the
-      // stamped M102 must win classification — otherwise a Manifest config error
+      // stamped M102 must win classification — otherwise a Tuple config error
       // is bucketed as a provider 401 and inflates provider_error_rate/billing.
       const failures = [
         {
@@ -986,7 +986,7 @@ describe('ProxyMessageRecorder', () => {
           errorBody: JSON.stringify({
             error: {
               message:
-                '[🦚 Manifest M102] anthropic subscription credentials could not be refreshed. Reconnect OAuth here: https://x/routing See https://manifest.build/docs/errors/M102',
+                '[↗ Tuple M102] anthropic subscription credentials could not be refreshed. Reconnect OAuth here: https://x/routing See https://tuple.ai/docs/errors/M102',
             },
           }),
           fallbackIndex: 0,
@@ -1001,7 +1001,7 @@ describe('ProxyMessageRecorder', () => {
         expect.objectContaining({
           error_code: 'M102',
           routing_reason: 'scored', // display keeps the tier reason
-          error_origin: 'config', // …but it classifies as Manifest config, not a provider 401
+          error_origin: 'config', // …but it classifies as Tuple config, not a provider 401
           error_class: 'subscription_credentials_unusable',
         }),
       );
@@ -1238,11 +1238,11 @@ describe('ProxyMessageRecorder', () => {
       expect(emitMock).toHaveBeenCalledWith('tenant-1', 'message', 'user-1');
     });
 
-    it('stamps error_code when the primary body is a Manifest credential failure', async () => {
+    it('stamps error_code when the primary body is a Tuple credential failure', async () => {
       const body = JSON.stringify({
         error: {
           message:
-            '[🦚 Manifest M102] openai subscription credentials could not be refreshed. Reconnect OAuth here: https://x/routing See https://manifest.build/docs/errors/M102',
+            '[↗ Tuple M102] openai subscription credentials could not be refreshed. Reconnect OAuth here: https://x/routing See https://tuple.ai/docs/errors/M102',
         },
       });
       await recorder.recordPrimaryFailure(
@@ -1403,7 +1403,7 @@ describe('ProxyMessageRecorder', () => {
     });
 
     it('produces N separate inserts for N successive calls with identical usage, model and agent', async () => {
-      // The regression pinned by mnfst/manifest#2513: ProxyMessageDedup used to
+      // The regression pinned by tupleai/tuple#2513: ProxyMessageDedup used to
       // treat "same tenant/agent/model/usage within a short window" as a
       // duplicate and silently drop it via an update-into-existing-row path.
       // Distinct requests that happen to look alike must each persist their
@@ -1503,7 +1503,7 @@ describe('ProxyMessageRecorder', () => {
       });
     });
 
-    it('keeps status=ok and no error axes for every reason — Manifest stubs never reach here', async () => {
+    it('keeps status=ok and no error axes for every reason — Tuple stubs never reach here', async () => {
       await recorder.recordSuccessMessage(ctx, 'gpt-4o', 'standard', 'scored', {
         prompt_tokens: 1,
         completion_tokens: 1,
@@ -1519,11 +1519,11 @@ describe('ProxyMessageRecorder', () => {
       });
     });
 
-    // The canned-stub detour through recordSuccessMessage is gone: a Manifest
-    // failure is written by recordManifestBlockedRequest, never by the success
+    // The canned-stub detour through recordSuccessMessage is gone: a Tuple
+    // failure is written by recordTupleBlockedRequest, never by the success
     // path flipping its own status to 'error'. A reason like `no_provider` that
     // somehow arrives here is a routing reason, not a failure signal.
-    it('does not resurrect the canned-response branch for a Manifest reason', async () => {
+    it('does not resurrect the canned-response branch for a Tuple reason', async () => {
       await recorder.recordSuccessMessage(ctx, 'gpt-4o', 'simple', 'no_provider', {
         prompt_tokens: 0,
         completion_tokens: 0,

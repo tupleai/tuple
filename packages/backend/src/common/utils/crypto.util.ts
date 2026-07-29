@@ -45,22 +45,22 @@ function deriveKey(secret: string, salt: Buffer): Buffer {
 }
 
 export function getEncryptionSecret(): string {
-  const dedicated = process.env['MANIFEST_ENCRYPTION_KEY'];
+  const dedicated = process.env['TUPLE_ENCRYPTION_KEY'];
   if (dedicated && dedicated.length >= 32) {
     return dedicated;
   }
 
   // Falling back to BETTER_AUTH_SECRET means a single secret leak compromises
   // both session signing and stored provider/OAuth keys. Warn once at boot so
-  // operators have a clear remediation path: set MANIFEST_ENCRYPTION_KEY to a
+  // operators have a clear remediation path: set TUPLE_ENCRYPTION_KEY to a
   // separate 32+ char secret.
   const sessionSecret = process.env['BETTER_AUTH_SECRET'];
   if (sessionSecret && sessionSecret.length >= 32) {
     if (!warnedAboutSecretReuse && process.env['NODE_ENV'] === 'production') {
       warnedAboutSecretReuse = true;
       logger.warn(
-        'MANIFEST_ENCRYPTION_KEY not set — falling back to BETTER_AUTH_SECRET for at-rest ' +
-          'encryption. Set MANIFEST_ENCRYPTION_KEY to a separate 32+ char secret so a session-' +
+        'TUPLE_ENCRYPTION_KEY not set — falling back to BETTER_AUTH_SECRET for at-rest ' +
+          'encryption. Set TUPLE_ENCRYPTION_KEY to a separate 32+ char secret so a session-' +
           'signing leak does not also decrypt stored provider/OAuth keys.',
       );
     }
@@ -68,7 +68,7 @@ export function getEncryptionSecret(): string {
   }
 
   throw new Error(
-    'Encryption secret required. Set MANIFEST_ENCRYPTION_KEY or BETTER_AUTH_SECRET (>=32 chars).',
+    'Encryption secret required. Set TUPLE_ENCRYPTION_KEY or BETTER_AUTH_SECRET (>=32 chars).',
   );
 }
 

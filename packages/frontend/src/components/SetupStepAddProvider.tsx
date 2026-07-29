@@ -44,18 +44,18 @@ const SetupStepAddProvider: Component<Props> = (props) => {
     <div>
       <h3 class="setup-step__heading">
         {props.platform === 'hermes'
-          ? 'Connect your Hermes harness to Manifest'
+          ? 'Connect your Hermes harness to Tuple'
           : props.platform === 'openclaw'
-            ? 'Connect your OpenClaw harness to Manifest'
+            ? 'Connect your OpenClaw harness to Tuple'
             : props.platform === 'nanobot'
-              ? 'Connect your Nanobot harness to Manifest'
+              ? 'Connect your Nanobot harness to Tuple'
               : props.platform === 'craft'
-                ? 'Connect your Craft harness to Manifest'
+                ? 'Connect your Craft harness to Tuple'
                 : props.platform === 'claude-code'
-                  ? 'Connect Claude Code to Manifest'
+                  ? 'Connect Claude Code to Tuple'
                   : props.platform === 'opencode'
-                    ? 'Connect OpenCode to Manifest'
-                    : 'Connect your harness to Manifest'}
+                    ? 'Connect OpenCode to Tuple'
+                    : 'Connect your harness to Tuple'}
       </h3>
 
       {/* Platform-filtered mode: show only relevant content */}
@@ -99,7 +99,7 @@ const SetupStepAddProvider: Component<Props> = (props) => {
       {/* Default / "other": show full tabbed UI */}
       <Show when={!isFiltered()}>
         <p class="setup-step__desc">
-          Point your harness at the Manifest endpoint using the model{' '}
+          Point your harness at the Tuple endpoint using the model{' '}
           <code class="setup-model-hint__code">auto</code>
         </p>
 

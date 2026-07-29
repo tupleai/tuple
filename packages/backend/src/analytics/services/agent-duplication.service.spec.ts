@@ -299,7 +299,7 @@ describe('AgentDuplicationService', () => {
 
       expect(mockTransaction).toHaveBeenCalledTimes(1);
       expect(result.agentName).toBe('source-copy');
-      expect(result.apiKey).toMatch(/^mnfst_/);
+      expect(result.apiKey).toMatch(/^tuple_/);
       // 2 enabled-provider rows copied: one for the global provider, one for the custom provider
       expect(result.copied).toEqual({
         providers: 2,

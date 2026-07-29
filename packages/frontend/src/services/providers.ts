@@ -1,6 +1,6 @@
 /* ── LLM Provider definitions (shared by Routing page) ── */
 
-import { SHARED_PROVIDER_BY_ID, type SharedProviderEntry } from 'manifest-shared';
+import { SHARED_PROVIDER_BY_ID, type SharedProviderEntry } from 'tuple-shared';
 
 export interface SubscriptionEndpointRegion {
   value: string;
@@ -267,7 +267,7 @@ const PROVIDER_UI: Record<string, ProviderUIOverlay> = {
   },
   'gemini-free': {
     initial: 'GF',
-    subtitle: 'Free Gemini models via Manifest',
+    subtitle: 'Free Gemini models via Tuple',
     models: [],
   },
   kiro: {

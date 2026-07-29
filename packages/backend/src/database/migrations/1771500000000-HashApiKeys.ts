@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { scryptSync } from 'crypto';
 
-const HASH_SALT = 'manifest-api-key-salt';
+const HASH_SALT = 'tuple-api-key-salt';
 const KEY_LENGTH = 32;
 
 export class HashApiKeys1771500000000 implements MigrationInterface {

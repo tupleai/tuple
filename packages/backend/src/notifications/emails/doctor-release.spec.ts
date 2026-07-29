@@ -12,15 +12,15 @@ function renderEmail(props: Parameters<typeof DoctorReleaseEmail>[0]): string {
 describe('DoctorReleaseEmail', () => {
   it('renders the announcement with the two CTAs and waitlist footer', () => {
     const html = renderEmail({
-      appUrl: 'https://app.manifest.build',
-      tutorialUrl: 'https://manifest.build/blog/auto-fix',
+      appUrl: 'https://app.tuple.ai',
+      tutorialUrl: 'https://tuple.ai/blog/auto-fix',
     });
     expect(html).toContain('Auto-fix is live on your account');
     expect(html).toContain('already running on your account');
-    expect(html).toContain('https://app.manifest.build');
+    expect(html).toContain('https://app.tuple.ai');
     expect(html).toContain('Open your dashboard');
     expect(html).toContain('How Auto-fix works');
-    expect(html).toContain('https://manifest.build/blog/auto-fix');
+    expect(html).toContain('https://tuple.ai/blog/auto-fix');
     expect(html).toContain('because you joined the Auto-fix');
     // The header reads "New: <icon> Auto-fix", not the old green badge.
     expect(html).toContain('New:');
@@ -30,7 +30,7 @@ describe('DoctorReleaseEmail', () => {
   });
 
   it('omits the tutorial button until the article URL exists', () => {
-    const html = renderEmail({ appUrl: 'https://app.manifest.build' });
+    const html = renderEmail({ appUrl: 'https://app.tuple.ai' });
     expect(html).not.toContain('How Auto-fix works');
     expect(html).toContain('Open your dashboard');
   });

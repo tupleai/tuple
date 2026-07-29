@@ -24,7 +24,7 @@ describe('managed free provider config', () => {
   });
 
   it('defaults to the managed gateway', () => {
-    expect(getManagedFreeLiteLlmBaseUrl()).toBe('https://credits.manifest.build');
+    expect(getManagedFreeLiteLlmBaseUrl()).toBe('https://credits.tuple.ai');
   });
 
   it('strips trailing slashes from the base URL', () => {

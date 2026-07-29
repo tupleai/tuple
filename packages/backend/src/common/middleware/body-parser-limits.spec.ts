@@ -32,7 +32,7 @@ function createMockResponse() {
 }
 
 describe('body parser limits', () => {
-  it('allows OpenAI-compatible proxy bodies above the regular Manifest API limit', async () => {
+  it('allows OpenAI-compatible proxy bodies above the regular Tuple API limit', async () => {
     const content = 'x'.repeat(1024 * 1024 + 1);
     const payload = { messages: [{ role: 'user', content }] };
 

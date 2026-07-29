@@ -47,7 +47,7 @@ describe('ResendProvider', () => {
 
     const body = JSON.parse((global.fetch as jest.Mock).mock.calls[0][1].body);
     expect(body.to).toEqual(['user@test.com']);
-    expect(body.from).toBe('Manifest <noreply@test.com>');
+    expect(body.from).toBe('Tuple <noreply@test.com>');
     expect(body.subject).toBe('Test');
     expect(body.html).toBe('<p>Hi</p>');
   });

@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Optional version override (e.g. 5.38.1). Leave blank to use the current version from packages/manifest/package.json."
+        description: "Optional version override (e.g. 5.38.1). Leave blank to use the current version from packages/tuple/package.json."
         required: false
         type: string
   workflow_call:
     inputs:
       version:
-        description: "Optional version override. Leave blank to use the current version from packages/manifest/package.json."
+        description: "Optional version override. Leave blank to use the current version from packages/tuple/package.json."
         required: false
         type: string
   pull_request:
@@ -33,7 +33,7 @@ permissions:
   contents: read
 
 env:
-  IMAGE: manifestdotbuild/manifest
+  IMAGE: tupleai/tuple
 
 jobs:
   validate:
@@ -133,8 +133,8 @@ jobs:
             VERSION="${{ inputs.version }}"
             echo "Using version from workflow input: $VERSION"
           else
-            VERSION=$(jq -r .version packages/manifest/package.json)
-            echo "Using version from packages/manifest/package.json: $VERSION"
+            VERSION=$(jq -r .version packages/tuple/package.json)
+            echo "Using version from packages/tuple/package.json: $VERSION"
           fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
@@ -164,7 +164,7 @@ jobs:
             type=semver,pattern={{major}},value=${{ steps.version.outputs.version }}
             type=sha
 
-      - name: Create manifest list and push
+      - name: Create tuple list and push
         working-directory: ${{ runner.temp }}/digests
         run: |
           docker buildx imagetools create \
@@ -182,16 +182,16 @@ jobs:
           TAGS: ${{ steps.meta.outputs.tags }}
           VERSION: ${{ steps.meta.outputs.version }}
         run: |
-          # Extract the manifest-list digest from the freshly-pushed tag.
+          # Extract the tuple-list digest from the freshly-pushed tag.
           # Uses the pattern established by the dagger project and others: format
-          # the full inspect output as JSON and pull .manifest.digest out with jq.
-          DIGEST=$(docker buildx imagetools inspect "${{ env.IMAGE }}:${VERSION}" --format '{{json .}}' | jq -r '.manifest.digest')
+          # the full inspect output as JSON and pull .tuple.digest out with jq.
+          DIGEST=$(docker buildx imagetools inspect "${{ env.IMAGE }}:${VERSION}" --format '{{json .}}' | jq -r '.tuple.digest')
           if [ -z "$DIGEST" ] || [ "$DIGEST" = "null" ]; then
-            echo "::error::Failed to extract manifest-list digest for ${{ env.IMAGE }}:${VERSION}"
+            echo "::error::Failed to extract tuple-list digest for ${{ env.IMAGE }}:${VERSION}"
             docker buildx imagetools inspect "${{ env.IMAGE }}:${VERSION}" --format '{{json .}}'
             exit 1
           fi
-          echo "Signing manifest list digest: $DIGEST"
+          echo "Signing tuple list digest: $DIGEST"
           for tag in ${TAGS}; do
             cosign sign --yes "${tag}@${DIGEST}"
           done

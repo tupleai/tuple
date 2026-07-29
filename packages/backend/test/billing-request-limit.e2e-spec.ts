@@ -16,14 +16,14 @@ let ds: DataSource;
 
 const envSnapshots: Record<string, string | undefined> = {};
 const BILLING_ENV_VARS = [
-  'MANIFEST_MODE',
+  'TUPLE_MODE',
   'STRIPE_SECRET_KEY',
   'STRIPE_WEBHOOK_SECRET',
   'STRIPE_PRO_PRICE_ID',
   'PLAN_LIMIT_FREE_REQUESTS',
 ];
 
-async function waitForManifestBlockCount(tenantId: string, minimum: number): Promise<number> {
+async function waitForTupleBlockCount(tenantId: string, minimum: number): Promise<number> {
   const deadline = Date.now() + 1000;
   let count = 0;
   do {
@@ -45,7 +45,7 @@ async function waitForManifestBlockCount(tenantId: string, minimum: number): Pro
 
 beforeAll(async () => {
   for (const key of BILLING_ENV_VARS) envSnapshots[key] = process.env[key];
-  process.env['MANIFEST_MODE'] = 'cloud';
+  process.env['TUPLE_MODE'] = 'cloud';
   process.env['STRIPE_SECRET_KEY'] = 'sk_test_dummy';
   process.env['STRIPE_WEBHOOK_SECRET'] = 'whsec_dummy';
   process.env['STRIPE_PRO_PRICE_ID'] = 'price_dummy';
@@ -100,7 +100,7 @@ describe('request limit gate (/v1 proxy)', () => {
     expect(res.body.limit).toBe(0);
   });
 
-  it('records the blocked request as a visible Manifest failure without counting it toward quota', async () => {
+  it('records the blocked request as a visible Tuple failure without counting it toward quota', async () => {
     const tenantRows = await ds.query(`SELECT id FROM tenants WHERE owner_user_id = $1 LIMIT 1`, [
       TEST_USER_ID,
     ]);
@@ -115,7 +115,7 @@ describe('request limit gate (/v1 proxy)', () => {
       `SELECT COUNT(*)::int AS n FROM agent_messages WHERE tenant_id = $1`,
       [tenantId],
     );
-    const manifestBlocksBefore = await ds.query(
+    const tupleBlocksBefore = await ds.query(
       `SELECT COUNT(*)::int AS n
          FROM requests
         WHERE tenant_id = $1
@@ -130,9 +130,9 @@ describe('request limit gate (/v1 proxy)', () => {
       .set('Accept', 'application/json')
       .send({ model: 'auto', messages: [{ role: 'user', content: 'again' }] })
       .expect(402);
-    const manifestBlocksAfter = await waitForManifestBlockCount(
+    const tupleBlocksAfter = await waitForTupleBlockCount(
       tenantId,
-      manifestBlocksBefore[0].n + 1,
+      tupleBlocksBefore[0].n + 1,
     );
     const after = await ds.query(`SELECT COUNT(*)::int AS n FROM requests WHERE tenant_id = $1`, [
       tenantId,
@@ -156,7 +156,7 @@ describe('request limit gate (/v1 proxy)', () => {
 
     expect(after[0].n).toBe(before[0].n + 1);
     expect(attemptsAfter[0].n).toBe(attemptsBefore[0].n);
-    expect(manifestBlocksAfter).toBe(manifestBlocksBefore[0].n + 1);
+    expect(tupleBlocksAfter).toBe(tupleBlocksBefore[0].n + 1);
     expect(latestBlock[0]).toEqual(
       expect.objectContaining({
         status: 'failed',

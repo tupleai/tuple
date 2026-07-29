@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ERROR_ORIGINS, MANIFEST_ERROR_ORIGINS } from 'manifest-shared';
+import { ERROR_ORIGINS, TUPLE_ERROR_ORIGINS } from 'tuple-shared';
 import { AgentMessage } from '../../entities/agent-message.entity';
-import { ManifestRequest } from '../../entities/request.entity';
+import { TupleRequest } from '../../entities/request.entity';
 import { rangeToInterval } from '../../common/utils/range.util';
 import { computeCutoff } from '../../common/utils/postgres-sql';
 import { addTenantFilter, excludePlaygroundAgents, sqlIsSuccessStatus } from './query-helpers';
@@ -18,8 +18,8 @@ export interface ErrorBreakdownResponse {
   provider_errors: number;
   /** Network/timeout failures reaching a provider. */
   transport_errors: number;
-  /** Manifest's OWN config/policy/internal rejections — NOT a provider failure. */
-  manifest_errors: number;
+  /** Tuple's OWN config/policy/internal rejections — NOT a provider failure. */
+  tuple_errors: number;
   /**
    * Requests healed by Auto-fix in the window — one per healed request. NOT additive with
    * `total_errors`: the healed original is a superseded attempt that is already
@@ -114,7 +114,7 @@ export class ErrorBreakdownService {
   ): Promise<number> {
     const qb = this.messageRepo
       .createQueryBuilder('at')
-      .leftJoin(ManifestRequest, 'r', 'r.id = at.request_id')
+      .leftJoin(TupleRequest, 'r', 'r.id = at.request_id')
       .select('COUNT(DISTINCT COALESCE(at.request_id, at.autofix_group_id, at.id))', 'count')
       .where('at.timestamp >= :cutoff', { cutoff })
       .andWhere("(at.autofix_role = 'original' OR at.status = 'auto_fixed')")
@@ -152,7 +152,7 @@ export class ErrorBreakdownService {
       total += g.count;
     }
     const provider = by_origin['provider'] ?? 0;
-    const manifest = MANIFEST_ERROR_ORIGINS.reduce((sum, o) => sum + (by_origin[o] ?? 0), 0);
+    const tuple = TUPLE_ERROR_ORIGINS.reduce((sum, o) => sum + (by_origin[o] ?? 0), 0);
     const denom = provider + successful;
     return {
       range,
@@ -160,7 +160,7 @@ export class ErrorBreakdownService {
       total_errors: total,
       provider_errors: provider,
       transport_errors: by_origin['transport'] ?? 0,
-      manifest_errors: manifest,
+      tuple_errors: tuple,
       auto_fixed: autoFixed,
       by_origin,
       by_class,

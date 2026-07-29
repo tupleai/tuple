@@ -1,5 +1,5 @@
 {
-  "name": "manifest-frontend",
+  "name": "tuple-frontend",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -18,7 +18,7 @@
     "better-auth": "1.6.25",
     "dompurify": "^3.4.12",
     "highlight.js": "^11.11.1",
-    "manifest-shared": "*",
+    "tuple-shared": "*",
     "marked": "^18.0.7",
     "solid-js": "^1.9.14",
     "uplot": "^1.6.31"

@@ -10,7 +10,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
  * `agent_enabled_providers` junction column follows the rename.
  *
  * Rows whose user has no tenant cannot be re-scoped. The migration aborts so
- * the operator can inspect them; set MANIFEST_MIGRATION_FORCE=1 to delete the
+ * the operator can inspect them; set TUPLE_MIGRATION_FORCE=1 to delete the
  * orphans instead (a provider row is unreachable without a tenant anyway).
  */
 export class TenantProviders1792500000000 implements MigrationInterface {
@@ -30,13 +30,13 @@ export class TenantProviders1792500000000 implements MigrationInterface {
     );
     const orphanCount = Number(orphans[0]?.count ?? 0);
     if (orphanCount > 0) {
-      if (process.env.MANIFEST_MIGRATION_FORCE === '1') {
+      if (process.env.TUPLE_MIGRATION_FORCE === '1') {
         await queryRunner.query(`DELETE FROM "user_providers" WHERE "tenant_id" IS NULL`);
       } else {
         throw new Error(
           `TenantProviders migration: ${orphanCount} user_providers row(s) reference a user ` +
             `with no tenant and cannot be re-scoped. Inspect them (SELECT * FROM user_providers ` +
-            `WHERE tenant_id IS NULL) or re-run with MANIFEST_MIGRATION_FORCE=1 to delete them.`,
+            `WHERE tenant_id IS NULL) or re-run with TUPLE_MIGRATION_FORCE=1 to delete them.`,
         );
       }
     }

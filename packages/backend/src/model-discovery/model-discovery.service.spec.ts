@@ -86,7 +86,7 @@ function makeMockRepo() {
 }
 
 describe('ModelDiscoveryService', () => {
-  const previousMode = process.env['MANIFEST_MODE'];
+  const previousMode = process.env['TUPLE_MODE'];
   let service: ModelDiscoveryService;
   let providerRepo: ReturnType<typeof makeMockRepo>;
   let customProviderRepo: ReturnType<typeof makeMockRepo>;
@@ -104,7 +104,7 @@ describe('ModelDiscoveryService', () => {
   let mockCopilotTokenService: { getCopilotToken: jest.Mock };
 
   beforeEach(() => {
-    process.env['MANIFEST_MODE'] = 'selfhosted';
+    process.env['TUPLE_MODE'] = 'selfhosted';
     providerRepo = makeMockRepo();
     customProviderRepo = makeMockRepo();
     fetcher = { fetch: jest.fn().mockResolvedValue([]) };
@@ -141,8 +141,8 @@ describe('ModelDiscoveryService', () => {
   });
 
   afterAll(() => {
-    if (previousMode === undefined) delete process.env['MANIFEST_MODE'];
-    else process.env['MANIFEST_MODE'] = previousMode;
+    if (previousMode === undefined) delete process.env['TUPLE_MODE'];
+    else process.env['TUPLE_MODE'] = previousMode;
   });
 
   afterEach(() => {
@@ -153,7 +153,7 @@ describe('ModelDiscoveryService', () => {
 
   describe('discoverModels', () => {
     it('does not contact a built-in local runtime from cloud', async () => {
-      process.env['MANIFEST_MODE'] = 'cloud';
+      process.env['TUPLE_MODE'] = 'cloud';
 
       const result = await service.discoverModels(
         makeProvider({ provider: 'ollama', auth_type: 'local', api_key_encrypted: null }),
@@ -579,7 +579,7 @@ describe('ModelDiscoveryService', () => {
 
   describe('refreshProvider', () => {
     it('rejects built-in local refreshes in cloud before reading the provider row', async () => {
-      process.env['MANIFEST_MODE'] = 'cloud';
+      process.env['TUPLE_MODE'] = 'cloud';
 
       const result = await service.refreshProvider('tenant-1', 'ollama', 'local');
 
@@ -587,7 +587,7 @@ describe('ModelDiscoveryService', () => {
         ok: false,
         model_count: 0,
         last_fetched_at: null,
-        error: expect.stringContaining('only available in self-hosted Manifest'),
+        error: expect.stringContaining('only available in self-hosted Tuple'),
       });
       expect(providerRepo.find).not.toHaveBeenCalled();
     });
@@ -748,7 +748,7 @@ describe('ModelDiscoveryService', () => {
 
   describe('getModelsForAgent', () => {
     it('hides built-in local models in cloud but keeps tunneled custom models', async () => {
-      process.env['MANIFEST_MODE'] = 'cloud';
+      process.env['TUPLE_MODE'] = 'cloud';
       providerRepo.find.mockResolvedValue([
         makeProvider({
           id: 'ollama-row',

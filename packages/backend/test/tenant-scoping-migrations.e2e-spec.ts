@@ -58,7 +58,7 @@ describe('Tenant-canonical scoping migrations — data backfill (e2e)', () => {
       type: 'postgres',
       url:
         process.env['DATABASE_URL'] ??
-        'postgresql://myuser:mypassword@localhost:5432/manifest_duprepro',
+        'postgresql://myuser:mypassword@localhost:5432/tuple_duprepro',
       entities: ['src/entities/!(*.spec).ts'],
       migrations: ['src/database/migrations/!(*.spec).ts'],
       synchronize: false,

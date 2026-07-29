@@ -88,11 +88,11 @@ async function usageRow(
 
 describe('AddTenantRequestUsage migration (e2e)', () => {
   let ds: DataSource;
-  let originalManifestMode: string | undefined;
+  let originalTupleMode: string | undefined;
 
   beforeAll(async () => {
-    originalManifestMode = process.env['MANIFEST_MODE'];
-    process.env['MANIFEST_MODE'] = 'cloud';
+    originalTupleMode = process.env['TUPLE_MODE'];
+    process.env['TUPLE_MODE'] = 'cloud';
     ds = new DataSource({
       type: 'postgres',
       url:
@@ -128,7 +128,7 @@ describe('AddTenantRequestUsage migration (e2e)', () => {
     await insertRequest(ds, 'seed-zero-attempt');
     await insertAttempt(ds, 'seed-legacy');
     await insertAttempt(ds, 'seed-legacy-superseded', { superseded: true });
-    await insertAttempt(ds, 'seed-manifest-rejection', { errorOrigin: 'policy' });
+    await insertAttempt(ds, 'seed-tuple-rejection', { errorOrigin: 'policy' });
 
     await runMigration(ds, 'up');
     const cutoverTimes = await ds.query(
@@ -162,10 +162,10 @@ describe('AddTenantRequestUsage migration (e2e)', () => {
 
   afterAll(async () => {
     if (ds?.isInitialized) await ds.destroy();
-    if (originalManifestMode === undefined) {
-      delete process.env['MANIFEST_MODE'];
+    if (originalTupleMode === undefined) {
+      delete process.env['TUPLE_MODE'];
     } else {
-      process.env['MANIFEST_MODE'] = originalManifestMode;
+      process.env['TUPLE_MODE'] = originalTupleMode;
     }
   });
 
@@ -220,9 +220,9 @@ describe('AddTenantRequestUsage migration (e2e)', () => {
       agentId: PLAYGROUND,
       timestamp: afterCutoverTimestamp,
     });
-    await insertRequest(ds, 'live-manifest-rejection', AGENT, afterCutoverTimestamp);
-    await insertAttempt(ds, 'live-manifest-rejection-attempt', {
-      requestId: 'live-manifest-rejection',
+    await insertRequest(ds, 'live-tuple-rejection', AGENT, afterCutoverTimestamp);
+    await insertAttempt(ds, 'live-tuple-rejection-attempt', {
+      requestId: 'live-tuple-rejection',
       timestamp: afterCutoverTimestamp,
       errorOrigin: 'policy',
     });
@@ -302,11 +302,11 @@ describe('AddTenantRequestUsage migration (e2e)', () => {
 
 describe('AddTenantRequestUsage self-hosted migration (e2e)', () => {
   let ds: DataSource;
-  let originalManifestMode: string | undefined;
+  let originalTupleMode: string | undefined;
 
   beforeAll(async () => {
-    originalManifestMode = process.env['MANIFEST_MODE'];
-    process.env['MANIFEST_MODE'] = 'selfhosted';
+    originalTupleMode = process.env['TUPLE_MODE'];
+    process.env['TUPLE_MODE'] = 'selfhosted';
     ds = new DataSource({
       type: 'postgres',
       url:
@@ -323,10 +323,10 @@ describe('AddTenantRequestUsage self-hosted migration (e2e)', () => {
 
   afterAll(async () => {
     if (ds?.isInitialized) await ds.destroy();
-    if (originalManifestMode === undefined) {
-      delete process.env['MANIFEST_MODE'];
+    if (originalTupleMode === undefined) {
+      delete process.env['TUPLE_MODE'];
     } else {
-      process.env['MANIFEST_MODE'] = originalManifestMode;
+      process.env['TUPLE_MODE'] = originalTupleMode;
     }
   });
 

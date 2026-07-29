@@ -1,22 +1,22 @@
-import { MANIFEST_ERRORS_DOCS_BASE } from 'manifest-shared';
+import { TUPLE_ERRORS_DOCS_BASE } from 'tuple-shared';
 
-export { MANIFEST_ERRORS_DOCS_BASE };
+export { TUPLE_ERRORS_DOCS_BASE };
 
-const PEACOCK = '🦚';
+const ROUTING_MARK = '↗';
 
-export const MANIFEST_ERRORS = {
+export const TUPLE_ERRORS = {
   M001: {
     title: 'Missing Authorization header',
-    template: 'Missing the Authorization header. Set it to "Bearer mnfst_<your-key>".',
+    template: 'Missing the Authorization header. Set it to "Bearer tuple_<your-key>".',
   },
   M002: {
     title: 'Empty Bearer token',
-    template: 'The Bearer token is empty. Paste your Manifest key into it.',
+    template: 'The Bearer token is empty. Paste your Tuple key into it.',
   },
   M003: {
     title: 'Invalid key format',
     template:
-      'That doesn\'t look right. Manifest keys start with "mnfst_". Grab yours from the dashboard.',
+      'That doesn\'t look right. Tuple keys start with "tuple_". Grab yours from the dashboard.',
   },
   M004: {
     title: 'Key expired',
@@ -73,9 +73,9 @@ export const MANIFEST_ERRORS = {
       'Model "{model}" is not available for this agent. Use GET /v1/models to list available model IDs, or make the provider available for this agent here: {dashboardUrl}',
   },
   M303: {
-    title: 'Local provider unavailable on Manifest Cloud',
+    title: 'Local provider unavailable on Tuple Cloud',
     template:
-      'Built-in local providers are only available in self-hosted Manifest. On Manifest Cloud, expose the runtime through a public URL or tunnel and connect it as a custom provider.',
+      'Built-in local providers are only available in self-hosted Tuple. On Tuple Cloud, expose the runtime through a public URL or tunnel and connect it as a custom provider.',
   },
   M500: {
     title: 'Internal server error',
@@ -83,37 +83,37 @@ export const MANIFEST_ERRORS = {
   },
 } as const;
 
-export type ManifestErrorCode = keyof typeof MANIFEST_ERRORS;
+export type TupleErrorCode = keyof typeof TUPLE_ERRORS;
 
-// Matches the peacock prefix written by formatManifestError, e.g. `[🦚 Manifest M102]`.
-// The 🦚 is REQUIRED: only Manifest emits it, so a provider error body that merely
-// echoes the text "Manifest M100" can never be mis-extracted into a Manifest code
-// (which would then misclassify a provider round-trip as a Manifest config error).
-const MANIFEST_ERROR_CODE_RE = /\[\s*🦚\s*Manifest\s+(M\d{3})\s*\]/;
+// Matches the Tuple prefix written by formatTupleError, e.g. `[↗ Tuple M102]`.
+// The ↗ is REQUIRED: only Tuple emits it, so a provider error body that merely
+// echoes the text "Tuple M100" can never be mis-extracted into a Tuple code
+// (which would then misclassify a provider round-trip as a Tuple config error).
+const TUPLE_ERROR_CODE_RE = /\[\s*↗\s*Tuple\s+(M\d{3})\s*\]/;
 
-export function formatManifestError(
-  code: ManifestErrorCode,
+export function formatTupleError(
+  code: TupleErrorCode,
   vars: Record<string, string | number> = {},
 ): string {
-  const entry = MANIFEST_ERRORS[code];
+  const entry = TUPLE_ERRORS[code];
   const interpolated = entry.template.replace(/\{(\w+)\}/g, (match, key: string) => {
     const value = vars[key];
     return value === undefined ? match : String(value);
   });
-  return `[${PEACOCK} Manifest ${code}] ${interpolated} See ${MANIFEST_ERRORS_DOCS_BASE}/${code}`;
+  return `[${ROUTING_MARK} Tuple ${code}] ${interpolated} See ${TUPLE_ERRORS_DOCS_BASE}/${code}`;
 }
 
 /**
- * Pull a registered Manifest error code out of a rendered message or JSON body
- * that embeds one (provider-attempt rows store the peacock text in
+ * Pull a registered Tuple error code out of a rendered message or JSON body
+ * that embeds one (provider-attempt rows store the branded text in
  * error_message but need error_code for filters/analytics).
  */
-export function extractManifestErrorCode(
+export function extractTupleErrorCode(
   text: string | null | undefined,
-): ManifestErrorCode | null {
+): TupleErrorCode | null {
   if (!text) return null;
-  const match = text.match(MANIFEST_ERROR_CODE_RE);
+  const match = text.match(TUPLE_ERROR_CODE_RE);
   if (!match) return null;
-  const code = match[1] as ManifestErrorCode;
-  return code in MANIFEST_ERRORS ? code : null;
+  const code = match[1] as TupleErrorCode;
+  return code in TUPLE_ERRORS ? code : null;
 }

@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { normalizeStatus } from 'manifest-shared';
+import { normalizeStatus } from 'tuple-shared';
 import { AgentMessage } from '../entities/agent-message.entity';
 
 /**

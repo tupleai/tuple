@@ -528,7 +528,7 @@ describe("Sidebar — Auto-fix card", () => {
     expect(container.textContent).not.toContain("Failing requests are automatically fixed");
     const link = container.querySelector(".sidebar-autofix__btn") as HTMLAnchorElement;
     expect(link?.textContent).toBe("Learn more");
-    expect(link?.getAttribute("href")).toBe("https://manifest.build/autofix/");
+    expect(link?.getAttribute("href")).toBe("https://tuple.ai/autofix/");
     expect(link?.getAttribute("target")).toBe("_blank");
     expect(link?.getAttribute("rel")).toBe("noopener noreferrer");
   });

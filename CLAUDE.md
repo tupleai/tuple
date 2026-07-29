@@ -1,20 +1,20 @@
-# Manifest Development Guidelines
+# Tuple Development Guidelines
 
 Last updated: 2026-07-20
 
-## What Manifest Is
+## What Tuple Is
 
-Manifest is a smart model router for **AI agents**. It sits between an agent and its LLM providers, scores each request, and routes it to the cheapest model that can handle it. The dashboard tracks logical requests and their provider attempts, costs, and tokens across any agent that speaks OpenAI-compatible HTTP.
+Tuple is a smart model router for **AI agents**. It sits between an agent and its LLM providers, scores each request, and routes it to the cheapest model that can handle it. The dashboard tracks logical requests and their provider attempts, costs, and tokens across any agent that speaks OpenAI-compatible HTTP.
 
-**Supported agents**: see `AGENT_PLATFORMS` in `packages/shared/src/agent-type.ts` for the current list (OpenClaw, Hermes, Claude Code, OpenCode, generic OpenAI/Anthropic SDK slots, and others — don't duplicate the list here, it grows independently of this doc). OpenClaw remains the deepest integration, but no new code or copy should frame Manifest as OpenClaw-only. When adding examples, prefer "AI agent" as the noun and pick OpenClaw as the worked example rather than the sole target. Manifest is consumed as a generic OpenAI-compatible HTTP endpoint — there are no first-party OpenClaw plugins in this repo anymore.
+**Supported agents**: see `AGENT_PLATFORMS` in `packages/shared/src/agent-type.ts` for the current list (OpenClaw, Hermes, Claude Code, OpenCode, generic OpenAI/Anthropic SDK slots, and others — don't duplicate the list here, it grows independently of this doc). OpenClaw remains the deepest integration, but no new code or copy should frame Tuple as OpenClaw-only. When adding examples, prefer "AI agent" as the noun and pick OpenClaw as the worked example rather than the sole target. Tuple is consumed as a generic OpenAI-compatible HTTP endpoint — there are no first-party OpenClaw plugins in this repo anymore.
 
-Wingman — the gateway tester for sending requests against a Manifest backend while impersonating any of the supported agents (useful for routing/header-classifier reproductions) — lives in its own repo at [`mnfst/wingman`](https://github.com/mnfst/wingman) and is hosted at [`wingman.manifest.build`](https://wingman.manifest.build). The dashboard embeds it as an iframe drawer **in dev mode only** — it is dead-code-eliminated from production / self-hosted bundles via `__DEV_MODE__`. The backend allows the hosted Wingman origin through CORS in both dev and production (production also honors `WINGMAN_CORS_ORIGINS`), while the CSP `frame-src` that permits the drawer iframe stays dev-only; both are wired in `packages/backend/src/cors-csp-config.ts`.
+Wingman — the gateway tester for sending requests against a Tuple backend while impersonating any of the supported agents (useful for routing/header-classifier reproductions) — lives in its own repo at [`mnfst/wingman`](https://github.com/mnfst/wingman) and is hosted at [`wingman.tuple.ai`](https://wingman.tuple.ai). The dashboard embeds it as an iframe drawer **in dev mode only** — it is dead-code-eliminated from production / self-hosted bundles via `__DEV_MODE__`. The backend allows the hosted Wingman origin through CORS in both dev and production (production also honors `WINGMAN_CORS_ORIGINS`), while the CSP `frame-src` that permits the drawer iframe stays dev-only; both are wired in `packages/backend/src/cors-csp-config.ts`.
 
-**Whenever working in dev mode (`/serve`, `npm run dev`, etc.), the Wingman drawer is expected to be available** — open the FAB at the bottom-right of the dashboard (or hit ⌘/Ctrl+Shift+W) and confirm the iframe loads `https://wingman.manifest.build` cleanly. The drawer is part of the dev surface area, so a broken iframe means the dev environment is broken. `/serve` is **dev-only** — never use it to validate production behavior.
+**Whenever working in dev mode (`/serve`, `npm run dev`, etc.), the Wingman drawer is expected to be available** — open the FAB at the bottom-right of the dashboard (or hit ⌘/Ctrl+Shift+W) and confirm the iframe loads `https://wingman.tuple.ai` cleanly. The drawer is part of the dev surface area, so a broken iframe means the dev environment is broken. `/serve` is **dev-only** — never use it to validate production behavior.
 
 ## IMPORTANT: Cloud Mode Always
 
-When starting the app for development or testing (e.g. `/serve`), **always use `MANIFEST_MODE=cloud`** (the default). Every dev session must use a **fresh PostgreSQL database** via Docker — multiple concurrent dev instances sharing one DB cause cross-run data pollution and intermittent test failures:
+When starting the app for development or testing (e.g. `/serve`), **always use `TUPLE_MODE=cloud`** (the default). Every dev session must use a **fresh PostgreSQL database** via Docker — multiple concurrent dev instances sharing one DB cause cross-run data pollution and intermittent test failures:
 
 ```bash
 # 1. Ensure the postgres_db container is running
@@ -22,7 +22,7 @@ docker start postgres_db 2>/dev/null || \
   docker run -d --name postgres_db -e POSTGRES_USER=myuser -e POSTGRES_PASSWORD=mypassword -e POSTGRES_DB=mydatabase -p 5432:5432 postgres:16
 
 # 2. Create a pristine database with a unique name
-DB_NAME="manifest_$(openssl rand -hex 4)"
+DB_NAME="tuple_$(openssl rand -hex 4)"
 docker exec postgres_db psql -U myuser -d postgres -c "CREATE DATABASE $DB_NAME;"
 
 # 3. Update DATABASE_URL in packages/backend/.env to use the new database
@@ -35,7 +35,7 @@ This guarantees each session starts with a clean, isolated database and avoids a
 
 ## Testing OpenClaw Integration
 
-To test routing from an OpenClaw agent against a local Manifest dev server, point OpenClaw at the dev server's OpenAI-compatible proxy directly — there is no plugin anymore:
+To test routing from an OpenClaw agent against a local Tuple dev server, point OpenClaw at the dev server's OpenAI-compatible proxy directly — there is no plugin anymore:
 
 ```bash
 # 1. Build and start the backend in cloud mode
@@ -44,14 +44,14 @@ PORT=38238 BIND_ADDRESS=127.0.0.1 \
   node -r dotenv/config packages/backend/dist/main.js
 
 # 2. Configure OpenClaw to use the dev server as a generic OpenAI-compatible provider
-openclaw config set models.providers.manifest '{"baseUrl":"http://localhost:38238/v1","api":"openai-completions","apiKey":"mnfst_YOUR_KEY","models":[{"id":"auto","name":"Manifest Auto"}]}'
-openclaw config set agents.defaults.model.primary manifest/auto
+openclaw config set models.providers.tuple '{"baseUrl":"http://localhost:38238/v1","api":"openai-completions","apiKey":"tuple_YOUR_KEY","models":[{"id":"auto","name":"Tuple Auto"}]}'
+openclaw config set agents.defaults.model.primary tuple/auto
 
 # 3. Restart the gateway
 openclaw gateway restart
 ```
 
-The `AgentKeyAuthGuard` accepts any non-`mnfst_*` token from loopback IPs in the self-hosted version, so loopback-only testing works even without a valid key. After restarting the backend, also restart the OpenClaw gateway — it doesn't reconnect automatically.
+The `AgentKeyAuthGuard` accepts any non-`tuple_*` token from loopback IPs in the self-hosted version, so loopback-only testing works even without a valid key. After restarting the backend, also restart the OpenClaw gateway — it doesn't reconnect automatically.
 
 ## Active Technologies
 
@@ -87,7 +87,7 @@ packages/
 │   │   ├── entities/                        # TypeORM entities (22 files)
 │   │   │   ├── tenant.entity.ts             # Multi-tenant root
 │   │   │   ├── agent.entity.ts              # Agent (belongs to tenant)
-│   │   │   ├── agent-api-key.entity.ts      # OTLP ingest keys (mnfst_*)
+│   │   │   ├── agent-api-key.entity.ts      # OTLP ingest keys (tuple_*)
 │   │   │   └── ...                          # request, agent-message (provider attempt), tenant-provider, tier-assignment, header-tier, etc.
 │   │   ├── common/
 │   │   │   ├── guards/api-key.guard.ts      # X-API-Key header auth (timing-safe)
@@ -96,7 +96,7 @@ packages/
 │   │   │   ├── filters/spa-fallback.filter.ts
 │   │   │   ├── interceptors/               # agent-cache, user-cache
 │   │   │   ├── constants/                   # api-key, cache, ollama, providers, openai-models, xai-models, subscription-clients
-│   │   │   ├── services/                    # ingest-event-bus, manifest-runtime, tenant-cache
+│   │   │   ├── services/                    # ingest-event-bus, tuple-runtime, tenant-cache
 │   │   │   └── utils/                       # crypto, hash, range, period, slugify, url-validation, provider-inference, postgres-sql, cost-calculator, detect-self-hosted, frontend-path, og-rewrite, secret-scrub, ttl-cache, local-ip, etc.
 │   │   ├── health/                          # @Public() health check
 │   │   ├── analytics/                       # Dashboard analytics
@@ -215,10 +215,10 @@ cd packages/frontend && npx vite
 
 Set `SEED_DATA=true` in `packages/backend/.env` to seed on startup (dev/test only). This creates:
 
-- **Admin user**: `admin@manifest.build` / `manifest` (email verification email is skipped if Mailgun is not configured — user is created but unverified)
+- **Admin user**: `admin@tuple.ai` / `tuple` (email verification email is skipped if Mailgun is not configured — user is created but unverified)
 - **Tenant**: `seed-tenant-001` linked to the admin user
 - **Agent**: `demo-agent` with OTLP key `dev-otlp-key-001`
-- **API key**: `dev-api-key-manifest-001`
+- **API key**: `dev-api-key-tuple-001`
 - **Security events**: 12 sample events for the security dashboard
 - **Requests and provider attempts**: Sample telemetry for the demo agent
 
@@ -226,7 +226,7 @@ Seeding is idempotent — it checks for existing records before inserting.
 
 **Dev-login shortcut:** when running under the Vite dev server the login page shows a
 prominent one-click **⚡ Sign in as dev** button that submits the seeded
-`admin@manifest.build` / `manifest` credentials — no copy-paste. It's gated by
+`admin@tuple.ai` / `tuple` credentials — no copy-paste. It's gated by
 `import.meta.env.DEV`, so Vite strips the button and the credential literals from
 production builds, and no password ever rides in a URL. See
 `packages/frontend/src/pages/Login.tsx`.
@@ -245,13 +245,13 @@ SEED_DATA=true
 
 Generate a secret with: `openssl rand -hex 32`
 
-**Database naming convention:** Always create uniquely-named databases to avoid overlapping other dev/test instances. Use the pattern `manifest_<context>_<random>` (e.g., `manifest_sse_49821`, `manifest_dev_83712`). Create databases via Docker:
+**Database naming convention:** Always create uniquely-named databases to avoid overlapping other dev/test instances. Use the pattern `tuple_<context>_<random>` (e.g., `tuple_sse_49821`, `tuple_dev_83712`). Create databases via Docker:
 
 ```bash
-docker exec postgres_db psql -U myuser -d postgres -c "CREATE DATABASE manifest_<name>;"
+docker exec postgres_db psql -U myuser -d postgres -c "CREATE DATABASE tuple_<name>;"
 ```
 
-Then set `DATABASE_URL=postgresql://myuser:mypassword@localhost:5432/manifest_<name>` in `.env`.
+Then set `DATABASE_URL=postgresql://myuser:mypassword@localhost:5432/tuple_<name>` in `.env`.
 
 ```bash
 # Production build + start (single server)
@@ -319,14 +319,14 @@ async handler(@CurrentUser() user: AuthUser) {
 ## Multi-Tenancy Model
 
 ```
-User (Better Auth) ──→ Tenant ──→ Agent ──→ AgentApiKey (mnfst_*)
+User (Better Auth) ──→ Tenant ──→ Agent ──→ AgentApiKey (tuple_*)
                                     │
                                     └──→ requests ──→ agent_messages (telemetry data)
 ```
 
 - **Tenant** (`tenants` table): Created automatically on first agent creation. `tenant.owner_user_id` = `user.id` is the ONLY user→tenant link (resolved through `TenantCacheService`); `tenant.name` mirrors it for display until repurposed as a slug.
 - **Agent** (`agents` table): Belongs to a tenant. Unique constraint on `[tenant_id, name]`.
-- **AgentApiKey** (`agent_api_keys` table): One-to-one with agent. `mnfst_*` format key for OTLP ingestion.
+- **AgentApiKey** (`agent_api_keys` table): One-to-one with agent. `tuple_*` format key for OTLP ingestion.
 - **ApiKey** (`api_keys` table): A separate, tenant-scoped credential (not per-agent) used for dashboard/API access — the primary key `ApiKeyGuard` checks. Distinct from `AgentApiKey`.
 - **Onboarding flow**: `ApiKeyGeneratorService.onboardAgent()` creates tenant (if new) + agent + API key via three sequential inserts.
 
@@ -356,8 +356,8 @@ Every resource belongs to a tenant; users only authenticate and (optionally) app
 | GET | `/api/v1/security` | Session/API Key | Security score + events |
 | GET | `/api/v1/model-prices` | Session/API Key | Model pricing list |
 | GET | `/api/v1/free-models` | Session/API Key | Free LLM model catalog |
-| GET | `/api/v1/agent/usage` | Bearer (mnfst_*) | Token usage for the calling agent |
-| GET | `/api/v1/agent/costs` | Bearer (mnfst_*) | Cost data for the calling agent |
+| GET | `/api/v1/agent/usage` | Bearer (tuple_*) | Token usage for the calling agent |
+| GET | `/api/v1/agent/costs` | Bearer (tuple_*) | Cost data for the calling agent |
 | GET | `/api/v1/overview/*` | Session/API Key | Overview timeseries/breakdown sub-endpoints |
 | GET | `/api/v1/providers` / `/api/v1/providers/usage` | Session/API Key | Connected provider list + usage |
 | GET | `/api/v1/provider-analytics/*` | Session/API Key | Per-provider analytics |
@@ -372,16 +372,16 @@ Every resource belongs to a tenant; users only authenticate and (optionally) app
 | GET | `/api/v1/routing/pricing-health` | Session/API Key | OpenRouter pricing sync health |
 | POST | `/api/v1/routing/pricing/refresh` | Session/API Key | Force pricing cache refresh |
 | GET/POST/DELETE | `/api/v1/oauth/:provider/*` | Session/API Key | OAuth flows (Gemini, OpenAI, Anthropic, xAI, Kiro, MiniMax) |
-| POST | `/api/v1/routing/resolve` | Bearer (mnfst_*) | Model resolution |
-| POST | `/api/v1/routing/subscription-providers` | Bearer (mnfst_*) | Subscription provider config |
+| POST | `/api/v1/routing/resolve` | Bearer (tuple_*) | Model resolution |
+| POST | `/api/v1/routing/subscription-providers` | Bearer (tuple_*) | Subscription provider config |
 | GET | `/api/v1/setup/status` | Public | First-run setup status |
 | POST | `/api/v1/setup/admin` | Public | Create initial admin user |
-| GET | `/api/v1/public/*` | Public (opt-in) | Aggregate public stats (controlled by `MANIFEST_PUBLIC_STATS`) |
-| GET | `/v1/models` | Bearer (mnfst_*) | Available model list (proxy) |
-| POST | `/v1/chat/completions` | Bearer (mnfst_*) | LLM proxy (OpenAI-compatible) |
-| POST | `/v1/responses` | Bearer (mnfst_*) | LLM proxy (OpenAI Responses API) |
-| POST | `/v1/messages` | Bearer (mnfst_*) | LLM proxy (Anthropic Messages API) |
-| POST | `/chat/completions` | Bearer (mnfst_*) | Legacy root-level OTLP-compatible proxy alias |
+| GET | `/api/v1/public/*` | Public (opt-in) | Aggregate public stats (controlled by `TUPLE_PUBLIC_STATS`) |
+| GET | `/v1/models` | Bearer (tuple_*) | Available model list (proxy) |
+| POST | `/v1/chat/completions` | Bearer (tuple_*) | LLM proxy (OpenAI-compatible) |
+| POST | `/v1/responses` | Bearer (tuple_*) | LLM proxy (OpenAI Responses API) |
+| POST | `/v1/messages` | Bearer (tuple_*) | LLM proxy (Anthropic Messages API) |
+| POST | `/chat/completions` | Bearer (tuple_*) | Legacy root-level OTLP-compatible proxy alias |
 | GET/POST/PATCH | `/api/v1/playground/*` | Session/API Key | Playground runs (run, list, star, mark best) |
 | GET | `/api/v1/events` | Session | SSE real-time events |
 | GET | `/api/v1/github/stars` | Public | GitHub star count |
@@ -392,12 +392,12 @@ See `packages/backend/.env.example` for all variables. Key ones:
 
 - `BETTER_AUTH_SECRET` — **Required.** Secret for Better Auth session signing (min 32 chars). Generate with `openssl rand -hex 32`.
 - `DATABASE_URL` — **Required** in every environment except `NODE_ENV=test` (which falls back to `postgresql://myuser:mypassword@localhost:5432/mydatabase`, matching the local Docker command). Dev and production both throw on boot if unset. Format: `postgresql://user:password@host:port/database`.
-- `MANIFEST_ENCRYPTION_KEY` — Recommended. AES-256-GCM key (min 32 chars) for encrypting stored provider API keys and OAuth tokens. Defaults to `BETTER_AUTH_SECRET` if unset — set this independently so a session-cookie leak doesn't also expose provider credentials.
+- `TUPLE_ENCRYPTION_KEY` — Recommended. AES-256-GCM key (min 32 chars) for encrypting stored provider API keys and OAuth tokens. Defaults to `BETTER_AUTH_SECRET` if unset — set this independently so a session-cookie leak doesn't also expose provider credentials.
 - `PORT` — Server port. Default: `3001`
 - `BIND_ADDRESS` — Bind address. Default: `127.0.0.1` (use `0.0.0.0` for Railway/Docker)
 - `NODE_ENV` — `development` or `production`. Dev allows broad CORS (local dashboard + Wingman); production allows the hosted Wingman origin plus any `WINGMAN_CORS_ORIGINS` entries.
 - `CORS_ORIGIN` — Allowed CORS origin (dev). Default: `http://localhost:3000`
-- `WINGMAN_CORS_ORIGINS` — Production only. Extra browser origins allowed to call the gateway (comma-separated). The hosted Wingman (`https://wingman.manifest.build`) is always allowed.
+- `WINGMAN_CORS_ORIGINS` — Production only. Extra browser origins allowed to call the gateway (comma-separated). The hosted Wingman (`https://wingman.tuple.ai`) is always allowed.
 - `BETTER_AUTH_URL` — Base URL for Better Auth. Default: `http://localhost:{PORT}`
 - `FRONTEND_PORT` — Extra trusted origin port for Better Auth.
 - `API_KEY` — Secret for programmatic API access (X-API-Key header).
@@ -411,16 +411,16 @@ See `packages/backend/.env.example` for all variables. Key ones:
 - `EMAIL_PROVIDER` — Unified email provider: `resend` (recommended), `mailgun`, or `sendgrid`. Used for Better Auth transactional emails and threshold alerts.
 - `EMAIL_API_KEY` — API key for the configured `EMAIL_PROVIDER`.
 - `EMAIL_DOMAIN` — Sending domain (required for Mailgun).
-- `EMAIL_FROM` — Sender address. Default: `noreply@manifest.build`
+- `EMAIL_FROM` — Sender address. Default: `noreply@tuple.ai`
 - `MAILGUN_API_KEY` / `MAILGUN_DOMAIN` / `NOTIFICATION_FROM_EMAIL` — Legacy Mailgun-only variables. Deprecated; use `EMAIL_*` instead. Still honored for backward compatibility.
 - `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` — Google OAuth (optional)
 - `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` — GitHub OAuth (optional)
 - `DISCORD_CLIENT_ID` / `DISCORD_CLIENT_SECRET` — Discord OAuth (optional)
 - `SEED_DATA` — Set `true` to seed demo data on startup. Dev/test only — ignored when `NODE_ENV=production` (use the first-run setup wizard instead).
-- `MANIFEST_MODE` — `selfhosted` or `cloud` (default: `cloud`; auto-detected as `selfhosted` inside Docker via `/.dockerenv` or Podman via `/run/.containerenv`). Self-hosted mode enables loopback auth shortcuts and allows custom-provider URLs with `http://` / private IPs. `local` is accepted as a legacy alias for `selfhosted`.
-- `MANIFEST_TELEMETRY_DISABLED` — Set `1` to opt out of anonymous telemetry (self-hosted only).
-- `MANIFEST_PUBLIC_STATS` — Set `true` to expose `/api/v1/public/*` aggregate stats without auth (cloud-only marketing use).
-- `TELEMETRY_ENDPOINT` — Where self-hosted installs POST the anonymous usage report. Default: `https://telemetry.manifest.build/v1/report`. See [Telemetry](#anonymous-usage-telemetry-self-hosted).
+- `TUPLE_MODE` — `selfhosted` or `cloud` (default: `cloud`; auto-detected as `selfhosted` inside Docker via `/.dockerenv` or Podman via `/run/.containerenv`). Self-hosted mode enables loopback auth shortcuts and allows custom-provider URLs with `http://` / private IPs. `local` is accepted as a legacy alias for `selfhosted`.
+- `TUPLE_TELEMETRY_DISABLED` — Set `1` to opt out of anonymous telemetry (self-hosted only).
+- `TUPLE_PUBLIC_STATS` — Set `true` to expose `/api/v1/public/*` aggregate stats without auth (cloud-only marketing use).
+- `TELEMETRY_ENDPOINT` — Where self-hosted installs POST the anonymous usage report. Default: `https://telemetry.tuple.ai/v1/report`. See [Telemetry](#anonymous-usage-telemetry-self-hosted).
 - `SENTRY_DSN` / `SENTRY_ENVIRONMENT` / `SENTRY_RELEASE` — Opt-in Sentry error monitoring. Unset `SENTRY_DSN` disables Sentry entirely; `SENTRY_ENVIRONMENT` defaults to `NODE_ENV`. See [Error Monitoring](#error-monitoring-sentry-opt-in).
 - `WINGMAN_PORT` — Dev-only. Port a locally-running Wingman build listens on, allowed through CSP `frame-src` and CORS alongside the hosted Wingman origin. Default: backend `PORT` + 1.
 - `AUTH_DB_POOL_MAX` — Connection pool size for Better Auth's own `pg.Pool`, separate from `DB_POOL_MAX`. Default: `10`.
@@ -429,16 +429,16 @@ See `packages/backend/.env.example` for all variables. Key ones:
 - `AUTOFIX_HEALING_API_KEY` — Sent as `x-api-key` on every call to Phoenix. Phoenix guards `/api/heal*` and fails closed in production, so this is required when `AUTOFIX_HEALING_URL` points at a production Phoenix; omit it for a keyless dev/test Phoenix.
 - `AUTOFIX_GLOBAL_ENABLED` — Set `false` to disable Auto-fix for all agents (default on). Companions: `AUTOFIX_TIMEOUT_MS` (per heal call, default `10000`), `AUTOFIX_REPAIRABLE_STATUSES` (default `400,404,422`).
 - `AUTOFIX_ROLLOUT` — Three-phase early-access gate: `selected` (default — only tenants we hand-picked via `tenants.autofix_access_granted_at`), `waitlist` (+ anyone who joined `tenants.autofix_waitlist_at`), or `everyone` (GA). See [Auto-fix](#auto-fix-self-healing-via-phoenix).
-- `AUTOFIX_REPORT_ALL_4XX` — Set `true` to stream an agent's request-side 4xx (4xx except 401/402/403/429) to Phoenix's `POST /api/heal/observe` as evidence, carrying the full request body. Serves no fix and creates no heal attempt; it only lets Phoenix see the body that failed. Wider than the heal path in scope (not limited to `AUTOFIX_REPAIRABLE_STATUSES`, and it catches fallback-model failures the heal path never reports) but **gated to agents with Auto-fix on** — `AutofixService.isActiveFor()`, the same tenant early-access + per-agent flag that healing clears. Turning Auto-fix on is what consents to sending failing requests to the healing service; the gate fails closed. Off by default: a second, deployment-level switch on top. Manifest persists nothing; the body is secret-scrubbed, capped at 256 KB, batched, and dropped under backpressure. Skipped when Auto-fix already reported the same failure via `/api/heal`. See `routing/autofix/observation-reporter.ts`.
+- `AUTOFIX_REPORT_ALL_4XX` — Set `true` to stream an agent's request-side 4xx (4xx except 401/402/403/429) to Phoenix's `POST /api/heal/observe` as evidence, carrying the full request body. Serves no fix and creates no heal attempt; it only lets Phoenix see the body that failed. Wider than the heal path in scope (not limited to `AUTOFIX_REPAIRABLE_STATUSES`, and it catches fallback-model failures the heal path never reports) but **gated to agents with Auto-fix on** — `AutofixService.isActiveFor()`, the same tenant early-access + per-agent flag that healing clears. Turning Auto-fix on is what consents to sending failing requests to the healing service; the gate fails closed. Off by default: a second, deployment-level switch on top. Tuple persists nothing; the body is secret-scrubbed, capped at 256 KB, batched, and dropped under backpressure. Skipped when Auto-fix already reported the same failure via `/api/heal`. See `routing/autofix/observation-reporter.ts`.
 - `STRIPE_SECRET_KEY` / `STRIPE_WEBHOOK_SECRET` / `STRIPE_PRO_PRICE_ID` — Billing (cloud only). See `packages/backend/src/billing/`.
 - `PLAN_LIMIT_FREE_REQUESTS` / `PLAN_LIMIT_PRO_REQUESTS` / `PLAN_REQUEST_QUOTA_RESET_AT` — Per-plan request quotas enforced by `plan.service.ts`.
 
 ## Domain Terminology
 
-Manifest terminology is directional:
+Tuple terminology is directional:
 
-- A **Manifest Request** is one logical request from an agent to Manifest and lives in `requests`.
-- A **Provider Attempt** is one request from Manifest to an AI provider and lives in `agent_messages`.
+- A **Tuple Request** is one logical request from an agent to Tuple and lives in `requests`.
+- A **Provider Attempt** is one request from Tuple to an AI provider and lives in `agent_messages`.
 - A **Tenant** is a user's data boundary. It is created from `user.id` on first agent creation.
 - An **Agent** is an AI agent owned by a tenant. It has a unique OTLP ingest key.
 
@@ -455,25 +455,25 @@ Any backend endpoint that returns provider-attempt fields rendered by the fronte
 
 This rule exists because the Overview and Messages pages previously drifted and the Recent Messages badge read `STANDARD` instead of the specificity category (`CODING` etc.) — the frontend already shares the rendering code, so the divergence was purely backend projection drift.
 
-## Manifest's own errors (`M###`)
+## Tuple's own errors (`M###`)
 
-Every failure Manifest itself produces — as opposed to one a provider returned — carries a documented code from `MANIFEST_ERRORS` in `packages/backend/src/common/errors/error-codes.ts`, published at `https://manifest.build/docs/errors/<code>`.
+Every failure Tuple itself produces — as opposed to one a provider returned — carries a documented code from `TUPLE_ERRORS` in `packages/backend/src/common/errors/error-codes.ts`, published at `https://tuple.ai/docs/errors/<code>`.
 
-**Raise them with `ManifestError`** (`common/errors/manifest-error.ts`), never a bare `HttpException`. The type is what lets `proxy.controller.ts` tell "Manifest refused this request" from "the provider returned a 4xx". Before it existed, a malformed body (M300) and a Manifest bug (M500) were both recorded as *provider* errors and counted against `provider_error_rate`.
+**Raise them with `TupleError`** (`common/errors/tuple-error.ts`), never a bare `HttpException`. The type is what lets `proxy.controller.ts` tell "Tuple refused this request" from "the provider returned a 4xx". Before it existed, a malformed body (M300) and a Tuple bug (M500) were both recorded as *provider* errors and counted against `provider_error_rate`.
 
-**Every code is recorded on a Manifest Request**, with four exceptions. `M001`, `M002`, `M003`, and `M005` are raised by `AgentKeyAuthGuard` before a key resolves to a tenant, so there is no agent to attribute a row to — they're listed in `UNRECORDABLE_MANIFEST_CODES` and write nothing. (`M004`, an expired key, *does* resolve an agent, so the guard stashes it on `request.manifestErrorContext` and `ProxyExceptionFilter` records it.) `__tests__/manifest-error.spec.ts` fails if a new code is neither mapped in `MANIFEST_CODE_TO_REASON` nor declared unrecordable.
+**Every code is recorded on a Tuple Request**, with four exceptions. `M001`, `M002`, `M003`, and `M005` are raised by `AgentKeyAuthGuard` before a key resolves to a tenant, so there is no agent to attribute a row to — they're listed in `UNRECORDABLE_TUPLE_CODES` and write nothing. (`M004`, an expired key, *does* resolve an agent, so the guard stashes it on `request.tupleErrorContext` and `ProxyExceptionFilter` records it.) `__tests__/tuple-error.spec.ts` fails if a new code is neither mapped in `TUPLE_CODE_TO_REASON` nor declared unrecordable.
 
-**`ProxyMessageRecorder.recordManifestBlockedRequest()` is the only writer of Manifest-authored rejected requests.** It creates one `requests` row, stamps `requests.error_code` plus the *rendered* message (the `[🦚 Manifest M100] No anthropic API key yet. Add one here: …` text the caller saw — not a generic stand-in), and creates zero `agent_messages` rows because no provider was contacted. Do not route these through `recordSuccessMessage` or manufacture a `provider='manifest'` attempt.
+**`ProxyMessageRecorder.recordTupleBlockedRequest()` is the only writer of Tuple-authored rejected requests.** It creates one `requests` row, stamps `requests.error_code` plus the *rendered* message (the `[↗ Tuple M100] No anthropic API key yet. Add one here: …` text the caller saw — not a generic stand-in), and creates zero `agent_messages` rows because no provider was contacted. Do not route these through `recordSuccessMessage` or manufacture a `provider='tuple'` attempt.
 
 `M500` is the deliberate exception to "store what the caller saw": the caller gets the friendly "Something broke on our end", while the row stores the raw internal error message. The dashboard is where you go to find out what actually broke, so don't "fix" it to match.
 
-**The Requests log hides no origin.** The legacy `getMessages()` API method applies an origin filter only when the caller passes `?origin=`. It previously hid `config` requests by default while the Overview showed them — so a user who saw a "Failed: Setup" request and clicked through found nothing, with no filter anywhere to bring it back. `messages-manifest-errors.e2e-spec.ts` pins the fix.
+**The Requests log hides no origin.** The legacy `getMessages()` API method applies an origin filter only when the caller passes `?origin=`. It previously hid `config` requests by default while the Overview showed them — so a user who saw a "Failed: Setup" request and clicked through found nothing, with no filter anywhere to bring it back. `messages-tuple-errors.e2e-spec.ts` pins the fix.
 
 ### The `request` error origin
 
-`ERROR_ORIGINS` (in `packages/shared/src/error-taxonomy.ts`) has six values. `request` means the caller sent a body Manifest could not route — not the operator's setup (`config`), not a limit they set (`policy`), and not a Manifest bug (`internal`).
+`ERROR_ORIGINS` (in `packages/shared/src/error-taxonomy.ts`) has six values. `request` means the caller sent a body Tuple could not route — not the operator's setup (`config`), not a limit they set (`policy`), and not a Tuple bug (`internal`).
 
-`request` is a member of `MANIFEST_ERROR_ORIGINS`. Do not confuse the error-origin value with the `requests` table: it classifies who caused an error. That membership is load-bearing because it keeps caller-caused failures out of provider reliability metrics and inside the `origin=manifest` filter shorthand. Any new origin that is not a provider round-trip belongs there too.
+`request` is a member of `TUPLE_ERROR_ORIGINS`. Do not confuse the error-origin value with the `requests` table: it classifies who caused an error. That membership is load-bearing because it keeps caller-caused failures out of provider reliability metrics and inside the `origin=tuple` filter shorthand. Any new origin that is not a provider round-trip belongs there too.
 
 ## Content Security Policy (CSP)
 
@@ -495,13 +495,13 @@ To add a new font or icon library:
 
 Self-hosted installs (Docker / `node dist/main.js` with `NODE_ENV=production`)
 send one aggregate usage report per 24h to `TELEMETRY_ENDPOINT` (default
-`https://telemetry.manifest.build/v1/report`). The module lives at
+`https://telemetry.tuple.ai/v1/report`). The module lives at
 `packages/backend/src/telemetry/`.
 
 **Payload fields (v1) — keep this list minimal**:
 
 - `schema_version`, `install_id` (random UUIDv4, persisted once in
-  `install_metadata`), `manifest_version`
+  `install_metadata`), `tuple_version`
 - Last 24h aggregates from `agent_messages` (payload field names remain legacy for protocol compatibility): `messages_total`,
   `messages_by_provider` (bucketed via `PROVIDER_BY_ID_OR_ALIAS` — unknown
   values collapse to `"custom"`, NULL to `"unknown"`), `messages_by_tier`
@@ -512,13 +512,13 @@ send one aggregate usage report per 24h to `TELEMETRY_ENDPOINT` (default
 - Configuration: `agents_total`, `agents_by_platform`
 - Runtime: `platform` (`process.platform`), `arch` (`process.arch`)
 
-User-facing spec: https://manifest.build/docs/self-hosted#telemetry
+User-facing spec: https://tuple.ai/docs/self-hosted#telemetry
 
 **Explicitly never sent**: tenant/user IDs, emails, API keys, prompts,
 message contents, model names, custom provider URLs, OAuth client IDs,
 raw IPs.
 
-**Opt-out**: `MANIFEST_TELEMETRY_DISABLED=1`. Also auto-disabled when
+**Opt-out**: `TUPLE_TELEMETRY_DISABLED=1`. Also auto-disabled when
 `NODE_ENV !== 'production'` so dev instances never report.
 
 **Cadence**: `@Cron(CronExpression.EVERY_HOUR)` fires once an hour but
@@ -603,13 +603,13 @@ Otherwise the agent is **clean** and gets the simplified view. The signals live 
 - **Old user, existing agent that used complexity/task-specific** → stays legacy → full surfaces + banners, behavior untouched.
 - **Old user creating a _new_ agent** → the new agent is **clean** (it has no complexity/specificity config of its own), so it gets the **simplified view** — even though the user is "old". An old user whose agent long ago stopped using these (no active config left) is likewise treated as clean.
 
-Dev seeding (`packages/backend/src/database/seed-cohorts.ts`, `seedRoutingCohorts`) creates two demo logins so both states are visible side by side: `admin@manifest.build` (clean — Default + Custom only) and `olduser@manifest.build` (legacy — complexity + task-specific visible). Both passwords are `manifest`. Seeding is idempotent.
+Dev seeding (`packages/backend/src/database/seed-cohorts.ts`, `seedRoutingCohorts`) creates two demo logins so both states are visible side by side: `admin@tuple.ai` (clean — Default + Custom only) and `olduser@tuple.ai` (legacy — complexity + task-specific visible). Both passwords are `tuple`. Seeding is idempotent.
 
 Still to come (not in this phase): a migration assistant (task-specific → header rules, complexity → collapse to default) and a committed end date.
 
 ## Auto-fix (self-healing via Phoenix)
 
-**Auto-fix** repairs a failing request before the fallback chain runs. When an agent request fails with a **repairable request-side 4xx** (default allow-list `400,404,422` — never 401/403/429/5xx), Manifest hands the failed request + normalized provider error to an external healing service (**Phoenix**), gets back a patched request, and resends it **once**. It runs **before** `shouldTriggerFallback`, so the fallback chain is the safety net if healing doesn't clear the error. Toggled **per agent** (`agents.autofix_enabled`) and gated to **early-access tenants** (the waitlist gate below) — not tied to the routing cohort.
+**Auto-fix** repairs a failing request before the fallback chain runs. When an agent request fails with a **repairable request-side 4xx** (default allow-list `400,404,422` — never 401/403/429/5xx), Tuple hands the failed request + normalized provider error to an external healing service (**Phoenix**), gets back a patched request, and resends it **once**. It runs **before** `shouldTriggerFallback`, so the fallback chain is the safety net if healing doesn't clear the error. Toggled **per agent** (`agents.autofix_enabled`) and gated to **early-access tenants** (the waitlist gate below) — not tied to the routing cohort.
 
 **Per-agent default is deployment-mode-dependent.** `agents.autofix_enabled` is **nullable**: `NULL` means "no explicit choice — inherit the mode default", which is **ON in cloud, OFF in self-hosted** (resolved by `AutofixService.resolveEnabled()` via `isSelfHosted()`, computed once at boot). An explicit `true`/`false` (the user flipping the Settings toggle) always wins. The `GET/PATCH …/autofix` endpoints return the *resolved* effective value, so the UI shows the right default state without persisting one. Migration `1799000300000` drops the old blanket `false` default and resets pre-feature `false` rows to `NULL` so they inherit the mode default.
 
@@ -620,12 +620,12 @@ Still to come (not in this phase): a migration assistant (task-specific → head
 
 `AutofixService.hasAccess(tenantId)` (cached 30s; invalidated on waitlist join) computes `granted || (rollout==='waitlist' && joined)`, short-circuiting to `true` under `everyone`. `maybeHeal` requires it, so a non-access tenant **never heals even when the cloud default would enable it**; `GET/PATCH …/autofix` return `available` so the Settings toggle shows only to access tenants (everyone else keeps the "Get early access" card). Advance the rollout by bumping `AUTOFIX_ROLLOUT`; at `everyone`, retire the gate.
 
-**Scope:** non-streaming responses + streaming that fails before the first byte (a repairable 4xx makes `providerResponse.ok=false` before any client bytes are sent). **One attempt only — there is no retry budget.** If the single patched retry still fails, Manifest reports the outcome to Phoenix and hands off to fallback.
+**Scope:** non-streaming responses + streaming that fails before the first byte (a repairable 4xx makes `providerResponse.ok=false` before any client bytes are sent). **One attempt only — there is no retry budget.** If the single patched retry still fails, Tuple reports the outcome to Phoenix and hands off to fallback.
 
-**Manifest-blocked M302s are healable too.** An explicit `model` that resolves to no connected model never reaches a provider — historically it returned the friendly M302 without Phoenix ever seeing it. Now `healOrRejectUnavailableModel` (`proxy.service.ts`) synthesizes the 404 a provider would return (`code: model_not_found`, `param: model`, fingerprint provider inferred from the model prefix, `manifest` for bare names) and runs it through the same `maybeHeal` gates; a patch that renames the model re-resolves routing from scratch and serves the repaired request. Recording keeps one caller Request with the original requested model and the Auto-fix outcome, plus the real healed provider retry as its sole Provider Attempt — no attempt is fabricated for the Manifest-blocked original. Agents without Auto-fix (or a failed heal) get the friendly M302 exactly as before; an uncleared block remains a failed M302 Request with zero Provider Attempts.
+**Tuple-blocked M302s are healable too.** An explicit `model` that resolves to no connected model never reaches a provider — historically it returned the friendly M302 without Phoenix ever seeing it. Now `healOrRejectUnavailableModel` (`proxy.service.ts`) synthesizes the 404 a provider would return (`code: model_not_found`, `param: model`, fingerprint provider inferred from the model prefix, `tuple` for bare names) and runs it through the same `maybeHeal` gates; a patch that renames the model re-resolves routing from scratch and serves the repaired request. Recording keeps one caller Request with the original requested model and the Auto-fix outcome, plus the real healed provider retry as its sole Provider Attempt — no attempt is fabricated for the Tuple-blocked original. Agents without Auto-fix (or a failed heal) get the friendly M302 exactly as before; an uncleared block remains a failed M302 Request with zero Provider Attempts.
 
 **Code:** `packages/backend/src/routing/autofix/`
-- `autofix.service.ts` — `maybeHeal()` gates on (globally enabled + repairable status + circuit breaker closed + agent opted in), then `runHealOnce()` does one heal + one reforward. Any throw degrades to the original provider error (never a Manifest 500). Per-agent config is cached 30s; `invalidateConfig()` is called on toggle. **Circuit breaker:** after 3 consecutive heal-call transport failures the breaker opens for 30s and `maybeHeal()` skips healing (returns null → straight to fallback), so a slow/down Phoenix stops adding latency to every repairable 4xx; any successful round-trip clears the streak.
+- `autofix.service.ts` — `maybeHeal()` gates on (globally enabled + repairable status + circuit breaker closed + agent opted in), then `runHealOnce()` does one heal + one reforward. Any throw degrades to the original provider error (never a Tuple 500). Per-agent config is cached 30s; `invalidateConfig()` is called on toggle. **Circuit breaker:** after 3 consecutive heal-call transport failures the breaker opens for 30s and `maybeHeal()` skips healing (returns null → straight to fallback), so a slow/down Phoenix stops adding latency to every repairable 4xx; any successful round-trip clears the streak.
 - `healing-client.ts` — the `HealingClient` port + `HEALING_CLIENT` DI token. Chosen at boot in `autofix.module.ts`: `HttpHealingClient` when `AUTOFIX_HEALING_URL` is set; otherwise **`NoopHealingClient` in production** (inert — never mutates traffic) and the in-process **`MockHealingClient` only in dev/test** (so the flow can be exercised without an external Phoenix). This keeps the dev mock's hardcoded catalog off real traffic when a healer isn't wired.
 - `phoenix.types.ts` — the wire contract. `provider-error-normalizer.ts` — turns a raw 4xx body into `{message,type,param,code}`. `autofix.types.ts` — internal `AutofixRecord` / `AutofixChainEntry`.
 - `autofix-health-probe.ts` — on boot (`OnApplicationBootstrap`), if `AUTOFIX_HEALING_URL` is set, pings Phoenix `GET /api/health` once (fire-and-forget, never blocks/fails boot) and warns if unreachable — so a wrong URL / missing key / down Phoenix surfaces at deploy, not on the first repairable 4xx.
@@ -635,9 +635,9 @@ Still to come (not in this phase): a migration assistant (task-specific → head
 **Phoenix = [`mnfst/phoenix`](https://github.com/mnfst/phoenix)** (separate repo). Contract (v2):
 - `POST /api/heal` — body `{traceId, provider, api, url?, request, response:{statusCode, error:{message,type?,param?,code?}}}`. **`traceId` is required** (Phoenix rejects a body without it) and **the provider error is nested under `response`** (a flat `providerError` is rejected), and `api` is the proxy `apiMode` verbatim (`chat_completions` | `responses` | `messages`). The response is discriminated on `status`: `patched` / `unverified` (both carry `healedBody` + `healAttemptId` → apply the patch and resend; `patched` = verified issue, `unverified` = fresh patch) | `resolving` (Phoenix is still authoring a fix — nothing to resend) | `no_patch`. Also returns `issueId`, `patchId?`, `operations?`.
 - `PATCH /api/heal-attempts/{healAttemptId}` — report the retry outcome `{retryStatusCode, error?}` (`error` required when ≥400). Fire-and-forget; Phoenix decides succeeded/failed. Only possible when a patch handed out a `healAttemptId` — `no_patch`/`resolving` carry none, so those outcomes are **not** reported.
-- `traceId` is stable across the logical request (Manifest reuses the internal `groupId`).
+- `traceId` is stable across the logical request (Tuple reuses the internal `groupId`).
 
-**Recording separates the request verdict from attempt audit.** `requests.autofix_status` is the one outcome for the logical request; only `retry_succeeded` means the request was recovered by Auto-fix. Actual provider calls remain `agent_messages` rows with their own `status`. When Manifest sends a patched retry, the related attempt rows use `autofix_applied`, `autofix_group_id`, `autofix_role`, and `autofix_operations`; Phoenix's decision metadata is exposed by the entity as `autofix_decision` (`{status,issueId,patchId,healAttemptId,explanation}`) and mapped to the retained physical column `autofix_phoenix`. A Phoenix consultation that produces no patched retry must not create a fake provider attempt.
+**Recording separates the request verdict from attempt audit.** `requests.autofix_status` is the one outcome for the logical request; only `retry_succeeded` means the request was recovered by Auto-fix. Actual provider calls remain `agent_messages` rows with their own `status`. When Tuple sends a patched retry, the related attempt rows use `autofix_applied`, `autofix_group_id`, `autofix_role`, and `autofix_operations`; Phoenix's decision metadata is exposed by the entity as `autofix_decision` (`{status,issueId,patchId,healAttemptId,explanation}`) and mapped to the retained physical column `autofix_phoenix`. A Phoenix consultation that produces no patched retry must not create a fake provider attempt.
 
 **Frontend:** `pages/SettingsAutofixSection.tsx` — a single on/off toggle in the per-agent **Settings** page (shown for every agent; `services/api/routing.ts` `getAutofix`/`updateAutofix`; `.settings-switch` styling). `components/MessageDetails.tsx` renders the Auto-fix panel + sibling link.
 
@@ -721,24 +721,24 @@ All pricing comes from a single source:
 
 ## Releases
 
-There are **no publishable npm packages** in this repo. `packages/backend`, `packages/frontend`, `packages/shared`, and `packages/manifest` are all `private: true`. Manifest ships exclusively as the Docker image at `manifestdotbuild/manifest` (built from `docker/Dockerfile`).
+There are **no publishable npm packages** in this repo. `packages/backend`, `packages/frontend`, `packages/shared`, and `packages/tuple` are all `private: true`. Tuple ships exclusively as the Docker image at `tupleai/tuple` (built from `docker/Dockerfile`).
 
-### `packages/manifest/` is the canonical version
+### `packages/tuple/` is the canonical version
 
-`packages/manifest/` is a **code-free shell package** that exists only to hold the canonical "Manifest version". It has no `src/`, no tests, no dependencies — just `package.json`, `README.md`, and (after the first release) a `CHANGELOG.md`. The real backend and frontend live under `packages/backend/` and `packages/frontend/` as before.
+`packages/tuple/` is a **code-free shell package** that exists only to hold the canonical "Tuple version". It has no `src/`, no tests, no dependencies — just `package.json`, `README.md`, and (after the first release) a `CHANGELOG.md`. The real backend and frontend live under `packages/backend/` and `packages/frontend/` as before.
 
-`.changeset/config.json` has `"ignore": ["manifest-backend", "manifest-frontend", "manifest-shared"]`, so when a contributor runs `npx changeset`, **only `manifest` is a selectable target**. Bumps to `manifest-backend` / `manifest-frontend` / `manifest-shared` are silently discarded. Always target `manifest` regardless of which files you actually changed. A CI check (`scripts/check-changesets.js`, wired into the `changeset-check` job) enforces this: a changeset that targets an ignored package fails the PR, because it makes `changeset version` a no-op and breaks the Release workflow with "No commits between main and changeset-release/main".
+`.changeset/config.json` has `"ignore": ["tuple-backend", "tuple-frontend", "tuple-shared"]`, so when a contributor runs `npx changeset`, **only `tuple` is a selectable target**. Bumps to `tuple-backend` / `tuple-frontend` / `tuple-shared` are silently discarded. Always target `tuple` regardless of which files you actually changed. A CI check (`scripts/check-changesets.js`, wired into the `changeset-check` job) enforces this: a changeset that targets an ignored package fails the PR, because it makes `changeset version` a no-op and breaks the Release workflow with "No commits between main and changeset-release/main".
 
 ### Adding a changeset
 
 ```bash
 npx changeset
-# → select "manifest"
+# → select "tuple"
 # → choose patch / minor / major
 # → write a one-line summary (this becomes the CHANGELOG entry)
 ```
 
-Commit the generated `.changeset/*.md` file alongside your code. On merge to `main`, `release.yml` runs `changesets/action`, which opens (or updates) a `chore: version packages` PR bumping `packages/manifest/package.json` and appending to `packages/manifest/CHANGELOG.md`.
+Commit the generated `.changeset/*.md` file alongside your code. On merge to `main`, `release.yml` runs `changesets/action`, which opens (or updates) a `chore: version packages` PR bumping `packages/tuple/package.json` and appending to `packages/tuple/CHANGELOG.md`.
 
 Changesets are **not** required on every PR — they're optional and only meaningful for changes you want in the changelog. Use `npx changeset add --empty` for purely internal work if you want an explicit "no release" marker.
 
@@ -746,11 +746,11 @@ Changesets are **not** required on every PR — they're optional and only meanin
 
 Merging the `chore: version packages` PR to `main` automatically publishes a new Docker image — no manual step required.
 
-1. Merge the pending `chore: version packages` PR. `release.yml` detects the version bump in `packages/manifest/package.json` (by diffing `HEAD~1` against `HEAD`) and calls `docker.yml` as a reusable workflow.
-2. The `publish` job reads `packages/manifest/package.json`, resolves the version automatically, and pushes `manifestdotbuild/manifest:{version}` + `{major}.{minor}` + `{major}` + `sha-<short>` to Docker Hub. The image is multi-arch (amd64 + arm64) and cosign-signed.
+1. Merge the pending `chore: version packages` PR. `release.yml` detects the version bump in `packages/tuple/package.json` (by diffing `HEAD~1` against `HEAD`) and calls `docker.yml` as a reusable workflow.
+2. The `publish` job reads `packages/tuple/package.json`, resolves the version automatically, and pushes `tupleai/tuple:{version}` + `{major}.{minor}` + `{major}` + `sha-<short>` to Docker Hub. The image is multi-arch (amd64 + arm64) and cosign-signed.
 3. **Manually update the Docker Hub description** on hub.docker.com by copy-pasting the current contents of `docker/DOCKER_README.md`. (Automating this sync hit a wall because `docker-pushrm` and the Docker Hub web API need a personal-user PAT and the existing secrets are scoped to the org — tracked as a follow-up, not blocking releases.)
 
-**Manual override:** `workflow_dispatch` on `Docker → Run workflow` still works for hotfixes and retags. Leave the `version` input blank to use `packages/manifest/package.json`, or pass a semver string to retag an older commit / publish a hotfix version.
+**Manual override:** `workflow_dispatch` on `Docker → Run workflow` still works for hotfixes and retags. Leave the `version` input blank to use `packages/tuple/package.json`, or pass a semver string to retag an older commit / publish a hotfix version.
 
 ### Summary of what CI does on each trigger
 
@@ -758,8 +758,8 @@ Merging the `chore: version packages` PR to `main` automatically publishes a new
 |---------|--------------|
 | PR opened/updated (runtime files) | `ci.yml` runs tests, lint, typecheck, coverage. `docker.yml` validates the Docker build (no push). `changeset-check` warns softly if no changeset is present. |
 | Merge to `main` | `release.yml` runs `changesets/action` to open or update the `chore: version packages` PR. No publish — the version on `main` hasn't changed yet. |
-| Merge of `chore: version packages` PR | `release.yml` runs again, detects the version bump in `packages/manifest/package.json`, and calls `docker.yml` as a reusable workflow. This pushes a new image tag to Docker Hub automatically. |
-| Manual `workflow_dispatch` on `Docker` workflow | Reads `packages/manifest/package.json` (or the `version` input override) and pushes a new image tag to Docker Hub. Used for hotfixes and retags. |
+| Merge of `chore: version packages` PR | `release.yml` runs again, detects the version bump in `packages/tuple/package.json`, and calls `docker.yml` as a reusable workflow. This pushes a new image tag to Docker Hub automatically. |
+| Manual `workflow_dispatch` on `Docker` workflow | Reads `packages/tuple/package.json` (or the `version` input override) and pushes a new image tag to Docker Hub. Used for hotfixes and retags. |
 
 ## Code Coverage (Codecov)
 

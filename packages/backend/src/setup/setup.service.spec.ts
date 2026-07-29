@@ -83,30 +83,30 @@ describe('SetupService', () => {
   });
 
   describe('isSelfHosted', () => {
-    const originalMode = process.env['MANIFEST_MODE'];
+    const originalMode = process.env['TUPLE_MODE'];
 
     afterEach(() => {
-      if (originalMode === undefined) delete process.env['MANIFEST_MODE'];
-      else process.env['MANIFEST_MODE'] = originalMode;
+      if (originalMode === undefined) delete process.env['TUPLE_MODE'];
+      else process.env['TUPLE_MODE'] = originalMode;
     });
 
-    it('returns true when MANIFEST_MODE is selfhosted', () => {
-      process.env['MANIFEST_MODE'] = 'selfhosted';
+    it('returns true when TUPLE_MODE is selfhosted', () => {
+      process.env['TUPLE_MODE'] = 'selfhosted';
       expect(service.isSelfHosted()).toBe(true);
     });
 
-    it('returns true for legacy MANIFEST_MODE=local', () => {
-      process.env['MANIFEST_MODE'] = 'local';
+    it('returns true for legacy TUPLE_MODE=local', () => {
+      process.env['TUPLE_MODE'] = 'local';
       expect(service.isSelfHosted()).toBe(true);
     });
 
-    it('returns false when MANIFEST_MODE is cloud', () => {
-      process.env['MANIFEST_MODE'] = 'cloud';
+    it('returns false when TUPLE_MODE is cloud', () => {
+      process.env['TUPLE_MODE'] = 'cloud';
       expect(service.isSelfHosted()).toBe(false);
     });
 
-    it('returns false when MANIFEST_MODE is not set', () => {
-      delete process.env['MANIFEST_MODE'];
+    it('returns false when TUPLE_MODE is not set', () => {
+      delete process.env['TUPLE_MODE'];
       expect(service.isSelfHosted()).toBe(false);
     });
   });

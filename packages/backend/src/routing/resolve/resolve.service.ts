@@ -20,7 +20,7 @@ import { scoreRequest, ScorerInput, MomentumInput, scanMessages } from '../../sc
 import { ResolveResponse } from '../dto/resolve-response';
 import { inferProviderFromModelName } from '../../common/utils/provider-aliases';
 import { Agent } from '../../entities/agent.entity';
-import { DEFAULT_RESPONSE_MODE, DEFAULT_OUTPUT_MODALITY } from 'manifest-shared';
+import { DEFAULT_RESPONSE_MODE, DEFAULT_OUTPUT_MODALITY } from 'tuple-shared';
 import type {
   AuthType,
   ModelRoute,
@@ -28,7 +28,7 @@ import type {
   OutputModality,
   SpecificityCategory,
   TierSlot,
-} from 'manifest-shared';
+} from 'tuple-shared';
 import type { HeaderTier } from '../../entities/header-tier.entity';
 import type { TierAssignment } from '../../entities/tier-assignment.entity';
 import type { SpecificityAssignment } from '../../entities/specificity-assignment.entity';

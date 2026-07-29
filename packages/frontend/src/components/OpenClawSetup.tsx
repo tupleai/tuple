@@ -62,7 +62,7 @@ const OpenClawSetup: Component<Props> = (props) => {
   const [wizKeyRevealed, setWizKeyRevealed] = createSignal(false);
 
   const hasFullKey = () => !!props.apiKey;
-  const masked = () => (props.keyPrefix ? `${props.keyPrefix}...` : 'mnfst_YOUR_KEY');
+  const masked = () => (props.keyPrefix ? `${props.keyPrefix}...` : 'tuple_YOUR_KEY');
   const copyKey = () => props.apiKey ?? masked();
   const cliKey = () => (cliKeyRevealed() && props.apiKey ? props.apiKey : masked());
   const wizKey = () => (wizKeyRevealed() && props.apiKey ? props.apiKey : masked());
@@ -70,8 +70,8 @@ const OpenClawSetup: Component<Props> = (props) => {
   return (
     <div class="setup-agents-card">
       <p class="setup-step__desc">
-        Register Manifest in your OpenClaw config to route each request to the best provider using
-        the model <code class="setup-model-hint__code">manifest/auto</code>
+        Register Tuple in your OpenClaw config to route each request to the best provider using
+        the model <code class="setup-model-hint__code">tuple/auto</code>
       </p>
 
       <div
@@ -148,7 +148,7 @@ const OpenClawSetup: Component<Props> = (props) => {
           </div>
           <OnboardField label="Endpoint compatibility" value="OpenAI Chat Completions-compatible" />
           <OnboardField label="Model ID" value="auto" copyable />
-          <OnboardField label="Endpoint ID" value="manifest" copyable />
+          <OnboardField label="Endpoint ID" value="tuple" copyable />
         </div>
       </Show>
     </div>

@@ -35,7 +35,7 @@ import {
   MODEL_MODALITIES,
   type ModelCapability,
   type ModelModality,
-} from 'manifest-shared';
+} from 'tuple-shared';
 
 const FETCH_TIMEOUT_MS = 5000;
 const ANTHROPIC_DEFAULT_CONTEXT = 200000;

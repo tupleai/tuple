@@ -1,6 +1,6 @@
 import { TrieMatch } from './keyword-trie';
 import { ScorerTool, extractToolName } from './types';
-import { SpecificityCategory, SPECIFICITY_CATEGORIES } from 'manifest-shared';
+import { SpecificityCategory, SPECIFICITY_CATEGORIES } from 'tuple-shared';
 import { ACTIVATION_THRESHOLDS, weightFor } from './specificity-weights';
 import { computeSignalBoosts } from './specificity-signals';
 
@@ -86,7 +86,7 @@ const STICKY_BIAS = 2;
  *
  * @param allMatches        Trie matches from the scoring pipeline
  * @param tools             Tool definitions from the request (optional)
- * @param headerOverride    Explicit category from x-manifest-specificity header
+ * @param headerOverride    Explicit category from x-tuple-specificity header
  * @param thresholdOverride Uniform threshold override (mainly for tests)
  * @param text              Raw user text used for structural signal detection
  */

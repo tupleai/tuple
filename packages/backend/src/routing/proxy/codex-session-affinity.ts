@@ -34,9 +34,9 @@ export interface CodexAffinityRequest {
  * stable `session-id` / `thread-id` headers, (2) defaulting the body's
  * `prompt_cache_key` to its thread id, and (3) replaying the
  * `x-codex-turn-state` sticky-routing token returned by each response on the
- * next request. Manifest sent none of these, so every request landed on an
+ * next request. Tuple sent none of these, so every request landed on an
  * arbitrary shard and `cached_tokens` was always 0 — agentic tool loops
- * re-paid their full prompt prefix on every step (mnfst/manifest#2217).
+ * re-paid their full prompt prefix on every step (tupleai/tuple#2217).
  *
  * This service closes that gap:
  * - `prepare()` resolves a session for the subscription token + the caller's

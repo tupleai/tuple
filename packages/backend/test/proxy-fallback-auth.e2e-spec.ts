@@ -267,8 +267,8 @@ describe('Proxy fallback success — auth_type/cost_usd attribution (#1173)', ()
       .send({ messages: [{ role: 'user', content: 'hello' }] })
       .expect(200);
 
-    expect(res.headers['x-manifest-fallback-from']).toBe(PRIMARY_MODEL);
-    expect(res.headers['x-manifest-fallback-index']).toBe('0');
+    expect(res.headers['x-tuple-fallback-from']).toBe(PRIMARY_MODEL);
+    expect(res.headers['x-tuple-fallback-index']).toBe('0');
     expect(calls.map((c) => c.status)).toEqual([401, 200]);
   });
 });

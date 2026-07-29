@@ -55,7 +55,7 @@ function mockRecorder() {
     recordPrimaryFailure: jest.fn().mockResolvedValue(undefined),
     recordFallbackSuccess: jest.fn().mockResolvedValue(undefined),
     recordSuccessMessage: jest.fn().mockResolvedValue(undefined),
-    recordManifestBlockedRequest: jest.fn().mockResolvedValue(undefined),
+    recordTupleBlockedRequest: jest.fn().mockResolvedValue(undefined),
     recordAutofixOriginal: jest.fn().mockResolvedValue(undefined),
   };
 }
@@ -95,11 +95,11 @@ describe('proxy-response-handler', () => {
       const meta = makeMeta();
       const headers = buildMetaHeaders(meta);
 
-      expect(headers['X-Manifest-Tier']).toBe('standard');
-      expect(headers['X-Manifest-Model']).toBe('gpt-4o');
-      expect(headers['X-Manifest-Provider']).toBe('openai');
-      expect(headers['X-Manifest-Confidence']).toBe('0.9');
-      expect(headers['X-Manifest-Reason']).toBe('auto');
+      expect(headers['X-Tuple-Tier']).toBe('standard');
+      expect(headers['X-Tuple-Model']).toBe('gpt-4o');
+      expect(headers['X-Tuple-Provider']).toBe('openai');
+      expect(headers['X-Tuple-Confidence']).toBe('0.9');
+      expect(headers['X-Tuple-Reason']).toBe('auto');
     });
 
     it('should include fallback headers when fallbackFromModel is set', () => {
@@ -109,37 +109,37 @@ describe('proxy-response-handler', () => {
       });
       const headers = buildMetaHeaders(meta);
 
-      expect(headers['X-Manifest-Fallback-From']).toBe('gpt-4o');
-      expect(headers['X-Manifest-Fallback-Index']).toBe('2');
+      expect(headers['X-Tuple-Fallback-From']).toBe('gpt-4o');
+      expect(headers['X-Tuple-Fallback-Index']).toBe('2');
     });
 
     it('should default fallback index to 0 when not set', () => {
       const meta = makeMeta({ fallbackFromModel: 'gpt-4o' });
       const headers = buildMetaHeaders(meta);
 
-      expect(headers['X-Manifest-Fallback-Index']).toBe('0');
+      expect(headers['X-Tuple-Fallback-Index']).toBe('0');
     });
 
     it('should not include fallback headers when no fallback', () => {
       const meta = makeMeta();
       const headers = buildMetaHeaders(meta);
 
-      expect(headers).not.toHaveProperty('X-Manifest-Fallback-From');
-      expect(headers).not.toHaveProperty('X-Manifest-Fallback-Index');
+      expect(headers).not.toHaveProperty('X-Tuple-Fallback-From');
+      expect(headers).not.toHaveProperty('X-Tuple-Fallback-Index');
     });
 
     it('should include specificity header when specificity_category is set', () => {
       const meta = makeMeta({ specificity_category: 'coding' });
       const headers = buildMetaHeaders(meta);
 
-      expect(headers['X-Manifest-Specificity']).toBe('coding');
+      expect(headers['X-Tuple-Specificity']).toBe('coding');
     });
 
     it('should not include specificity header when specificity_category is not set', () => {
       const meta = makeMeta();
       const headers = buildMetaHeaders(meta);
 
-      expect(headers).not.toHaveProperty('X-Manifest-Specificity');
+      expect(headers).not.toHaveProperty('X-Tuple-Specificity');
     });
   });
 
@@ -309,13 +309,13 @@ describe('proxy-response-handler', () => {
 
       expect(recorder.recordFailedFallbacks).toHaveBeenCalled();
       expect(recorder.recordPrimaryFailure).toHaveBeenCalled();
-      expect(res.setHeader).toHaveBeenCalledWith('X-Manifest-Fallback-Exhausted', 'true');
+      expect(res.setHeader).toHaveBeenCalledWith('X-Tuple-Fallback-Exhausted', 'true');
       expect(res.json).toHaveBeenCalledWith(
         expect.objectContaining({
           error: expect.objectContaining({
             type: 'server_error',
             code: 'fallback_exhausted',
-            source: 'manifest',
+            source: 'tuple',
             primary_model: 'gpt-4o',
             attempted_fallbacks: [{ model: 'claude-3-haiku', provider: 'anthropic', status: 429 }],
           }),
@@ -407,7 +407,7 @@ describe('proxy-response-handler', () => {
         recorder as any,
       );
 
-      expect(res.setHeader).toHaveBeenCalledWith('X-Manifest-Fallback-Exhausted', 'true');
+      expect(res.setHeader).toHaveBeenCalledWith('X-Tuple-Fallback-Exhausted', 'true');
       expect(res.json).toHaveBeenCalledWith(
         expect.objectContaining({
           error: expect.objectContaining({
@@ -2420,20 +2420,20 @@ describe('proxy-response-handler', () => {
         healedAutofix,
         expect.objectContaining({ provider: 'openai', reason: 'auto', traceId: 'trace-1' }),
       );
-      expect(recorder.recordManifestBlockedRequest).not.toHaveBeenCalled();
+      expect(recorder.recordTupleBlockedRequest).not.toHaveBeenCalled();
     });
 
-    it('does not invent a Provider Attempt for a healed Manifest-blocked original', () => {
+    it('does not invent a Provider Attempt for a healed Tuple-blocked original', () => {
       // An M302 heal starts with no provider call. The Request parent already
       // keeps the caller's requested model and Auto-fix outcome, while the
       // actual retry is recorded as the sole Provider Attempt.
       const recorder = mockRecorder();
       const meta = makeMeta({ autofixOriginalProviderCallStarted: false });
-      const manifestAutofix: AutofixRecord = {
+      const tupleAutofix: AutofixRecord = {
         ...healedAutofix,
-        manifestOrigin: {
+        tupleOrigin: {
           code: 'M302',
-          message: '[🦚 Manifest M302] Model "ghost" is not available for this agent.',
+          message: '[↗ Tuple M302] Model "ghost" is not available for this agent.',
           model: 'ghost',
         },
       };
@@ -2449,10 +2449,10 @@ describe('proxy-response-handler', () => {
         undefined,
         null,
         undefined,
-        manifestAutofix,
+        tupleAutofix,
       );
 
-      expect(recorder.recordManifestBlockedRequest).not.toHaveBeenCalled();
+      expect(recorder.recordTupleBlockedRequest).not.toHaveBeenCalled();
       expect(recorder.recordAutofixOriginal).not.toHaveBeenCalled();
       // The retry row still records as the standard success message.
       expect(recorder.recordSuccessMessage).toHaveBeenCalledWith(
@@ -2461,7 +2461,7 @@ describe('proxy-response-handler', () => {
         'standard',
         'auto',
         expect.anything(),
-        expect.objectContaining({ autofix: manifestAutofix }),
+        expect.objectContaining({ autofix: tupleAutofix }),
       );
     });
 

@@ -61,14 +61,14 @@ const AutofixModal: Component<{ open: boolean; onClose: () => void }> = (props) 
             <div class="autofix-modal__left">
               <div class="autofix-modal__brand">
                 <img
-                  src="/logotype-white.svg"
-                  alt="Manifest"
+                  src="/logotype-light.png"
+                  alt="Tuple"
                   class="autofix-modal__logo autofix-modal__logo--light"
                   height="31"
                 />
                 <img
-                  src="/logotype-dark.svg"
-                  alt="Manifest"
+                  src="/logotype-dark.png"
+                  alt="Tuple"
                   class="autofix-modal__logo autofix-modal__logo--dark"
                   height="31"
                 />
@@ -83,7 +83,7 @@ const AutofixModal: Component<{ open: boolean; onClose: () => void }> = (props) 
               </p>
               <div class="autofix-modal__ctas">
                 <a
-                  href="https://calendly.com/sebastien-manifest/30min"
+                  href="mailto:support@tuple.ai?subject=Tuple%20Auto-fix%20demo"
                   target="_blank"
                   rel="noopener noreferrer"
                   class="btn btn--primary autofix-modal__cta-book"
@@ -199,7 +199,7 @@ const AutofixModal: Component<{ open: boolean; onClose: () => void }> = (props) 
                 </li>
               </ul>
               <a
-                href="https://manifest.build/autofix/"
+                href="https://tuple.ai/autofix/"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="autofix-modal__learn-more"

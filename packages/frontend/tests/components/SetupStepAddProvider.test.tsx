@@ -20,7 +20,7 @@ describe("SetupStepAddProvider", () => {
 
   it("renders heading", () => {
     render(() => <SetupStepAddProvider {...defaultProps} />);
-    expect(screen.getByText("Connect your harness to Manifest")).toBeDefined();
+    expect(screen.getByText("Connect your harness to Tuple")).toBeDefined();
   });
 
   it("shows description with auto model", () => {
@@ -78,8 +78,8 @@ describe("SetupStepAddProvider", () => {
     const { container } = render(() => <SetupStepAddProvider {...defaultProps} />);
     const agentTabs = container.querySelectorAll(".panel__tab");
     fireEvent.click(agentTabs[3]); // Craft Agent
-    expect(container.textContent).toContain("Manifest provider preset");
-    expect(container.textContent).toContain("mnfst_YOUR_KEY");
+    expect(container.textContent).toContain("Tuple provider preset");
+    expect(container.textContent).toContain("tuple_YOUR_KEY");
   });
 
   it("shows OpenCode setup when OpenCode tab clicked", () => {
@@ -87,7 +87,7 @@ describe("SetupStepAddProvider", () => {
     const agentTabs = container.querySelectorAll(".panel__tab");
     fireEvent.click(agentTabs[5]); // OpenCode
     expect(container.textContent).toContain("~/.config/opencode/opencode.json");
-    expect(container.textContent).toContain('"model": "manifest/auto"');
+    expect(container.textContent).toContain('"model": "tuple/auto"');
   });
 
   it("defaults to OpenClaw agent tab", () => {
@@ -106,14 +106,14 @@ describe("SetupStepAddProvider", () => {
   it("shows Agents card when OpenClaw selected", () => {
     const { container } = render(() => <SetupStepAddProvider {...defaultProps} />);
     expect(container.querySelector(".setup-agents-card")).not.toBeNull();
-    expect(container.textContent).toContain("manifest/auto");
+    expect(container.textContent).toContain("tuple/auto");
   });
 
   it("shows Hermes setup when Hermes Agent selected", () => {
     const { container } = render(() => <SetupStepAddProvider {...defaultProps} />);
     const agentTabs = container.querySelectorAll(".panel__tab");
     fireEvent.click(agentTabs[1]); // Hermes Agent
-    expect(container.textContent).toContain("Point Hermes at the Manifest endpoint");
+    expect(container.textContent).toContain("Point Hermes at the Tuple endpoint");
   });
 
   it("switches back to OpenClaw from Hermes Agent", () => {
@@ -121,8 +121,8 @@ describe("SetupStepAddProvider", () => {
     const agentTabs = container.querySelectorAll(".panel__tab");
     fireEvent.click(agentTabs[1]); // Hermes
     fireEvent.click(agentTabs[0]); // OpenClaw
-    expect(container.textContent).toContain("manifest/auto");
-    expect(container.textContent).not.toContain("Point Hermes at the Manifest endpoint");
+    expect(container.textContent).toContain("tuple/auto");
+    expect(container.textContent).not.toContain("Point Hermes at the Tuple endpoint");
   });
 
   it("shows CLI and openclaw onboard sub-tabs", () => {
@@ -176,38 +176,38 @@ describe("SetupStepAddProvider", () => {
     expect(fields[3].textContent).toContain("Model ID");
     expect(fields[3].textContent).toContain("auto");
     expect(fields[4].textContent).toContain("Endpoint ID");
-    expect(fields[4].textContent).toContain("manifest");
+    expect(fields[4].textContent).toContain("tuple");
   });
 
   it("shows eye toggle on CLI sub-tab when apiKey provided", () => {
     const { container } = render(() => (
-      <SetupStepAddProvider {...defaultProps} apiKey="mnfst_secret" keyPrefix="mnfst_abc" />
+      <SetupStepAddProvider {...defaultProps} apiKey="tuple_secret" keyPrefix="tuple_abc" />
     ));
     expect(container.querySelector('[aria-label="Reveal API key"]')).not.toBeNull();
   });
 
   it("reveals key in CLI commands when eye toggle clicked", () => {
     const { container } = render(() => (
-      <SetupStepAddProvider {...defaultProps} apiKey="mnfst_secret" keyPrefix="mnfst_abc" />
+      <SetupStepAddProvider {...defaultProps} apiKey="tuple_secret" keyPrefix="tuple_abc" />
     ));
-    expect(container.textContent).toContain("mnfst_abc...");
-    expect(container.textContent).not.toContain("mnfst_secret");
+    expect(container.textContent).toContain("tuple_abc...");
+    expect(container.textContent).not.toContain("tuple_secret");
     fireEvent.click(container.querySelector('[aria-label="Reveal API key"]')!);
-    expect(container.textContent).toContain("mnfst_secret");
+    expect(container.textContent).toContain("tuple_secret");
   });
 
   it("hides key again on second CLI eye toggle click", () => {
     const { container } = render(() => (
-      <SetupStepAddProvider {...defaultProps} apiKey="mnfst_secret" keyPrefix="mnfst_abc" />
+      <SetupStepAddProvider {...defaultProps} apiKey="tuple_secret" keyPrefix="tuple_abc" />
     ));
     fireEvent.click(container.querySelector('[aria-label="Reveal API key"]')!);
     fireEvent.click(container.querySelector('[aria-label="Hide API key"]')!);
-    expect(container.textContent).not.toContain("mnfst_secret");
+    expect(container.textContent).not.toContain("tuple_secret");
   });
 
   it("does not show eye toggle on CLI when no apiKey", () => {
     const { container } = render(() => (
-      <SetupStepAddProvider {...defaultProps} keyPrefix="mnfst_abc" />
+      <SetupStepAddProvider {...defaultProps} keyPrefix="tuple_abc" />
     ));
     expect(container.querySelector('[aria-label="Reveal API key"]')).toBeNull();
   });
@@ -231,15 +231,15 @@ describe("SetupStepAddProvider", () => {
 
   it("shows full API key on Toolkits tab when provided", () => {
     const { container } = render(() => (
-      <SetupStepAddProvider {...defaultProps} apiKey="mnfst_test_key" />
+      <SetupStepAddProvider {...defaultProps} apiKey="tuple_test_key" />
     ));
     fireEvent.click(container.querySelectorAll(".setup-segment__btn")[1]);
-    expect(container.textContent).toContain("mnfst_test_key");
+    expect(container.textContent).toContain("tuple_test_key");
   });
 
   it("shows placeholder when no apiKey or keyPrefix", () => {
     const { container } = render(() => <SetupStepAddProvider {...defaultProps} />);
-    expect(container.textContent).toContain("mnfst_YOUR_KEY");
+    expect(container.textContent).toContain("tuple_YOUR_KEY");
   });
 
   it("has copy buttons", () => {
@@ -267,10 +267,10 @@ describe("SetupStepAddProvider", () => {
 
   it("includes api key in CLI snippet", () => {
     const { container } = render(() => (
-      <SetupStepAddProvider {...defaultProps} apiKey="mnfst_test" keyPrefix="mnfst_tes" />
+      <SetupStepAddProvider {...defaultProps} apiKey="tuple_test" keyPrefix="tuple_tes" />
     ));
     fireEvent.click(container.querySelector('[aria-label="Reveal API key"]')!);
-    expect(container.textContent).toContain("mnfst_test");
+    expect(container.textContent).toContain("tuple_test");
   });
 
   describe("platform-filtered mode", () => {
@@ -278,7 +278,7 @@ describe("SetupStepAddProvider", () => {
       const { container } = render(() => (
         <SetupStepAddProvider {...defaultProps} platform="openclaw" />
       ));
-      expect(container.textContent).toContain("Register Manifest in your OpenClaw config");
+      expect(container.textContent).toContain("Register Tuple in your OpenClaw config");
       expect(container.querySelector('[aria-label="Setup method"]')).toBeNull();
     });
 
@@ -286,14 +286,14 @@ describe("SetupStepAddProvider", () => {
       render(() => (
         <SetupStepAddProvider {...defaultProps} platform="openclaw" />
       ));
-      expect(screen.getByText("Connect your OpenClaw harness to Manifest")).toBeDefined();
+      expect(screen.getByText("Connect your OpenClaw harness to Tuple")).toBeDefined();
     });
 
     it("shows HermesSetup directly when platform is hermes", () => {
       const { container } = render(() => (
         <SetupStepAddProvider {...defaultProps} platform="hermes" />
       ));
-      expect(container.textContent).toContain("Point Hermes at the Manifest endpoint");
+      expect(container.textContent).toContain("Point Hermes at the Tuple endpoint");
       expect(container.querySelector('[aria-label="Setup method"]')).toBeNull();
     });
 
@@ -301,7 +301,7 @@ describe("SetupStepAddProvider", () => {
       render(() => (
         <SetupStepAddProvider {...defaultProps} platform="hermes" />
       ));
-      expect(screen.getByText("Connect your Hermes harness to Manifest")).toBeDefined();
+      expect(screen.getByText("Connect your Hermes harness to Tuple")).toBeDefined();
     });
 
     it("shows NanobotSetup directly when platform is nanobot", () => {
@@ -318,15 +318,15 @@ describe("SetupStepAddProvider", () => {
       render(() => (
         <SetupStepAddProvider {...defaultProps} platform="nanobot" />
       ));
-      expect(screen.getByText("Connect your Nanobot harness to Manifest")).toBeDefined();
+      expect(screen.getByText("Connect your Nanobot harness to Tuple")).toBeDefined();
     });
 
     it("shows CraftAgentSetup directly when platform is craft", () => {
       const { container } = render(() => (
         <SetupStepAddProvider {...defaultProps} platform="craft" />
       ));
-      expect(container.textContent).toContain("Manifest provider preset");
-      expect(container.textContent).toContain("mnfst_YOUR_KEY");
+      expect(container.textContent).toContain("Tuple provider preset");
+      expect(container.textContent).toContain("tuple_YOUR_KEY");
       // No top-level Agents/Toolkits tabs in filtered mode.
       expect(container.querySelector('[aria-label="Setup method"]')).toBeNull();
     });
@@ -335,7 +335,7 @@ describe("SetupStepAddProvider", () => {
       render(() => (
         <SetupStepAddProvider {...defaultProps} platform="craft" />
       ));
-      expect(screen.getByText("Connect your Craft harness to Manifest")).toBeDefined();
+      expect(screen.getByText("Connect your Craft harness to Tuple")).toBeDefined();
     });
 
     it("shows ClaudeCodeSetup directly when platform is claude-code", () => {
@@ -352,7 +352,7 @@ describe("SetupStepAddProvider", () => {
       render(() => (
         <SetupStepAddProvider {...defaultProps} platform="claude-code" />
       ));
-      expect(screen.getByText("Connect Claude Code to Manifest")).toBeDefined();
+      expect(screen.getByText("Connect Claude Code to Tuple")).toBeDefined();
     });
 
     it("shows OpenCodeSetup directly when platform is opencode", () => {
@@ -360,7 +360,7 @@ describe("SetupStepAddProvider", () => {
         <SetupStepAddProvider {...defaultProps} platform="opencode" />
       ));
       expect(container.textContent).toContain("~/.config/opencode/opencode.json");
-      expect(container.textContent).toContain('"model": "manifest/auto"');
+      expect(container.textContent).toContain('"model": "tuple/auto"');
       expect(container.querySelector('[aria-label="Setup method"]')).toBeNull();
     });
 
@@ -368,7 +368,7 @@ describe("SetupStepAddProvider", () => {
       render(() => (
         <SetupStepAddProvider {...defaultProps} platform="opencode" />
       ));
-      expect(screen.getByText("Connect OpenCode to Manifest")).toBeDefined();
+      expect(screen.getByText("Connect OpenCode to Tuple")).toBeDefined();
     });
 
     it("shows OpenAI SDK snippet when platform is openai-sdk", () => {
@@ -439,14 +439,14 @@ describe("SetupStepAddProvider", () => {
       const { container } = render(() => (
         <SetupStepAddProvider {...defaultProps} platform="openclaw" />
       ));
-      expect(container.textContent).toContain("Connect your OpenClaw harness to Manifest");
+      expect(container.textContent).toContain("Connect your OpenClaw harness to Tuple");
     });
 
     it("does not show description text in filtered mode", () => {
       const { container } = render(() => (
         <SetupStepAddProvider {...defaultProps} platform="openclaw" />
       ));
-      expect(container.textContent).not.toContain("Point your harness at the Manifest endpoint");
+      expect(container.textContent).not.toContain("Point your harness at the Tuple endpoint");
     });
   });
 });

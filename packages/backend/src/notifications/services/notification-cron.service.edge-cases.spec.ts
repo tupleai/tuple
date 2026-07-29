@@ -14,7 +14,7 @@ import { NotificationRulesService } from './notification-rules.service';
 import { NotificationEmailService } from './notification-email.service';
 import { EmailProviderConfigService } from './email-provider-config.service';
 import { NotificationLogService } from './notification-log.service';
-import { ManifestRuntimeService } from '../../common/services/manifest-runtime.service';
+import { TupleRuntimeService } from '../../common/services/tuple-runtime.service';
 
 const baseRule = {
   id: 'rule-1',
@@ -91,7 +91,7 @@ describe('NotificationCronService — edge cases', () => {
           },
         },
         {
-          provide: ManifestRuntimeService,
+          provide: TupleRuntimeService,
           useValue: { getAuthBaseUrl: jest.fn().mockReturnValue('http://localhost:3001') },
         },
       ],

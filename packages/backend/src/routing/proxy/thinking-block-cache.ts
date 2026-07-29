@@ -80,7 +80,7 @@ function routeContextMatches(
  *    unmodified `thinking` or `redacted_thinking` blocks that preceded the
  *    tool use."
  *
- * OpenAI-compat clients strip unknown fields, so Manifest caches the blocks
+ * OpenAI-compat clients strip unknown fields, so Tuple caches the blocks
  * here and re-injects them when the client replays the assistant turn.
  *
  * Keyed by `${sessionKey}:${firstToolUseId}` — the first tool_use id from

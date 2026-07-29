@@ -9,7 +9,7 @@ const TWENTY_FOUR_HOURS_MS = 24 * 60 * 60 * 1000;
 /**
  * Drives the once-per-24h telemetry send for self-hosted installs.
  *
- * Opt-out: `MANIFEST_TELEMETRY_DISABLED=1` silences all outbound traffic.
+ * Opt-out: `TUPLE_TELEMETRY_DISABLED=1` silences all outbound traffic.
  * Dev safety: when `NODE_ENV !== 'production'` the sender is also silent, so
  * local development and tests never report.
  *
@@ -34,7 +34,7 @@ export class TelemetryService implements OnModuleInit {
     const install = await this.installIds.getOrCreate();
     this.logger.log(
       `Anonymous usage telemetry is enabled. Install ID: ${install.install_id}. ` +
-        `To disable: set MANIFEST_TELEMETRY_DISABLED=1. What we send: ${TELEMETRY_DOCS_URL}`,
+        `To disable: set TUPLE_TELEMETRY_DISABLED=1. What we send: ${TELEMETRY_DOCS_URL}`,
     );
   }
 
@@ -47,7 +47,7 @@ export class TelemetryService implements OnModuleInit {
 
     const payload = await this.payloadBuilder.build(
       install.install_id,
-      this.config.manifestVersion,
+      this.config.tupleVersion,
     );
     const ok = await this.postPayload(payload);
     if (ok) await this.installIds.markSent(now);

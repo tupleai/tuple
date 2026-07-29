@@ -200,7 +200,7 @@ vi.mock('../../src/components/HeaderTierSnippetModal.js', () => ({
 }));
 
 import HeaderTierCard from '../../src/components/HeaderTierCard';
-import type { ProviderParamSpecCatalog } from 'manifest-shared';
+import type { ProviderParamSpecCatalog } from 'tuple-shared';
 import { getModelParamSpecs } from '../../src/services/api/model-params.js';
 import type { HeaderTier } from '../../src/services/api/header-tiers';
 import type { AvailableModel, CustomProviderData, RoutingProvider } from '../../src/services/api';
@@ -209,7 +209,7 @@ const baseTier: HeaderTier = {
   id: 'ht-1',
   agent_id: 'agent-1',
   name: 'Premium',
-  header_key: 'x-manifest-tier',
+  header_key: 'x-tuple-tier',
   header_value: 'premium',
   badge_color: 'indigo',
   sort_order: 0,
@@ -306,7 +306,7 @@ describe('HeaderTierCard', () => {
       />
     ));
     expect(container.textContent).toContain('Premium');
-    expect(container.textContent).toContain('x-manifest-tier');
+    expect(container.textContent).toContain('x-tuple-tier');
     expect(container.textContent).toContain('premium');
   });
 

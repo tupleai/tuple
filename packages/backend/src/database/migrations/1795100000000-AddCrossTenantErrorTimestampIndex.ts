@@ -2,7 +2,7 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 /**
  * Timestamp-leading partial index over error rows, for CROSS-TENANT error scans
- * by time window (the Manifest Cloud control plane's hourly error-insights
+ * by time window (the Tuple Cloud control plane's hourly error-insights
  * rollup: `WHERE timestamp >= $1 AND timestamp < $2 AND status IN (errors)`,
  * with no tenant filter).
  *

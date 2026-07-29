@@ -1,6 +1,6 @@
 import { HttpException } from '@nestjs/common';
-import { FREE_PLAN_REQUESTS_PER_MONTH } from 'manifest-shared';
-import { ManifestError } from '../../../common/errors/manifest-error';
+import { FREE_PLAN_REQUESTS_PER_MONTH } from 'tuple-shared';
+import { TupleError } from '../../../common/errors/tuple-error';
 import { ProxyController } from '../proxy.controller';
 import { ProxyMessageRecorder } from '../proxy-message-recorder';
 import { IngestEventBusService } from '../../../common/services/ingest-event-bus.service';
@@ -236,7 +236,7 @@ describe('ProxyController', () => {
     recorder.onModuleDestroy();
   });
 
-  it('should expose /v1/models as an OpenAI-compatible list with the Manifest auto route', async () => {
+  it('should expose /v1/models as an OpenAI-compatible list with the Tuple auto route', async () => {
     await expect(controller.models(mockRequest({}) as never)).resolves.toEqual({
       object: 'list',
       data: [
@@ -244,7 +244,7 @@ describe('ProxyController', () => {
           id: 'auto',
           object: 'model',
           created: 0,
-          owned_by: 'manifest',
+          owned_by: 'tuple',
         },
       ],
     });
@@ -272,7 +272,7 @@ describe('ProxyController', () => {
     await expect(controller.models(mockRequest({}) as never)).resolves.toEqual({
       object: 'list',
       data: [
-        { id: 'auto', object: 'model', created: 0, owned_by: 'manifest' },
+        { id: 'auto', object: 'model', created: 0, owned_by: 'tuple' },
         { id: 'openai/gpt-4o', object: 'model', created: 0, owned_by: 'openai' },
         { id: 'openrouter/gpt-4o', object: 'model', created: 0, owned_by: 'openrouter' },
         {
@@ -314,7 +314,7 @@ describe('ProxyController', () => {
     await expect(controller.models(mockRequest({}) as never)).resolves.toEqual({
       object: 'list',
       data: [
-        { id: 'auto', object: 'model', created: 0, owned_by: 'manifest' },
+        { id: 'auto', object: 'model', created: 0, owned_by: 'tuple' },
         { id: 'openai/gpt-4o', object: 'model', created: 0, owned_by: 'openai' },
       ],
     });
@@ -336,7 +336,7 @@ describe('ProxyController', () => {
     await expect(controller.models(mockRequest({}) as never, 'true')).resolves.toEqual({
       object: 'list',
       data: [
-        { id: 'auto', object: 'model', created: 0, owned_by: 'manifest' },
+        { id: 'auto', object: 'model', created: 0, owned_by: 'tuple' },
         {
           id: 'openai/gpt-5.4-mini-subscription',
           object: 'model',
@@ -373,7 +373,7 @@ describe('ProxyController', () => {
     await expect(controller.models(mockRequest({}) as never, undefined, 'true')).resolves.toEqual({
       object: 'list',
       data: [
-        { id: 'auto', object: 'model', created: 0, owned_by: 'manifest' },
+        { id: 'auto', object: 'model', created: 0, owned_by: 'tuple' },
         {
           id: 'openai/gpt-5.4-mini-subscription',
           object: 'model',
@@ -413,7 +413,7 @@ describe('ProxyController', () => {
 
     const withCosts = await controller.models(mockRequest({}) as never, undefined, 'true');
     expect(withCosts.data).toEqual([
-      { id: 'auto', object: 'model', created: 0, owned_by: 'manifest' },
+      { id: 'auto', object: 'model', created: 0, owned_by: 'tuple' },
       {
         id: 'openai/input-only',
         object: 'model',
@@ -450,7 +450,7 @@ describe('ProxyController', () => {
     await expect(controller.models(mockRequest({}) as never, 'true')).resolves.toEqual({
       object: 'list',
       data: [
-        { id: 'auto', object: 'model', created: 0, owned_by: 'manifest' },
+        { id: 'auto', object: 'model', created: 0, owned_by: 'tuple' },
         { id: 'kiro/mystery-model', object: 'model', created: 0, owned_by: 'kiro' },
         {
           id: 'openai/gpt-5.3-codex-spark-subscription',
@@ -488,7 +488,7 @@ describe('ProxyController', () => {
     await expect(controller.models(mockRequest({}) as never, 'true')).resolves.toEqual({
       object: 'list',
       data: [
-        { id: 'auto', object: 'model', created: 0, owned_by: 'manifest' },
+        { id: 'auto', object: 'model', created: 0, owned_by: 'tuple' },
         {
           id: 'openai/gpt-4o',
           object: 'model',
@@ -522,7 +522,7 @@ describe('ProxyController', () => {
     await expect(controller.models(mockRequest({}) as never, 'true', 'true')).resolves.toEqual({
       object: 'list',
       data: [
-        { id: 'auto', object: 'model', created: 0, owned_by: 'manifest' },
+        { id: 'auto', object: 'model', created: 0, owned_by: 'tuple' },
         {
           id: 'openai/gpt-4o',
           object: 'model',
@@ -569,11 +569,11 @@ describe('ProxyController', () => {
 
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith(responseBody);
-    expect(headers['X-Manifest-Tier']).toBe('simple');
-    expect(headers['X-Manifest-Model']).toBe('gpt-4o');
-    expect(headers['X-Manifest-Provider']).toBe('OpenAI');
-    expect(headers['X-Manifest-Confidence']).toBe('0.9');
-    expect(headers['X-Manifest-Reason']).toBe('scored');
+    expect(headers['X-Tuple-Tier']).toBe('simple');
+    expect(headers['X-Tuple-Model']).toBe('gpt-4o');
+    expect(headers['X-Tuple-Provider']).toBe('OpenAI');
+    expect(headers['X-Tuple-Confidence']).toBe('0.9');
+    expect(headers['X-Tuple-Reason']).toBe('scored');
   });
 
   it('records the exact provider request and response on its Provider Attempt', async () => {
@@ -883,7 +883,7 @@ describe('ProxyController', () => {
     expect(res.status).toHaveBeenCalledWith(200);
   });
 
-  it('enforces the plan request limit before routing and records a Manifest policy row', async () => {
+  it('enforces the plan request limit before routing and records a Tuple policy row', async () => {
     const block = new HttpException(
       {
         statusCode: 402,
@@ -894,7 +894,7 @@ describe('ProxyController', () => {
       402,
     );
     planService.assertWithinRequestLimit.mockRejectedValueOnce(block);
-    const recordSpy = jest.spyOn(recorder, 'recordManifestBlockedRequest');
+    const recordSpy = jest.spyOn(recorder, 'recordTupleBlockedRequest');
 
     const req = mockRequest({ model: 'auto', messages: [{ role: 'user', content: 'hi' }] });
     const { res } = mockResponse();
@@ -905,7 +905,7 @@ describe('ProxyController', () => {
     await flushRecorderMicrotasks();
 
     // Gate ran before rate limiting / routing. The recorded row is classified as
-    // Manifest policy, which PlanService excludes from billable request counts.
+    // Tuple policy, which PlanService excludes from billable request counts.
     expect(planService.assertWithinRequestLimit).toHaveBeenCalledWith(req.ingestionContext);
     expect(rateLimiter.checkLimit).not.toHaveBeenCalled();
     expect(proxyService.proxyRequest).not.toHaveBeenCalled();
@@ -930,11 +930,11 @@ describe('ProxyController', () => {
   });
 
   it('routes a non-402 plan-lookup error through the normal proxy error handler', async () => {
-    // A subscription/tenant lookup failure is Manifest's own bug (M500), not a
+    // A subscription/tenant lookup failure is Tuple's own bug (M500), not a
     // provider failure — it must be recorded + normalized, never thrown raw
     // (which would 500 the caller) and never blamed on the provider.
     planService.assertWithinRequestLimit.mockRejectedValueOnce(new Error('subscription db down'));
-    const manifestSpy = jest.spyOn(recorder, 'recordManifestBlockedRequest');
+    const tupleSpy = jest.spyOn(recorder, 'recordTupleBlockedRequest');
     const providerSpy = jest.spyOn(recorder, 'recordProviderError');
 
     const req = mockRequest({ messages: [{ role: 'user', content: 'hi' }] });
@@ -943,11 +943,11 @@ describe('ProxyController', () => {
     await controller.chatCompletions(req as never, res as never);
 
     expect(providerSpy).not.toHaveBeenCalled();
-    expect(manifestSpy).toHaveBeenCalledWith(
+    expect(tupleSpy).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({
         errorCode: 'M500',
-        reason: 'manifest_internal_error',
+        reason: 'tuple_internal_error',
         httpStatus: 500,
         // The real internal message, not the friendly text the caller sees.
         errorMessage: expect.stringContaining('subscription db down'),
@@ -1644,7 +1644,7 @@ describe('ProxyController', () => {
         choices: expect.arrayContaining([
           expect.objectContaining({
             message: expect.objectContaining({
-              content: expect.stringContaining('[🦚 Manifest M500]'),
+              content: expect.stringContaining('[↗ Tuple M500]'),
             }),
           }),
         ]),
@@ -2015,11 +2015,11 @@ describe('ProxyController', () => {
       expect(rateLimiter.releaseSlot).not.toHaveBeenCalled();
     });
 
-    it('should record local rate-limit blocks as Manifest policy rows', async () => {
-      // The real limiter throws a ManifestError — that type is what tells the
-      // controller this 429 is Manifest's, not a provider's.
+    it('should record local rate-limit blocks as Tuple policy rows', async () => {
+      // The real limiter throws a TupleError — that type is what tells the
+      // controller this 429 is Tuple's, not a provider's.
       rateLimiter.checkLimit.mockImplementation(() => {
-        throw new ManifestError('M201', 429);
+        throw new TupleError('M201', 429);
       });
 
       const req = mockRequest({ messages: [{ role: 'user', content: 'hi' }] });
@@ -2033,7 +2033,7 @@ describe('ProxyController', () => {
           status: 'failed',
           tenant_id: 'tenant-1',
           error_http_status: 429,
-          routing_reason: 'manifest_rate_limited',
+          routing_reason: 'tuple_rate_limited',
           error_origin: 'policy',
           error_class: 'rate_limit',
           error_code: 'M201',
@@ -2043,7 +2043,7 @@ describe('ProxyController', () => {
 
     it('names which limit fired: per-IP is M202, not the per-user reason', async () => {
       rateLimiter.checkIpLimit.mockImplementation(() => {
-        throw new ManifestError('M202', 429);
+        throw new TupleError('M202', 429);
       });
 
       const req = mockRequest({ messages: [{ role: 'user', content: 'hi' }] });
@@ -2055,7 +2055,7 @@ describe('ProxyController', () => {
       expect(mockMessageRepo.insert).toHaveBeenCalledWith(
         expect.objectContaining({
           error_code: 'M202',
-          routing_reason: 'manifest_ip_rate_limited',
+          routing_reason: 'tuple_ip_rate_limited',
           error_origin: 'policy',
         }),
       );
@@ -2063,7 +2063,7 @@ describe('ProxyController', () => {
 
     it('names which limit fired: concurrency is M203', async () => {
       rateLimiter.acquireSlot.mockImplementation(() => {
-        throw new ManifestError('M203', 429);
+        throw new TupleError('M203', 429);
       });
 
       const req = mockRequest({ messages: [{ role: 'user', content: 'hi' }] });
@@ -2075,15 +2075,15 @@ describe('ProxyController', () => {
       expect(mockMessageRepo.insert).toHaveBeenCalledWith(
         expect.objectContaining({
           error_code: 'M203',
-          routing_reason: 'manifest_concurrency_limited',
+          routing_reason: 'tuple_concurrency_limited',
         }),
       );
     });
   });
 
-  describe('Manifest-authored failures', () => {
+  describe('Tuple-authored failures', () => {
     it('records a malformed body (M300) on the request origin, not the provider', async () => {
-      proxyService.proxyRequest.mockRejectedValueOnce(new ManifestError('M300', 400));
+      proxyService.proxyRequest.mockRejectedValueOnce(new TupleError('M300', 400));
       const providerSpy = jest.spyOn(recorder, 'recordProviderError');
 
       const req = mockRequest({ messages: [] });
@@ -2109,7 +2109,7 @@ describe('ProxyController', () => {
     it('never records an unauthenticated auth failure — there is no agent to attribute it to', async () => {
       // M005 reaches the proxy only via the guard, which throws before any tenant
       // resolves. If it ever surfaced here it must still write nothing.
-      proxyService.proxyRequest.mockRejectedValueOnce(new ManifestError('M005', 401));
+      proxyService.proxyRequest.mockRejectedValueOnce(new TupleError('M005', 401));
 
       const req = mockRequest({ messages: [{ role: 'user', content: 'hi' }] });
       const { res } = mockResponse();
@@ -2122,7 +2122,7 @@ describe('ProxyController', () => {
 
     it('swallows a recorder failure on the stub path rather than failing the response', async () => {
       jest
-        .spyOn(recorder, 'recordManifestBlockedRequest')
+        .spyOn(recorder, 'recordTupleBlockedRequest')
         .mockRejectedValueOnce(new Error('db down'));
       proxyService.proxyRequest.mockResolvedValue({
         forward: {
@@ -2139,12 +2139,12 @@ describe('ProxyController', () => {
         },
         meta: {
           tier: 'simple',
-          model: 'manifest',
-          provider: 'manifest',
+          model: 'tuple',
+          provider: 'tuple',
           confidence: 1,
           reason: 'no_provider',
-          manifest_error_code: 'M101',
-          manifest_error_message: '[🦚 Manifest M101] No providers set up yet.',
+          tuple_error_code: 'M101',
+          tuple_error_message: '[↗ Tuple M101] No providers set up yet.',
         },
         failedFallbacks: [],
       });
@@ -2176,12 +2176,12 @@ describe('ProxyController', () => {
         },
         meta: {
           tier: 'simple',
-          model: 'manifest',
-          provider: 'manifest',
+          model: 'tuple',
+          provider: 'tuple',
           confidence: 1,
           reason: 'no_provider_key',
-          manifest_error_code: 'M100',
-          manifest_error_message: '[🦚 Manifest M100] No anthropic API key yet.',
+          tuple_error_code: 'M100',
+          tuple_error_message: '[↗ Tuple M100] No anthropic API key yet.',
         },
         failedFallbacks: [],
       });
@@ -2198,7 +2198,7 @@ describe('ProxyController', () => {
         expect.objectContaining({
           status: 'failed',
           error_code: 'M100',
-          error_message: '[🦚 Manifest M100] No anthropic API key yet.',
+          error_message: '[↗ Tuple M100] No anthropic API key yet.',
           error_origin: 'config',
           error_class: 'no_provider_key',
           model: 'auto',
@@ -2240,7 +2240,7 @@ describe('ProxyController', () => {
             error: { message: 'patched provider failed' },
           },
         ],
-        manifestOrigin: { code: 'M302', message: 'unavailable', model: 'ghost' },
+        tupleOrigin: { code: 'M302', message: 'unavailable', model: 'ghost' },
       };
       proxyService.proxyRequest.mockResolvedValue({
         forward: {
@@ -2257,19 +2257,19 @@ describe('ProxyController', () => {
         },
         meta: {
           tier: 'default',
-          model: 'manifest',
-          provider: 'manifest',
+          model: 'tuple',
+          provider: 'tuple',
           confidence: 0,
           reason: 'model_not_available',
-          manifest_error_code: 'M302',
-          manifest_error_message: '[🦚 Manifest M302] Model "ghost" is not available.',
+          tuple_error_code: 'M302',
+          tuple_error_message: '[↗ Tuple M302] Model "ghost" is not available.',
           attempt: retryAttempt,
           providerCallStarted: true,
         },
         failedFallbacks: [],
         autofix,
       });
-      const manifestSpy = jest.spyOn(recorder, 'recordManifestBlockedRequest');
+      const tupleSpy = jest.spyOn(recorder, 'recordTupleBlockedRequest');
 
       const req = mockRequest({ messages: [{ role: 'user', content: 'hi' }], model: 'ghost' });
       const { res } = mockResponse();
@@ -2277,7 +2277,7 @@ describe('ProxyController', () => {
       await controller.chatCompletions(req as never, res as never);
       await flushRecorderMicrotasks();
 
-      expect(manifestSpy).toHaveBeenCalledWith(
+      expect(tupleSpy).toHaveBeenCalledWith(
         expect.anything(),
         expect.objectContaining({ errorCode: 'M302', autofix, attempt: retryAttempt }),
       );
@@ -2773,7 +2773,7 @@ describe('ProxyController', () => {
           choices: expect.arrayContaining([
             expect.objectContaining({
               message: expect.objectContaining({
-                content: expect.stringContaining('[🦚 Manifest M500]'),
+                content: expect.stringContaining('[↗ Tuple M500]'),
               }),
             }),
           ]),
@@ -2824,7 +2824,7 @@ describe('ProxyController', () => {
           choices: expect.arrayContaining([
             expect.objectContaining({
               message: expect.objectContaining({
-                content: expect.stringContaining('[🦚 Manifest M500]'),
+                content: expect.stringContaining('[↗ Tuple M500]'),
               }),
             }),
           ]),
@@ -2864,7 +2864,7 @@ describe('ProxyController', () => {
         }),
       });
       // Meta headers should still be set
-      expect(headers['X-Manifest-Provider']).toBe('OpenAI');
+      expect(headers['X-Tuple-Provider']).toBe('OpenAI');
     });
 
     it('should emit a terminal SSE error when the upstream dies after the first chunk', async () => {
@@ -3387,7 +3387,7 @@ describe('ProxyController', () => {
       await controller.chatCompletions(req as never, res as never);
 
       expect(headers['Content-Type']).toBe('text/event-stream');
-      expect(headers['X-Manifest-Tier']).toBe('standard');
+      expect(headers['X-Tuple-Tier']).toBe('standard');
       expect(written.length).toBeGreaterThan(0);
     });
 
@@ -3579,9 +3579,9 @@ describe('ProxyController', () => {
 
       await controller.chatCompletions(req as never, res as never);
 
-      expect(headers['X-Manifest-Fallback-From']).toBe('gpt-4o');
-      expect(headers['X-Manifest-Fallback-Index']).toBe('0');
-      expect(headers['X-Manifest-Model']).toBe('claude-sonnet-4');
+      expect(headers['X-Tuple-Fallback-From']).toBe('gpt-4o');
+      expect(headers['X-Tuple-Fallback-Index']).toBe('0');
+      expect(headers['X-Tuple-Model']).toBe('claude-sonnet-4');
     });
 
     it('should not set fallback headers when meta has no fallbackFromModel', async () => {
@@ -3612,8 +3612,8 @@ describe('ProxyController', () => {
 
       await controller.chatCompletions(req as never, res as never);
 
-      expect(headers['X-Manifest-Fallback-From']).toBeUndefined();
-      expect(headers['X-Manifest-Fallback-Index']).toBeUndefined();
+      expect(headers['X-Tuple-Fallback-From']).toBeUndefined();
+      expect(headers['X-Tuple-Fallback-Index']).toBeUndefined();
     });
 
     it('should record primary failure and fallback success when fallback was used', async () => {
@@ -3882,13 +3882,13 @@ describe('ProxyController', () => {
           error_message: 'auth fail',
         }),
       ]);
-      expect(headers['X-Manifest-Fallback-Exhausted']).toBe('true');
+      expect(headers['X-Tuple-Fallback-Exhausted']).toBe('true');
       expect(res.json).toHaveBeenCalledWith(
         expect.objectContaining({
           error: expect.objectContaining({
             type: 'server_error',
             code: 'fallback_exhausted',
-            source: 'manifest',
+            source: 'tuple',
           }),
         }),
       );
@@ -3940,7 +3940,7 @@ describe('ProxyController', () => {
           error: expect.objectContaining({
             type: 'server_error',
             code: 'fallback_exhausted',
-            source: 'manifest',
+            source: 'tuple',
             status: 502,
           }),
         }),
@@ -4160,7 +4160,7 @@ describe('ProxyController', () => {
     );
   });
 
-  it('should return primary error status with fallback_exhausted code and X-Manifest-Fallback-Exhausted header', async () => {
+  it('should return primary error status with fallback_exhausted code and X-Tuple-Fallback-Exhausted header', async () => {
     const mockProviderResp = new Response('primary error', {
       status: 502,
       headers: { 'Content-Type': 'text/plain' },
@@ -4199,12 +4199,12 @@ describe('ProxyController', () => {
     await controller.chatCompletions(req as never, res as never);
 
     expect(res.status).toHaveBeenCalledWith(502);
-    expect(headers['X-Manifest-Fallback-Exhausted']).toBe('true');
+    expect(headers['X-Tuple-Fallback-Exhausted']).toBe('true');
     expect(res.json).toHaveBeenCalledWith({
       error: expect.objectContaining({
         type: 'server_error',
         code: 'fallback_exhausted',
-        source: 'manifest',
+        source: 'tuple',
         status: 502,
         primary_model: 'gpt-4o',
         primary_provider: 'OpenAI',
@@ -4216,7 +4216,7 @@ describe('ProxyController', () => {
     });
   });
 
-  it('should NOT set X-Manifest-Fallback-Exhausted when error has no failed fallbacks', async () => {
+  it('should NOT set X-Tuple-Fallback-Exhausted when error has no failed fallbacks', async () => {
     const mockProviderResp = new Response('bad request', {
       status: 400,
       headers: { 'Content-Type': 'text/plain' },
@@ -4239,7 +4239,7 @@ describe('ProxyController', () => {
     await controller.chatCompletions(req as never, res as never);
 
     expect(res.status).toHaveBeenCalledWith(400);
-    expect(headers['X-Manifest-Fallback-Exhausted']).toBeUndefined();
+    expect(headers['X-Tuple-Fallback-Exhausted']).toBeUndefined();
     expect(res.json).toHaveBeenCalledWith(
       expect.objectContaining({
         error: expect.objectContaining({ type: 'invalid_request_error', code: null }),
@@ -4247,7 +4247,7 @@ describe('ProxyController', () => {
     );
   });
 
-  it('should NOT set X-Manifest-Fallback-Exhausted when a fallback succeeded', async () => {
+  it('should NOT set X-Tuple-Fallback-Exhausted when a fallback succeeded', async () => {
     const responseBody = { choices: [{ message: { content: 'hello' } }] };
     const mockProviderResp = new Response(JSON.stringify(responseBody), {
       status: 200,
@@ -4275,6 +4275,6 @@ describe('ProxyController', () => {
     await controller.chatCompletions(req as never, res as never);
 
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(headers['X-Manifest-Fallback-Exhausted']).toBeUndefined();
+    expect(headers['X-Tuple-Fallback-Exhausted']).toBeUndefined();
   });
 });

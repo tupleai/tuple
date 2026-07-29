@@ -469,7 +469,7 @@ describe('Register', () => {
     await vi.waitFor(() => {
       expect(screen.getByText('Choose your plan')).toBeDefined();
     });
-    expect(screen.getByText(/Manifest now offers Free and Pro plans/)).toBeDefined();
+    expect(screen.getByText(/Tuple now offers Free and Pro plans/)).toBeDefined();
   });
 
   it('shows "Create an account" title without context=login (email signup)', async () => {

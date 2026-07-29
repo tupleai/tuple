@@ -1071,7 +1071,7 @@ describe('provider-client-converters', () => {
       expect(result).not.toHaveProperty('max_completion_tokens');
     });
 
-    /* ── Copilot: max_tokens → max_completion_tokens (mnfst/manifest#1849) ── */
+    /* ── Copilot: max_tokens → max_completion_tokens (tupleai/tuple#1849) ── */
 
     it('should convert max_tokens to max_completion_tokens for Copilot GPT-5', () => {
       const body = { messages: [{ role: 'user', content: 'hi' }], max_tokens: 4096 };

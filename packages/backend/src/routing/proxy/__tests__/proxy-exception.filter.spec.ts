@@ -1,7 +1,7 @@
 import { UnauthorizedException, BadRequestException, HttpException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ArgumentsHost } from '@nestjs/common';
-import { FREE_PLAN_REQUESTS_PER_MONTH } from 'manifest-shared';
+import { FREE_PLAN_REQUESTS_PER_MONTH } from 'tuple-shared';
 import { ProxyExceptionFilter } from '../proxy-exception.filter';
 import type { ProxyMessageRecorder } from '../proxy-message-recorder';
 
@@ -35,7 +35,7 @@ function chatHost(body: Record<string, unknown> = {}) {
 describe('ProxyExceptionFilter', () => {
   let filter: ProxyExceptionFilter;
   let config: jest.Mocked<ConfigService>;
-  let recordManifestBlockedRequest: jest.Mock;
+  let recordTupleBlockedRequest: jest.Mock;
 
   beforeEach(() => {
     config = {
@@ -45,9 +45,9 @@ describe('ProxyExceptionFilter', () => {
       }),
     } as unknown as jest.Mocked<ConfigService>;
 
-    recordManifestBlockedRequest = jest.fn().mockResolvedValue(undefined);
+    recordTupleBlockedRequest = jest.fn().mockResolvedValue(undefined);
     filter = new ProxyExceptionFilter(config, {
-      recordManifestBlockedRequest,
+      recordTupleBlockedRequest,
     } as unknown as ProxyMessageRecorder);
   });
 
@@ -85,7 +85,7 @@ describe('ProxyExceptionFilter', () => {
 
       expect(res.status).toHaveBeenCalledWith(200);
       const content = res.json.mock.calls[0][0].choices[0].message.content;
-      expect(content).toContain('mnfst_');
+      expect(content).toContain('tuple_');
     });
 
     it('converts "API key expired" with dashboard URL', () => {
@@ -112,7 +112,7 @@ describe('ProxyExceptionFilter', () => {
   describe('recording an expired key (M004)', () => {
     it('records the rejection against the agent the guard resolved', () => {
       const { host, req } = chatHost({ model: 'gpt-4o' });
-      req.manifestErrorContext = {
+      req.tupleErrorContext = {
         tenantId: 't-1',
         agentId: 'a-1',
         agentName: 'Fireplace',
@@ -121,8 +121,8 @@ describe('ProxyExceptionFilter', () => {
 
       filter.catch(new UnauthorizedException('API key expired'), host);
 
-      expect(recordManifestBlockedRequest).toHaveBeenCalledWith(
-        req.manifestErrorContext,
+      expect(recordTupleBlockedRequest).toHaveBeenCalledWith(
+        req.tupleErrorContext,
         expect.objectContaining({
           httpStatus: 401,
           errorCode: 'M004',
@@ -135,7 +135,7 @@ describe('ProxyExceptionFilter', () => {
 
     it('stores the same text the caller saw, dashboard link included', () => {
       const { host, req, res } = chatHost();
-      req.manifestErrorContext = {
+      req.tupleErrorContext = {
         tenantId: 't-1',
         agentId: 'a-1',
         agentName: 'Fireplace',
@@ -144,7 +144,7 @@ describe('ProxyExceptionFilter', () => {
 
       filter.catch(new UnauthorizedException('API key expired'), host);
 
-      const recorded = recordManifestBlockedRequest.mock.calls[0][1].errorMessage as string;
+      const recorded = recordTupleBlockedRequest.mock.calls[0][1].errorMessage as string;
       const shown = res.json.mock.calls[0][0].choices[0].message.content as string;
       expect(recorded).toBe(shown);
       // A row that doesn't say where to generate a new key isn't actionable.
@@ -154,25 +154,25 @@ describe('ProxyExceptionFilter', () => {
     it('records nothing when the key never resolved to an agent', () => {
       const { host } = chatHost();
       filter.catch(new UnauthorizedException('API key expired'), host);
-      expect(recordManifestBlockedRequest).not.toHaveBeenCalled();
+      expect(recordTupleBlockedRequest).not.toHaveBeenCalled();
     });
 
     it('records nothing for auth failures that cannot be attributed', () => {
       const { host, req } = chatHost();
-      req.manifestErrorContext = {
+      req.tupleErrorContext = {
         tenantId: 't-1',
         agentId: 'a-1',
         agentName: 'Fireplace',
         userId: null,
       };
       filter.catch(new UnauthorizedException('Invalid API key'), host);
-      expect(recordManifestBlockedRequest).not.toHaveBeenCalled();
+      expect(recordTupleBlockedRequest).not.toHaveBeenCalled();
     });
 
     it('swallows a recorder failure rather than turning a 401 into a 500', () => {
-      recordManifestBlockedRequest.mockRejectedValueOnce(new Error('db down'));
+      recordTupleBlockedRequest.mockRejectedValueOnce(new Error('db down'));
       const { host, req, res } = chatHost();
-      req.manifestErrorContext = {
+      req.tupleErrorContext = {
         tenantId: 't-1',
         agentId: 'a-1',
         agentName: 'Fireplace',
@@ -185,7 +185,7 @@ describe('ProxyExceptionFilter', () => {
 
     it('omits a non-string model rather than persisting garbage', () => {
       const { host, req } = chatHost({ model: 42 });
-      req.manifestErrorContext = {
+      req.tupleErrorContext = {
         tenantId: 't-1',
         agentId: 'a-1',
         agentName: 'Fireplace',
@@ -194,7 +194,7 @@ describe('ProxyExceptionFilter', () => {
 
       filter.catch(new UnauthorizedException('API key expired'), host);
 
-      expect(recordManifestBlockedRequest).toHaveBeenCalledWith(
+      expect(recordTupleBlockedRequest).toHaveBeenCalledWith(
         expect.anything(),
         expect.objectContaining({ model: undefined }),
       );
@@ -277,9 +277,9 @@ describe('ProxyExceptionFilter', () => {
 
       expect(res.status).toHaveBeenCalledWith(200);
       const content = res.json.mock.calls[0][0].choices[0].message.content;
-      expect(content).toContain('[🦚 Manifest M500]');
+      expect(content).toContain('[↗ Tuple M500]');
       expect(content).toContain('Something broke on our end');
-      expect(content).toContain('https://manifest.build/docs/errors/M500');
+      expect(content).toContain('https://tuple.ai/docs/errors/M500');
     });
 
     it('converts unknown auth message to friendly message', () => {
@@ -302,7 +302,7 @@ describe('ProxyExceptionFilter', () => {
         expect.objectContaining({
           error: expect.objectContaining({
             type: 'auth_error',
-            code: 'manifest_auth',
+            code: 'tuple_auth',
             message: expect.stringContaining("don't recognize this key"),
           }),
         }),

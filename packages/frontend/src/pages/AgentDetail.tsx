@@ -32,7 +32,7 @@ const AgentDetail: ParentComponent = (props) => {
 
   return (
     <div class="container--lg">
-      <Title>{agentDisplayName() ?? agentName()} | Manifest</Title>
+      <Title>{agentDisplayName() ?? agentName()} | Tuple</Title>
 
       <div style="margin-bottom: 8px;">
         <A

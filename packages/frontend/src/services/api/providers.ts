@@ -1,4 +1,4 @@
-import { SHARED_PROVIDERS, type AuthType } from 'manifest-shared';
+import { SHARED_PROVIDERS, type AuthType } from 'tuple-shared';
 import { invalidateAll } from './cache.js';
 import { BASE_URL, fetchJson, parseErrorMessage } from './core.js';
 

@@ -14,7 +14,7 @@ const TEST_AGENT_ID = 'agent-001';
 const TEST_TENANT_ID = 'tenant-1';
 
 describe('ProviderController', () => {
-  const previousMode = process.env['MANIFEST_MODE'];
+  const previousMode = process.env['TUPLE_MODE'];
   let controller: ProviderController;
   let mockProviderService: Record<string, jest.Mock>;
   let mockDiscoveryService: Record<string, jest.Mock>;
@@ -26,7 +26,7 @@ describe('ProviderController', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    process.env['MANIFEST_MODE'] = 'selfhosted';
+    process.env['TUPLE_MODE'] = 'selfhosted';
     mockProviderService = {
       getProviders: jest.fn().mockResolvedValue([]),
       upsertProvider: jest.fn().mockResolvedValue({ provider: {}, isNew: false }),
@@ -72,8 +72,8 @@ describe('ProviderController', () => {
   });
 
   afterAll(() => {
-    if (previousMode === undefined) delete process.env['MANIFEST_MODE'];
-    else process.env['MANIFEST_MODE'] = previousMode;
+    if (previousMode === undefined) delete process.env['TUPLE_MODE'];
+    else process.env['TUPLE_MODE'] = previousMode;
   });
 
   describe('upsertProvider region validation', () => {
@@ -522,21 +522,21 @@ describe('ProviderController', () => {
     });
 
     it('rejects built-in local providers in cloud before contacting localhost', async () => {
-      process.env['MANIFEST_MODE'] = 'cloud';
+      process.env['TUPLE_MODE'] = 'cloud';
 
       await expect(
         controller.upsertProvider(mockCtx, mockAgentName, {
           provider: 'ollama',
           authType: 'local',
         }),
-      ).rejects.toThrow('Built-in local providers are only available in self-hosted Manifest');
+      ).rejects.toThrow('Built-in local providers are only available in self-hosted Tuple');
 
       expect(mockOllamaSync.sync).not.toHaveBeenCalled();
       expect(mockProviderService.upsertProvider).not.toHaveBeenCalled();
     });
 
     it('rejects local auth on a non-local built-in provider in cloud', async () => {
-      process.env['MANIFEST_MODE'] = 'cloud';
+      process.env['TUPLE_MODE'] = 'cloud';
 
       await expect(
         controller.upsertProvider(mockCtx, mockAgentName, {

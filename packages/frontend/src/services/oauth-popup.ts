@@ -42,14 +42,14 @@ export function monitorOAuthPopup(
 
   const handleMessage = (data: unknown) => {
     if (!isOAuthMessage(data)) return;
-    if (data.type === 'manifest-oauth-success') handleResult(true);
-    else if (data.type === 'manifest-oauth-error') handleResult(false);
+    if (data.type === 'tuple-oauth-success') handleResult(true);
+    else if (data.type === 'tuple-oauth-error') handleResult(false);
   };
 
   // BroadcastChannel: works even when COOP severs window.opener
   let pollRef: ReturnType<typeof setInterval>;
   try {
-    bc = new BroadcastChannel('manifest-oauth');
+    bc = new BroadcastChannel('tuple-oauth');
     bc.onmessage = (event: MessageEvent) => handleMessage(event.data);
   } catch {
     /* BroadcastChannel not supported -- fall through to other methods */

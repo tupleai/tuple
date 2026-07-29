@@ -83,7 +83,7 @@ const AnthropicOAuthDetailView: Component<Props> = (props) => {
     try {
       const { url, state: authState } = await startAnthropicOAuth(props.agentName);
       setState(authState);
-      const opened = window.open(url, 'manifest-anthropic-oauth', 'noopener,noreferrer');
+      const opened = window.open(url, 'tuple-anthropic-oauth', 'noopener,noreferrer');
       if (!opened) {
         toast.error(
           'Popup was blocked by your browser. Allow popups for this site, then try again.',
@@ -215,7 +215,7 @@ const AnthropicOAuthDetailView: Component<Props> = (props) => {
       <Show when={showConnectFlow()}>
         <div class="anthropic-detail__primary">
           <p class="provider-detail__hint">
-            Sign in with your Claude Pro or Max account. Manifest will route through your
+            Sign in with your Claude Pro or Max account. Tuple will route through your
             subscription with auto-refreshing tokens.
           </p>
           <button

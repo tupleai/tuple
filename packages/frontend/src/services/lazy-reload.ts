@@ -1,6 +1,6 @@
 import { lazy, type Component } from 'solid-js';
 
-const RELOAD_KEY = 'manifest:chunk-reload';
+const RELOAD_KEY = 'tuple:chunk-reload';
 
 /**
  * Wrap a dynamic import with retry-via-reload. On import failure,

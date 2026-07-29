@@ -23,16 +23,16 @@ function makeRunner(orphanCount: number): { runner: QueryRunner; queries: string
 
 describe('TenantScopedConfigs1792600000000', () => {
   let migration: TenantScopedConfigs1792600000000;
-  const originalForce = process.env.MANIFEST_MIGRATION_FORCE;
+  const originalForce = process.env.TUPLE_MIGRATION_FORCE;
 
   beforeEach(() => {
     migration = new TenantScopedConfigs1792600000000();
-    delete process.env.MANIFEST_MIGRATION_FORCE;
+    delete process.env.TUPLE_MIGRATION_FORCE;
   });
 
   afterEach(() => {
-    if (originalForce === undefined) delete process.env.MANIFEST_MIGRATION_FORCE;
-    else process.env.MANIFEST_MIGRATION_FORCE = originalForce;
+    if (originalForce === undefined) delete process.env.TUPLE_MIGRATION_FORCE;
+    else process.env.TUPLE_MIGRATION_FORCE = originalForce;
   });
 
   describe('up — no orphans', () => {
@@ -112,8 +112,8 @@ describe('TenantScopedConfigs1792600000000', () => {
       await expect(migration.up(runner)).rejects.toThrow(/email_provider_configs row\(s\)/);
     });
 
-    it('deletes orphans across every table when MANIFEST_MIGRATION_FORCE=1', async () => {
-      process.env.MANIFEST_MIGRATION_FORCE = '1';
+    it('deletes orphans across every table when TUPLE_MIGRATION_FORCE=1', async () => {
+      process.env.TUPLE_MIGRATION_FORCE = '1';
       const { runner, queries } = makeRunner(1);
       await migration.up(runner);
 

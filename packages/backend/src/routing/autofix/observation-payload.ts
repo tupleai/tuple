@@ -1,6 +1,6 @@
 import { scrubSecrets } from '../../common/utils/secret-scrub';
 import type { ProviderWireFormat, ProxyApiMode } from '../proxy/proxy-types';
-import type { AuthType } from 'manifest-shared';
+import type { AuthType } from 'tuple-shared';
 import { normalizeProviderError } from './provider-error-normalizer';
 import type { HealRequest } from './phoenix.types';
 

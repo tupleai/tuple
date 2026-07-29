@@ -15,7 +15,7 @@ export class BillingEmailService {
   constructor(private readonly configService: ConfigService) {
     this.fromEmail =
       this.configService.get<string>('app.emailFrom') ||
-      this.configService.get<string>('app.notificationFromEmail', 'noreply@manifest.build');
+      this.configService.get<string>('app.notificationFromEmail', 'noreply@tuple.ai');
   }
 
   getAppUrl(): string {

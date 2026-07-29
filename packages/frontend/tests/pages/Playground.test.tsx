@@ -461,7 +461,7 @@ describe('Playground page', () => {
       await waitFor(() => expect(mockStreamPlayground).toHaveBeenCalled());
       // Run id was set in the URL + sessionStorage.
       await waitFor(() =>
-        expect(ssStore['manifest.playground.lastRun']).toBeDefined(),
+        expect(ssStore['tuple.playground.lastRun']).toBeDefined(),
       );
       // The running→idle effect refreshes history and auto-selects the latest.
       await waitFor(() => expect(mockListPlaygroundRuns).toHaveBeenCalled());
@@ -738,7 +738,7 @@ describe('Playground page', () => {
       // onChange with a real header → persisted via persistHeaders + counted.
       fireEvent.click(await find('headers-change'));
       await waitFor(() =>
-        expect(lsStore['manifest.playground.requestHeaders']).toContain('X-Custom'),
+        expect(lsStore['tuple.playground.requestHeaders']).toContain('X-Custom'),
       );
       // A blocked + empty header contributes 0 to activeHeaderCount.
       fireEvent.click(await find('headers-change-blocked'));
@@ -755,7 +755,7 @@ describe('Playground page', () => {
     });
 
     it('restores persisted header entries on mount (loadStoredHeaders parse path)', async () => {
-      lsStore['manifest.playground.requestHeaders'] = JSON.stringify([
+      lsStore['tuple.playground.requestHeaders'] = JSON.stringify([
         { id: 'h1', key: 'X-A', value: '1' },
         { id: 'h2', key: 'X-B', value: '2' },
         'not-an-entry',
@@ -770,14 +770,14 @@ describe('Playground page', () => {
     });
 
     it('falls back to no entries when stored headers JSON is malformed', async () => {
-      lsStore['manifest.playground.requestHeaders'] = '{not json';
+      lsStore['tuple.playground.requestHeaders'] = '{not json';
       render(() => <Playground />);
       await find('prompt');
       expect(document.querySelector('.playground-prompt__headers-badge')).toBeNull();
     });
 
     it('falls back to no entries when stored headers is not an array', async () => {
-      lsStore['manifest.playground.requestHeaders'] = JSON.stringify({ not: 'array' });
+      lsStore['tuple.playground.requestHeaders'] = JSON.stringify({ not: 'array' });
       render(() => <Playground />);
       await find('prompt');
       expect(document.querySelector('.playground-prompt__headers-badge')).toBeNull();
@@ -881,11 +881,11 @@ describe('Playground page', () => {
       render(() => <Playground />);
       renderSidebar();
       fireEvent.click(await find('sidebar-toggle'));
-      expect(lsStore['manifest.playground.recentOpen']).toBe('false');
+      expect(lsStore['tuple.playground.recentOpen']).toBe('false');
     });
 
     it('starts collapsed when the stored sidebar preference is "false"', async () => {
-      lsStore['manifest.playground.recentOpen'] = 'false';
+      lsStore['tuple.playground.recentOpen'] = 'false';
       render(() => <Playground />);
       renderSidebar();
       await waitFor(() =>
@@ -914,7 +914,7 @@ describe('Playground page', () => {
 
     it('restores from sessionStorage lastRun when no search param is set', async () => {
       mockGetProviders.mockResolvedValue([{ ...ACTIVE_PROVIDER, is_active: false }]);
-      ssStore['manifest.playground.lastRun'] = 'r-ss';
+      ssStore['tuple.playground.lastRun'] = 'r-ss';
       mockGetPlaygroundRun.mockResolvedValue(makeRunDetail({ id: 'r-ss' }));
       render(() => <Playground />);
       await waitFor(() => expect(mockGetPlaygroundRun).toHaveBeenCalledWith('r-ss'));
@@ -923,11 +923,11 @@ describe('Playground page', () => {
     it('clears the stale run param + sessionStorage when restoring it fails', async () => {
       mockGetProviders.mockResolvedValue([{ ...ACTIVE_PROVIDER, is_active: false }]);
       searchParamsState.run = 'r-bad';
-      ssStore['manifest.playground.lastRun'] = 'r-bad';
+      ssStore['tuple.playground.lastRun'] = 'r-bad';
       mockGetPlaygroundRun.mockRejectedValue(new Error('gone'));
       render(() => <Playground />);
       await waitFor(() => expect(setSearchParamsFn).toHaveBeenCalledWith({ run: undefined }));
-      await waitFor(() => expect(ssStore['manifest.playground.lastRun']).toBeUndefined());
+      await waitFor(() => expect(ssStore['tuple.playground.lastRun']).toBeUndefined());
     });
   });
 

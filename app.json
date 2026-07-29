@@ -1,9 +1,9 @@
 {
-  "name": "Manifest",
+  "name": "Tuple",
   "description": "Open-source AI model router for agents and apps. Connect your providers to one OpenAI-compatible endpoint.",
-  "repository": "https://github.com/mnfst/manifest",
-  "website": "https://manifest.build",
-  "logo": "https://raw.githubusercontent.com/mnfst/manifest/HEAD/.github/assets/logo-dark.svg",
+  "repository": "https://github.com/tupleai/tuple",
+  "website": "https://tuple.ai",
+  "logo": "https://raw.githubusercontent.com/tupleai/tuple/HEAD/.github/assets/logo-dark.png",
   "success_url": "/setup",
   "stack": "container",
   "keywords": ["ai", "llm", "model-router", "agents", "postgres"],
@@ -28,7 +28,7 @@
       "description": "Session signing secret. Heroku generates a secure value for you.",
       "generator": "secret"
     },
-    "MANIFEST_ENCRYPTION_KEY": {
+    "TUPLE_ENCRYPTION_KEY": {
       "description": "Separate at-rest encryption key for provider credentials. Heroku generates a secure value for you.",
       "generator": "secret"
     },
@@ -36,8 +36,8 @@
       "description": "Bind to all interfaces so Heroku can route traffic to the dyno.",
       "value": "0.0.0.0"
     },
-    "MANIFEST_MODE": {
-      "description": "Run Manifest in self-hosted mode.",
+    "TUPLE_MODE": {
+      "description": "Run Tuple in self-hosted mode.",
       "value": "selfhosted"
     },
     "NODE_ENV": {

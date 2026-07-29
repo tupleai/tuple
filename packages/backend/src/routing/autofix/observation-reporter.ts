@@ -10,7 +10,7 @@ const BATCH_MAX = 50;
 const FLUSH_INTERVAL_MS = 2_000;
 /**
  * Backpressure ceiling. A provider outage can turn every request into a 4xx, and
- * a queue that grows with traffic would trade a Phoenix outage for a Manifest
+ * a queue that grows with traffic would trade a Phoenix outage for a Tuple
  * one. Past this depth the oldest observations are dropped: evidence is
  * sampled-by-nature (Phoenix folds recurrences into one issue), so losing some
  * is strictly better than holding the heap.
@@ -35,7 +35,7 @@ const MAX_IN_FLIGHT_GATES = 100;
  * Peacock's hourly scrape of `agent_messages`, which stores the model-parameter
  * snapshot and not the messages — so those issues arrived without the body that
  * caused them. This reporter closes that gap without persisting a single byte in
- * Manifest: the body is scrubbed, batched, and POSTed to Phoenix, which is where
+ * Tuple: the body is scrubbed, batched, and POSTed to Phoenix, which is where
  * request evidence already lives.
  *
  * **Only for agents with Auto-fix on** ({@link AutofixService.isActiveFor}).

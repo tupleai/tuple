@@ -11,7 +11,7 @@ import { execSync } from 'child_process';
 import { PlanUsageEmail, SubscriptionPlanEmail } from './billing-plan-email';
 
 const kind = (process.argv[2] ?? 'requests_warning') as string;
-const outPath = '/tmp/manifest-email-preview.html';
+const outPath = '/tmp/tuple-email-preview.html';
 
 async function main() {
   let html: string;

@@ -109,7 +109,7 @@ describe('AnthropicOAuthDetailView', () => {
     });
     expect(openSpy).toHaveBeenCalledWith(
       'https://x',
-      'manifest-anthropic-oauth',
+      'tuple-anthropic-oauth',
       'noopener,noreferrer',
     );
     openSpy.mockRestore();

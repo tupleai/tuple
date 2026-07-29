@@ -6,13 +6,13 @@ import { RoutingCacheService } from './routing-cache.service';
 import { ProviderService } from './provider.service';
 import { ModelDiscoveryService } from '../../model-discovery/model-discovery.service';
 import { randomUUID } from 'crypto';
-import type { AuthType, ModelRoute, ResponseMode } from 'manifest-shared';
+import type { AuthType, ModelRoute, ResponseMode } from 'tuple-shared';
 import {
   DEFAULT_RESPONSE_MODE,
   DEFAULT_OUTPUT_MODALITY,
   TIER_SLOTS,
   TierSlot,
-} from 'manifest-shared';
+} from 'tuple-shared';
 import { effectiveRoute, explicitRoute, unambiguousRoute, routeMatches } from './route-helpers';
 import { assertStreamableResponseMode } from './response-mode-guard';
 

@@ -79,7 +79,7 @@ export class ErrorPagesService {
       h1: dto.h1,
       body_what: dto.body_what ?? '',
       body_fix: dto.body_fix ?? '',
-      body_manifest: dto.body_manifest ?? '',
+      body_tuple: dto.body_tuple ?? '',
       sample_message: scrubForPublic(dto.sample_message),
       faq: dto.faq ?? [],
       stats: dto.stats,

@@ -1,5 +1,5 @@
 /**
- * Configuration for a Manifest-managed free provider backed by LiteLLM.
+ * Configuration for a Tuple-managed free provider backed by LiteLLM.
  *
  * To add another free provider, copy the Gemini Free entry below and change
  * its identity, LiteLLM model group, catalog prefix, filter, and budget env.
@@ -38,7 +38,7 @@ export function getManagedFreeProviderConfig(
   return MANAGED_FREE_PROVIDER_BY_ID.get(providerId.toLowerCase());
 }
 
-const DEFAULT_CREDITS_BASE_URL = 'https://credits.manifest.build';
+const DEFAULT_CREDITS_BASE_URL = 'https://credits.tuple.ai';
 const DEFAULT_MAX_BUDGET_USD = 10;
 
 export function getManagedFreeLiteLlmBaseUrl(): string {

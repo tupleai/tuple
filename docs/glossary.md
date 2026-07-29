@@ -1,34 +1,34 @@
 # Analytics glossary and metric definitions
 
-This document is the canonical contract for Manifest analytics terminology and metrics. Schema, API, analytics, and UI code must use these definitions consistently. It defines the concepts and counting rules only; it does not specify page layout or frontend behavior.
+This document is the canonical contract for Tuple analytics terminology and metrics. Schema, API, analytics, and UI code must use these definitions consistently. It defines the concepts and counting rules only; it does not specify page layout or frontend behavior.
 
 ## The two worlds
 
-Manifest analytics live in two distinct worlds. Mixing them produces totals that answer different questions.
+Tuple analytics live in two distinct worlds. Mixing them produces totals that answer different questions.
 
-**The Request world (agent side).** An agent makes one logical Request to Manifest. Manifest may try several providers to serve it, but the agent sees one outcome. Requests belong to agents and to the global Overview. Recovery is a Request-level concept.
+**The Request world (agent side).** An agent makes one logical Request to Tuple. Tuple may try several providers to serve it, but the agent sees one outcome. Requests belong to agents and to the global Overview. Recovery is a Request-level concept.
 
 **The Attempt world (provider side).** Every provider call is a Provider Attempt. A Request has zero or more Attempts. Attempts belong to providers, Provider Connections, and models. An Attempt may be triggered by fallback or Auto-fix, but that context does not change its status.
 
 ## Glossary
 
-### Manifest Request
+### Tuple Request
 
-One logical request from an agent to Manifest.
+One logical request from an agent to Tuple.
 
-- Direction: agent → Manifest
+- Direction: agent → Tuple
 - Database table: `requests`
 - Primary key: `requests.id`
 - Status: `requests.status`
 - A Request ultimately has one caller-visible outcome and may have zero, one, or many Provider Attempts.
 
-A zero-attempt Request is valid when Manifest rejects it before contacting an AI provider.
+A zero-attempt Request is valid when Tuple rejects it before contacting an AI provider.
 
 ### Provider Attempt
 
-One request from Manifest to an AI provider while serving a Manifest Request.
+One request from Tuple to an AI provider while serving a Tuple Request.
 
-- Direction: Manifest → AI provider
+- Direction: Tuple → AI provider
 - Database table: `agent_messages` (the physical legacy name is retained for safe rolling deploys)
 - Parent Request: `agent_messages.request_id → requests.id`
 - Order within the Request: `agent_messages.attempt_number`
@@ -47,11 +47,11 @@ Requests and newly written Provider Attempts use the same canonical status value
 | `success`   | The operation completed successfully.              | Success   |
 | `failed`    | The operation completed without succeeding.        | Failed    |
 
-`cancelled`, `success`, and `failed` are terminal. Outcome metrics use only `success` and `failed`; caller cancellations do not count as provider or Manifest errors. In this document, **completed** means a terminal outcome included in metrics (`success` or `failed`); it is not a separate status value.
+`cancelled`, `success`, and `failed` are terminal. Outcome metrics use only `success` and `failed`; caller cancellations do not count as provider or Tuple errors. In this document, **completed** means a terminal outcome included in metrics (`success` or `failed`); it is not a separate status value.
 
 Historical `agent_messages` rows may retain the legacy physical values `ok`, `error`, `fallback_error`, or `rate_limited`. Analytics readers normalize `ok` to `success` and the legacy failure values to `failed`. Writers must use the canonical values above.
 
-Manifest creates a Request with `pending` status when it accepts the Request and creates an Attempt with `pending` status when it starts the provider call. Each transitions to one terminal status. If the caller disconnects first, active rows transition to `cancelled` without error fields.
+Tuple creates a Request with `pending` status when it accepts the Request and creates an Attempt with `pending` status when it starts the provider call. Each transitions to one terminal status. If the caller disconnects first, active rows transition to `cancelled` without error fields.
 
 Every newly written `failed` Request and Attempt has a non-empty `error_message`. Machine classification remains in the `error_origin`, `error_class`, and `error_http_status` fields; the message is the human-readable explanation.
 
@@ -63,19 +63,19 @@ When a Request with at least one Attempt succeeds, its Last Attempt must also be
 
 The Last Attempt is the final Provider Attempt within a Request: the Attempt with the highest `attempt_number`. For a completed Request, it is also the Attempt that concluded the Request: the successful Attempt when the Request succeeded, otherwise the terminal non-superseded failure. A zero-attempt Request has no Last Attempt.
 
-Attempt numbers are positive, unique within their Request, and increase in the order Manifest starts provider calls. Do not derive Attempt order from timestamps. `agent_messages.timestamp` records the real provider-call start time, and `agent_messages.duration_ms` records measured elapsed time once the Attempt is terminal. Neither may be fabricated to create an ordering. Superseded Attempts are never the Last Attempt of a completed Request.
+Attempt numbers are positive, unique within their Request, and increase in the order Tuple starts provider calls. Do not derive Attempt order from timestamps. `agent_messages.timestamp` records the real provider-call start time, and `agent_messages.duration_ms` records measured elapsed time once the Attempt is terminal. Neither may be fabricated to create an ordering. Superseded Attempts are never the Last Attempt of a completed Request.
 
 Historical Attempts linked during the migration may have a null `attempt_number` when their order could not be reconstructed safely. Readers may use the legacy compatibility ranking (successful outcome, then non-superseded failure, then timestamp and id) to select a representative terminal Attempt, but must not present that inferred position as an Attempt number. All newly recorded Attempts require a positive `attempt_number`.
 
 ### Superseded Attempt
 
-A Superseded Attempt is a failed Provider Attempt after which Manifest continued the same Request with another Attempt.
+A Superseded Attempt is a failed Provider Attempt after which Tuple continued the same Request with another Attempt.
 
 Newly written Superseded Attempts keep `agent_messages.status = 'failed'` and have `agent_messages.superseded = true`; historical rows may retain a legacy failure status such as `fallback_error`. They count in Attempt metrics, but do not determine the Request outcome.
 
 ### Recovered Request
 
-A Recovered Request is a successful Request after Manifest continued beyond a failed Attempt by applying Auto-fix or fallback.
+A Recovered Request is a successful Request after Tuple continued beyond a failed Attempt by applying Auto-fix or fallback.
 
 Recovery belongs to Requests only. Providers, Provider Connections, models, and Attempts are never “recovered.” Applying a recovery method is not enough: the Request must ultimately succeed.
 
@@ -92,7 +92,7 @@ The ordering makes Auto-fix the tie-breaker if inconsistent or historical data s
 
 ### Recovery attempt
 
-A recovery attempt is a recovery method Manifest tried during a Request, whether or not it succeeded. The Requests table lists them in its "Recovery attempts" column and filter. Auto-fix and fallback fields on Attempts describe what happened in the chain; they do not replace the Request status or recovery category.
+A recovery attempt is a recovery method Tuple tried during a Request, whether or not it succeeded. The Requests table lists them in its "Recovery attempts" column and filter. Auto-fix and fallback fields on Attempts describe what happened in the chain; they do not replace the Request status or recovery category.
 
 ### AI Provider and Provider Connection
 
@@ -102,7 +102,7 @@ A **Provider Connection** is a tenant's configured connection to one AI Provider
 
 An Attempt identifies the Connection it used through `agent_messages.tenant_provider_id → tenant_providers.id`. `agent_messages.auth_type` and `agent_messages.provider_key_label` are historical display snapshots, not Connection identity. Authentication credentials such as API keys or access tokens remain encrypted Connection-level data and must never be copied onto Attempts.
 
-“Connection Attempts” are Provider Attempts filtered by `tenant_provider_id`, not a separate event type or table. The reference may be null for legacy data, local providers, or paths where Manifest could not identify a Connection, so Provider totals may exceed the sum of their Connection totals.
+“Connection Attempts” are Provider Attempts filtered by `tenant_provider_id`, not a separate event type or table. The reference may be null for legacy data, local providers, or paths where Tuple could not identify a Connection, so Provider totals may exceed the sum of their Connection totals.
 
 ## Request and Attempt data
 
@@ -146,8 +146,8 @@ Request-level surfaces count Requests; Provider-, Connection-, and model-level s
 | ----------------- | -------------------------------------------------- |
 | `no_patch`        | Phoenix was consulted but returned no known patch. |
 | `resolving`       | Phoenix is still investigating; no retry was sent. |
-| `retry_succeeded` | Manifest applied a patch and the retry succeeded.  |
-| `retry_failed`    | Manifest applied a patch but the retry failed.     |
+| `retry_succeeded` | Tuple applied a patch and the retry succeeded.  |
+| `retry_failed`    | Tuple applied a patch but the retry failed.     |
 | `service_error`   | The Phoenix service call failed.                   |
 
 Only `retry_succeeded` means the Request was recovered by Auto-fix.
@@ -159,7 +159,7 @@ Only `retry_succeeded` means the Request was recovered by Auto-fix.
 | Request or Attempt is still in progress        |                0 |                0 | `pending`      | `pending` where applicable    | Excluded |
 | Caller disconnects before an outcome           |                0 |                0 | `cancelled`    | `cancelled` where applicable  | Excluded |
 | Primary Provider succeeds                      |                1 |                1 | `success`      | `success`                     | None     |
-| Manifest rejects before contacting a Provider  |                1 |                0 | `failed`       | None                          | None     |
+| Tuple rejects before contacting a Provider  |                1 |                0 | `failed`       | None                          | None     |
 | Primary Attempt fails, fallback succeeds       |                1 |                2 | `success`      | `failed`, `success`           | Fallback |
 | Primary Attempt fails, Auto-fix retry succeeds |                1 |                2 | `success`      | `failed`, `success`           | Auto-fix |
 | Auto-fix retry fails, fallback succeeds        |                1 |                3 | `success`      | `failed`, `failed`, `success` | Fallback |
@@ -173,7 +173,7 @@ The Counted Requests and Counted Attempts columns show how many rows the complet
 2. A Request counts once in Request-world surfaces; an Attempt counts once in Attempt-world surfaces. The totals are not expected to match.
 3. “Recovered” only qualifies Requests. Providers, Connections, models, and Attempts have no recovery metric.
 4. Auto-fix and fallback fields on an Attempt describe its trigger or context, never its result. The Attempt's status records its result.
-5. A Request-level Provider lens attributes each Request once to its Last Attempt's Provider. Zero-attempt Requests use the Manifest bucket. It must never count every Attempt as a separate Request.
+5. A Request-level Provider lens attributes each Request once to its Last Attempt's Provider. Zero-attempt Requests use the Tuple bucket. It must never count every Attempt as a separate Request.
 6. Connection and model surfaces remain Attempt-level because one Request may use several Connections or models.
 
 ## Legacy naming and statuses

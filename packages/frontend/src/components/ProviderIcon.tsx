@@ -1,5 +1,5 @@
 import type { JSX } from 'solid-js';
-import { SHARED_PROVIDER_BY_ID_OR_ALIAS, normalizeProviderName } from 'manifest-shared';
+import { SHARED_PROVIDER_BY_ID_OR_ALIAS, normalizeProviderName } from 'tuple-shared';
 
 /**
  * Returns a branded icon for a given provider ID, or null if no icon exists.
@@ -9,10 +9,10 @@ export function providerIcon(id: string, size: number = 20): JSX.Element | null 
   const s = { width: `${size}px`, height: `${size}px` };
 
   switch (id) {
-    /* ── Manifest ────────────────────────────────── */
-    case 'manifest':
+    /* ── Tuple ────────────────────────────────── */
+    case 'tuple':
       return (
-        <img src="/icons/manifest.svg" alt="Manifest" style={{ ...s, 'border-radius': '3px' }} />
+        <img src="/icons/tuple.png" alt="Tuple" style={{ ...s, 'border-radius': '3px' }} />
       );
 
     /* ── OpenAI ───────────────────────────────────── */

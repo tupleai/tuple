@@ -169,7 +169,7 @@ describe('provider-params-spec', () => {
       ).toEqual([]);
     });
 
-    it('matches catalog provider aliases against Manifest provider IDs', () => {
+    it('matches catalog provider aliases against Tuple provider IDs', () => {
       const specs = getProviderParamSpecs(catalog, 'zai', 'subscription', 'glm-5.1');
 
       expect(specs).toHaveLength(1);

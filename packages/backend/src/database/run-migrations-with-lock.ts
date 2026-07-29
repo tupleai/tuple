@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 
 /**
- * Fixed key for the migration advisory lock. Every Manifest process that runs
+ * Fixed key for the migration advisory lock. Every Tuple process that runs
  * migrations (the pre-deploy step, Railway replicas across regions, overlapping
  * deployments) contends on this one key, so migrations run strictly one at a
  * time instead of deadlocking while acquiring DDL locks on the high-churn

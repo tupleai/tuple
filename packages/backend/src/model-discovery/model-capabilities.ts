@@ -1,6 +1,6 @@
 import { PROVIDER_BY_ID_OR_ALIAS } from '../common/constants/providers';
-import { resolveProviderMetadataIdentity } from 'manifest-shared';
-import type { AuthType, ModelCapability, ModelModality } from 'manifest-shared';
+import { resolveProviderMetadataIdentity } from 'tuple-shared';
+import type { AuthType, ModelCapability, ModelModality } from 'tuple-shared';
 import type { DiscoveredModel } from './model-fetcher';
 import type { ModelsDevModelEntry } from '../database/models-dev-sync.service';
 import { lookupKnownModalities } from './known-model-modalities';

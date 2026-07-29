@@ -137,7 +137,7 @@ const OAuthDetailView: Component<Props> = (props) => {
       } catch {
         setOauthState(null);
       }
-      const popup = window.open(url, 'manifest-oauth', 'width=500,height=700');
+      const popup = window.open(url, 'tuple-oauth', 'width=500,height=700');
       if (!popup) {
         toast.error(
           'Popup was blocked by your browser. Allow popups for this site, then try again.',

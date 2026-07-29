@@ -2,8 +2,8 @@ import { randomUUID } from 'crypto';
 import { ConfigService } from '@nestjs/config';
 import { Response as ExpressResponse } from 'express';
 import { Tier } from '../../scoring/types';
-import type { ResponseMode } from 'manifest-shared';
-import type { ManifestErrorCode } from '../../common/errors/error-codes';
+import type { ResponseMode } from 'tuple-shared';
+import type { TupleErrorCode } from '../../common/errors/error-codes';
 
 export interface FriendlyForward {
   response: Response;
@@ -22,13 +22,13 @@ export interface FriendlyResult {
     reason: string;
     response_mode: ResponseMode;
     /**
-     * Set when this 200 envelope is really a Manifest error dressed as an
+     * Set when this 200 envelope is really a Tuple error dressed as an
      * assistant message. The controller reads it to record the row through
-     * recordManifestBlockedRequest instead of the success path.
+     * recordTupleBlockedRequest instead of the success path.
      */
-    manifest_error_code?: ManifestErrorCode;
-    /** The rendered `[🦚 Manifest M100] …` text, persisted verbatim as error_message. */
-    manifest_error_message?: string;
+    tuple_error_code?: TupleErrorCode;
+    /** The rendered `[↗ Tuple M100] …` text, persisted verbatim as error_message. */
+    tuple_error_message?: string;
   };
 }
 
@@ -50,21 +50,21 @@ export function getDashboardUrl(
 export function buildFriendlyResponse(
   content: string,
   stream: boolean,
-  reason = 'manifest_internal_error',
-  errorCode?: ManifestErrorCode,
+  reason = 'tuple_internal_error',
+  errorCode?: TupleErrorCode,
 ): FriendlyResult {
-  const id = `chatcmpl-manifest-${randomUUID()}`;
+  const id = `chatcmpl-tuple-${randomUUID()}`;
   const created = Math.floor(Date.now() / 1000);
 
   const meta: FriendlyResult['meta'] = {
     tier: 'simple' as Tier,
-    model: 'manifest',
-    provider: 'manifest',
+    model: 'tuple',
+    provider: 'tuple',
     confidence: 1,
     reason,
     response_mode: stream ? 'stream' : 'buffered',
-    manifest_error_code: errorCode,
-    manifest_error_message: content,
+    tuple_error_code: errorCode,
+    tuple_error_message: content,
   };
 
   if (stream) {
@@ -72,7 +72,7 @@ export function buildFriendlyResponse(
       id,
       object: 'chat.completion.chunk',
       created,
-      model: 'manifest',
+      model: 'tuple',
       choices: [{ index: 0, delta: { role: 'assistant', content }, finish_reason: 'stop' }],
     };
     const ssePayload = `data: ${JSON.stringify(chunk)}\n\ndata: [DONE]\n\n`;
@@ -101,7 +101,7 @@ export function buildFriendlyResponse(
     id,
     object: 'chat.completion',
     created,
-    model: 'manifest',
+    model: 'tuple',
     choices: [
       {
         index: 0,
@@ -131,7 +131,7 @@ export function buildFriendlyResponse(
  * Used by the exception filter where we don't return a ProxyResult.
  */
 export function sendFriendlyResponse(res: ExpressResponse, content: string, stream: boolean): void {
-  const id = `chatcmpl-manifest-${randomUUID()}`;
+  const id = `chatcmpl-tuple-${randomUUID()}`;
   const created = Math.floor(Date.now() / 1000);
 
   if (stream) {
@@ -139,7 +139,7 @@ export function sendFriendlyResponse(res: ExpressResponse, content: string, stre
       id,
       object: 'chat.completion.chunk',
       created,
-      model: 'manifest',
+      model: 'tuple',
       choices: [{ index: 0, delta: { role: 'assistant', content }, finish_reason: 'stop' }],
     };
     const ssePayload = `data: ${JSON.stringify(chunk)}\n\ndata: [DONE]\n\n`;
@@ -152,7 +152,7 @@ export function sendFriendlyResponse(res: ExpressResponse, content: string, stre
       id,
       object: 'chat.completion',
       created,
-      model: 'manifest',
+      model: 'tuple',
       choices: [
         {
           index: 0,

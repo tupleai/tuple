@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@solidjs/testing-library';
 import { FREE_REQUEST_LIMIT_LABEL } from '../../src/services/billing-display';
-import { FREE_PLAN_REQUESTS_PER_MONTH } from 'manifest-shared';
+import { FREE_PLAN_REQUESTS_PER_MONTH } from 'tuple-shared';
 
 const searchParamsState: Record<string, string | undefined> = {};
 const setSearchParamsFn = vi.fn((p: Record<string, string | undefined>) => {

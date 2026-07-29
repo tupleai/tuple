@@ -3,15 +3,15 @@ import type { TenantContext } from '../../common/decorators/tenant-context.decor
 import type { ProviderUsageSummary } from '../services/provider-usage.service';
 
 describe('ProviderUsageController', () => {
-  const previousMode = process.env['MANIFEST_MODE'];
+  const previousMode = process.env['TUPLE_MODE'];
 
   beforeEach(() => {
-    process.env['MANIFEST_MODE'] = 'cloud';
+    process.env['TUPLE_MODE'] = 'cloud';
   });
 
   afterAll(() => {
-    if (previousMode === undefined) delete process.env['MANIFEST_MODE'];
-    else process.env['MANIFEST_MODE'] = previousMode;
+    if (previousMode === undefined) delete process.env['TUPLE_MODE'];
+    else process.env['TUPLE_MODE'] = previousMode;
   });
 
   it('delegates to ProviderUsageService and wraps the result in { providers }', async () => {

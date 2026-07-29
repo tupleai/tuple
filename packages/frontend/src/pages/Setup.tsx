@@ -60,11 +60,11 @@ const Setup: Component = () => {
 
   return (
     <>
-      <Title>Set up Manifest</Title>
-      <Meta name="description" content="Create the admin account for your Manifest instance." />
+      <Title>Set up Tuple</Title>
+      <Meta name="description" content="Create the admin account for your Tuple instance." />
       <Show when={!checking()} fallback={<div class="auth-header__subtitle">Loading...</div>}>
         <div class="auth-header">
-          <h1 class="auth-header__title">Welcome to Manifest</h1>
+          <h1 class="auth-header__title">Welcome to Tuple</h1>
           <p class="auth-header__subtitle">Create the admin account for your instance</p>
         </div>
         <form class="auth-form" onSubmit={handleSubmit}>

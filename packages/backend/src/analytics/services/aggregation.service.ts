@@ -18,7 +18,7 @@ import {
   sqlIsSuccessStatus,
 } from './query-helpers';
 import { computeCutoff, sqlSanitizeCost } from '../../common/utils/postgres-sql';
-import { ManifestRequest } from '../../entities/request.entity';
+import { TupleRequest } from '../../entities/request.entity';
 
 export { MetricWithTrend };
 
@@ -33,8 +33,8 @@ export class AggregationService {
     @InjectRepository(AgentMessage)
     private readonly turnRepo: Repository<AgentMessage>,
     @Optional()
-    @InjectRepository(ManifestRequest)
-    private readonly requestRepo?: Repository<ManifestRequest>,
+    @InjectRepository(TupleRequest)
+    private readonly requestRepo?: Repository<TupleRequest>,
   ) {}
 
   async hasAnyData(
@@ -210,7 +210,7 @@ export class AggregationService {
     };
   }
 
-  /** Request-level reliability for the headline KPI and Manifest value gap. */
+  /** Request-level reliability for the headline KPI and Tuple value gap. */
   async getRequestReliability(
     range: string,
     tenantId: string | null,
@@ -222,7 +222,7 @@ export class AggregationService {
     successful: number;
     success_rate: number;
     attempt_success_rate: number;
-    manifest_lift_pct: number;
+    tuple_lift_pct: number;
     recovered: number;
     previous_total: number;
   }> {
@@ -232,7 +232,7 @@ export class AggregationService {
         successful: 0,
         success_rate: 0,
         attempt_success_rate: 0,
-        manifest_lift_pct: 0,
+        tuple_lift_pct: 0,
         recovered: 0,
         previous_total: 0,
       };
@@ -334,7 +334,7 @@ export class AggregationService {
       successful,
       success_rate: successRate,
       attempt_success_rate: attemptSuccessRate,
-      manifest_lift_pct: successRate - attemptSuccessRate,
+      tuple_lift_pct: successRate - attemptSuccessRate,
       recovered: Number(row?.recovered ?? 0),
       previous_total: Number(row?.previous_total ?? 0),
     };

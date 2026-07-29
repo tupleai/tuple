@@ -47,7 +47,7 @@ import { useRightSidebar } from '../services/right-sidebar.jsx';
 import '../styles/playground.css';
 import '../styles/routing.css';
 
-const REQUEST_HEADERS_STORAGE_KEY = 'manifest.playground.requestHeaders';
+const REQUEST_HEADERS_STORAGE_KEY = 'tuple.playground.requestHeaders';
 
 function loadStoredHeaders(): HeaderEntry[] {
   try {
@@ -155,12 +155,12 @@ const Playground: Component = () => {
   const [announcement, setAnnouncement] = createSignal('');
   const [promptHeight, setPromptHeight] = createSignal(0);
   const [historyOpen, setHistoryOpen] = createSignal(
-    localStorage.getItem('manifest.playground.recentOpen') !== 'false',
+    localStorage.getItem('tuple.playground.recentOpen') !== 'false',
   );
   const toggleRecent = () => {
     const next = !historyOpen();
     setHistoryOpen(next);
-    localStorage.setItem('manifest.playground.recentOpen', String(next));
+    localStorage.setItem('tuple.playground.recentOpen', String(next));
   };
   const [historyRuns, setHistoryRuns] = createSignal<PlaygroundHistoryRunSummary[]>([]);
   const [historyLoading, setHistoryLoading] = createSignal(false);
@@ -206,7 +206,7 @@ const Playground: Component = () => {
     setLiveRunId(null);
     setOverlayBestId(null);
     setSearchParams({ run: undefined });
-    sessionStorage.removeItem('manifest.playground.lastRun');
+    sessionStorage.removeItem('tuple.playground.lastRun');
     // pickDefaults will fire via the existing createEffect since columns are now empty
     requestAnimationFrame(() => promptRef?.focus());
   };
@@ -239,7 +239,7 @@ const Playground: Component = () => {
       setCompletedResults([...store().columns]);
     }
     if (store().columns.length > 0) return;
-    const runId = searchParams.run || sessionStorage.getItem('manifest.playground.lastRun');
+    const runId = searchParams.run || sessionStorage.getItem('tuple.playground.lastRun');
     if (runId && !activeRunId()) {
       getPlaygroundRun(runId)
         .then((detail) => {
@@ -250,7 +250,7 @@ const Playground: Component = () => {
         })
         .catch(() => {
           setSearchParams({ run: undefined });
-          sessionStorage.removeItem('manifest.playground.lastRun');
+          sessionStorage.removeItem('tuple.playground.lastRun');
         });
     }
   });
@@ -289,7 +289,7 @@ const Playground: Component = () => {
     setLiveRunId(runId);
     setViewingHistory(null);
     setSearchParams({ run: runId });
-    sessionStorage.setItem('manifest.playground.lastRun', runId);
+    sessionStorage.setItem('tuple.playground.lastRun', runId);
   };
 
   const handleRetry = (id: string) => {
@@ -449,7 +449,7 @@ const Playground: Component = () => {
 
   return (
     <div class="playground" style={{ 'padding-bottom': `${promptHeight() + 48}px` }}>
-      <Title>Playground · Manifest</Title>
+      <Title>Playground · Tuple</Title>
       <Meta
         name="description"
         content="Compare models side by side for cost, speed, and quality."

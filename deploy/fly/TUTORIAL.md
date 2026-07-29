@@ -1,8 +1,8 @@
-# Deploy Manifest on Fly.io
+# Deploy Tuple on Fly.io
 
-This guide deploys Manifest on Fly.io with the public Manifest Docker image and a Fly Postgres database.
+This guide deploys Tuple on Fly.io with the public Tuple Docker image and a Fly Postgres database.
 
-Fly is a CLI-first deployment target, not a browser one-click button. The script in this directory creates the app, creates Postgres, attaches `DATABASE_URL`, generates Manifest secrets, and deploys the Docker image.
+Fly is a CLI-first deployment target, not a browser one-click button. The script in this directory creates the app, creates Postgres, attaches `DATABASE_URL`, generates Tuple secrets, and deploys the Docker image.
 
 ## Prerequisites
 
@@ -14,10 +14,10 @@ This stack creates paid resources. Review Fly pricing before leaving test apps r
 
 ## Fast Deploy
 
-From the Manifest repository root:
+From the Tuple repository root:
 
 ```bash
-FLY_APP_NAME=manifest-demo \
+FLY_APP_NAME=tuple-demo \
 FLY_REGION=cdg \
 FLY_ORG=personal \
 ./deploy/fly/deploy.sh
@@ -25,19 +25,19 @@ FLY_ORG=personal \
 
 Environment variables:
 
-- `FLY_APP_NAME`: Fly app name. Defaults to a generated `manifest-<hex>` name.
+- `FLY_APP_NAME`: Fly app name. Defaults to a generated `tuple-<hex>` name.
 - `FLY_POSTGRES_APP_NAME`: Postgres app name. Defaults to `<app-name>-db`.
 - `FLY_REGION`: Fly region. Defaults to `cdg`.
 - `FLY_ORG`: Fly organization. Defaults to `personal`.
 
-The script uses [`fly.toml`](fly.toml) as a template and deploys `docker.io/manifestdotbuild/manifest:6`. Re-running it keeps existing `BETTER_AUTH_SECRET` and `MANIFEST_ENCRYPTION_KEY` values; rotate those secrets manually only if you intend to invalidate sessions and encrypted provider credentials.
+The script uses [`fly.toml`](fly.toml) as a template and deploys `docker.io/tupleai/tuple:6`. Re-running it keeps existing `BETTER_AUTH_SECRET` and `TUPLE_ENCRYPTION_KEY` values; rotate those secrets manually only if you intend to invalidate sessions and encrypted provider credentials.
 
 ## Manual Deploy
 
 Create the app and database:
 
 ```bash
-APP_NAME=manifest-demo
+APP_NAME=tuple-demo
 POSTGRES_APP_NAME=${APP_NAME}-db
 REGION=cdg
 ORG=personal
@@ -56,8 +56,8 @@ fly postgres create \
 
 fly postgres attach "$POSTGRES_APP_NAME" \
   --app "$APP_NAME" \
-  --database-name manifest \
-  --database-user manifest \
+  --database-name tuple \
+  --database-user tuple \
   --yes
 ```
 
@@ -68,18 +68,18 @@ fly secrets set \
   --app "$APP_NAME" \
   --stage \
   "BETTER_AUTH_SECRET=$(openssl rand -hex 32)" \
-  "MANIFEST_ENCRYPTION_KEY=$(openssl rand -hex 32)"
+  "TUPLE_ENCRYPTION_KEY=$(openssl rand -hex 32)"
 ```
 
-Copy `deploy/fly/fly.toml` to a temporary file, replace `manifest-example` with your app name, then deploy:
+Copy `deploy/fly/fly.toml` to a temporary file, replace `tuple-example` with your app name, then deploy:
 
 ```bash
 cp deploy/fly/fly.toml fly.toml
-perl -pi -e "s/manifest-example/$APP_NAME/g; s/primary_region = \"cdg\"/primary_region = \"$REGION\"/" fly.toml
+perl -pi -e "s/tuple-example/$APP_NAME/g; s/primary_region = \"cdg\"/primary_region = \"$REGION\"/" fly.toml
 fly deploy --app "$APP_NAME" --config fly.toml
 ```
 
-## Open Manifest
+## Open Tuple
 
 Open the deployed app and create the first admin account:
 
@@ -101,18 +101,18 @@ fly logs --app <your-fly-app>
 
 ## What Gets Provisioned
 
-- Fly app running `docker.io/manifestdotbuild/manifest:6`.
+- Fly app running `docker.io/tupleai/tuple:6`.
 - Fly Postgres app.
 - `DATABASE_URL` secret from `fly postgres attach`.
-- Generated `BETTER_AUTH_SECRET` and `MANIFEST_ENCRYPTION_KEY` secrets.
+- Generated `BETTER_AUTH_SECRET` and `TUPLE_ENCRYPTION_KEY` secrets.
 - HTTPS Fly domain at `https://<app>.fly.dev`.
 
 ## Production notes
 
-- The template keeps one Machine running with `min_machines_running = 1` so Manifest is always available for agents.
+- The template keeps one Machine running with `min_machines_running = 1` so Tuple is always available for agents.
 - For production, choose a larger Postgres configuration or Fly Managed Postgres instead of the small script default.
 - Add a custom domain before configuring OAuth callback URLs.
-- Set `MANIFEST_TELEMETRY_DISABLED=1` as a Fly secret if you want to disable anonymous self-hosted telemetry.
+- Set `TUPLE_TELEMETRY_DISABLED=1` as a Fly secret if you want to disable anonymous self-hosted telemetry.
 - Destroy both the app and database when testing is done:
 
 ```bash

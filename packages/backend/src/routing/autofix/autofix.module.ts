@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Agent } from '../../entities/agent.entity';
 import { AgentMessage } from '../../entities/agent-message.entity';
 import { Tenant } from '../../entities/tenant.entity';
-import { ManifestRequest } from '../../entities/request.entity';
+import { TupleRequest } from '../../entities/request.entity';
 import { AutofixService } from './autofix.service';
 import { AutofixCohortController } from './autofix-cohort.controller';
 import { AutofixHealthProbe } from './autofix-health-probe';
@@ -26,7 +26,7 @@ const DEFAULT_TIMEOUT_MS = 10_000;
  *   loop can be exercised locally without an external Phoenix.
  */
 @Module({
-  imports: [TypeOrmModule.forFeature([Agent, AgentMessage, ManifestRequest, Tenant])],
+  imports: [TypeOrmModule.forFeature([Agent, AgentMessage, TupleRequest, Tenant])],
   controllers: [AutofixCohortController],
   providers: [
     AutofixService,

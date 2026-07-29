@@ -135,7 +135,7 @@ describe('GeminiOauthController', () => {
       oauthService.generateAuthorizationUrl.mockResolvedValue(
         'https://accounts.google.com/o/oauth2/v2/auth?...',
       );
-      configService.get.mockReturnValue('https://manifest.example.com');
+      configService.get.mockReturnValue('https://tuple.example.com');
 
       const req = {
         protocol: 'http',
@@ -151,7 +151,7 @@ describe('GeminiOauthController', () => {
       expect(oauthService.generateAuthorizationUrl).toHaveBeenCalledWith(
         'agent-id-1',
         'tenant-1',
-        'https://manifest.example.com',
+        'https://tuple.example.com',
         'user-1',
       );
     });
@@ -338,7 +338,7 @@ describe('GeminiOauthController', () => {
       const cspCall = res.setHeader.mock.calls.find((c) => c[0] === 'Content-Security-Policy');
       expect(cspCall).toBeDefined();
       expect(cspCall![1]).toMatch(/^default-src 'none'; script-src 'nonce-[A-Za-z0-9+/=]+'$/);
-      expect(res.send).toHaveBeenCalledWith(expect.stringContaining('manifest-oauth-success'));
+      expect(res.send).toHaveBeenCalledWith(expect.stringContaining('tuple-oauth-success'));
       expect(res.send).toHaveBeenCalledWith(expect.stringContaining('Login successful'));
       expect(res.send).toHaveBeenCalledWith(expect.stringContaining('BroadcastChannel'));
       const html = res.send.mock.calls[0][0] as string;
@@ -352,7 +352,7 @@ describe('GeminiOauthController', () => {
       const cspCall = res.setHeader.mock.calls.find((c) => c[0] === 'Content-Security-Policy');
       expect(cspCall).toBeDefined();
       expect(cspCall![1]).toMatch(/^default-src 'none'; script-src 'nonce-[A-Za-z0-9+/=]+'$/);
-      expect(res.send).toHaveBeenCalledWith(expect.stringContaining('manifest-oauth-error'));
+      expect(res.send).toHaveBeenCalledWith(expect.stringContaining('tuple-oauth-error'));
       expect(res.send).toHaveBeenCalledWith(expect.stringContaining('Login failed'));
       expect(res.send).toHaveBeenCalledWith(expect.stringContaining('BroadcastChannel'));
     });

@@ -41,7 +41,7 @@ const PATTERNS: Pattern[] = [
   { re: /\bsk-[A-Za-z0-9_\-]{10,}/g, replacement: '[REDACTED]' },
   { re: /\bgsk_[A-Za-z0-9_\-]{10,}/g, replacement: '[REDACTED]' },
   { re: /\bxai-[A-Za-z0-9_\-]{10,}/g, replacement: '[REDACTED]' },
-  { re: /\bmnfst_[A-Za-z0-9_\-]{10,}/g, replacement: '[REDACTED]' },
+  { re: /\btuple_[A-Za-z0-9_\-]{10,}/g, replacement: '[REDACTED]' },
   { re: /\bAIza[A-Za-z0-9_\-]{10,}/g, replacement: '[REDACTED]' },
 ];
 

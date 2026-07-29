@@ -27,7 +27,7 @@ describe("FrameworkSnippets", () => {
 
   it("renders connection details with API key placeholder", () => {
     const { container } = render(() => <FrameworkSnippets {...defaultProps} />);
-    expect(container.textContent).toContain("mnfst_YOUR_KEY");
+    expect(container.textContent).toContain("tuple_YOUR_KEY");
     expect(container.textContent).toContain("API Key");
   });
 
@@ -39,29 +39,29 @@ describe("FrameworkSnippets", () => {
 
   it("renders connection details with key prefix when provided", () => {
     const { container } = render(() => (
-      <FrameworkSnippets {...defaultProps} keyPrefix="mnfst_abc" />
+      <FrameworkSnippets {...defaultProps} keyPrefix="tuple_abc" />
     ));
-    expect(container.textContent).toContain("mnfst_abc...");
+    expect(container.textContent).toContain("tuple_abc...");
   });
 
   it("renders full API key when provided", () => {
     const { container } = render(() => (
-      <FrameworkSnippets {...defaultProps} apiKey="mnfst_full_key_123" />
+      <FrameworkSnippets {...defaultProps} apiKey="tuple_full_key_123" />
     ));
-    expect(container.textContent).toContain("mnfst_full_key_123");
+    expect(container.textContent).toContain("tuple_full_key_123");
   });
 
   it("hides full key when hideFullKey is set", () => {
     const { container } = render(() => (
-      <FrameworkSnippets {...defaultProps} apiKey="mnfst_secret" keyPrefix="mnfst_abc" hideFullKey />
+      <FrameworkSnippets {...defaultProps} apiKey="tuple_secret" keyPrefix="tuple_abc" hideFullKey />
     ));
-    expect(container.textContent).not.toContain("mnfst_secret");
-    expect(container.textContent).toContain("mnfst_abc...");
+    expect(container.textContent).not.toContain("tuple_secret");
+    expect(container.textContent).toContain("tuple_abc...");
   });
 
   it("shows API key copy button when key is hidden", () => {
     const { container } = render(() => (
-      <FrameworkSnippets {...defaultProps} apiKey="mnfst_secret" keyPrefix="mnfst_abc" hideFullKey />
+      <FrameworkSnippets {...defaultProps} apiKey="tuple_secret" keyPrefix="tuple_abc" hideFullKey />
     ));
     const keyRow = container.querySelectorAll(".setup-onboard-fields__row")[1];
     const copyBtn = keyRow?.querySelector('[aria-label="Copy to clipboard"]');
@@ -70,7 +70,7 @@ describe("FrameworkSnippets", () => {
 
   it("shows API key copy button when key is revealed", () => {
     const { container } = render(() => (
-      <FrameworkSnippets {...defaultProps} apiKey="mnfst_secret" keyPrefix="mnfst_abc" hideFullKey />
+      <FrameworkSnippets {...defaultProps} apiKey="tuple_secret" keyPrefix="tuple_abc" hideFullKey />
     ));
     fireEvent.click(container.querySelector('[aria-label="Reveal API key"]')!);
     const keyRow = container.querySelectorAll(".setup-onboard-fields__row")[1];
@@ -81,33 +81,33 @@ describe("FrameworkSnippets", () => {
 
   it("shows eye toggle to reveal key when hideFullKey and apiKey set", () => {
     const { container } = render(() => (
-      <FrameworkSnippets {...defaultProps} apiKey="mnfst_secret" keyPrefix="mnfst_abc" hideFullKey />
+      <FrameworkSnippets {...defaultProps} apiKey="tuple_secret" keyPrefix="tuple_abc" hideFullKey />
     ));
     expect(container.querySelector('[aria-label="Reveal API key"]')).not.toBeNull();
   });
 
   it("reveals key when eye toggle is clicked", () => {
     const { container } = render(() => (
-      <FrameworkSnippets {...defaultProps} apiKey="mnfst_secret" keyPrefix="mnfst_abc" hideFullKey />
+      <FrameworkSnippets {...defaultProps} apiKey="tuple_secret" keyPrefix="tuple_abc" hideFullKey />
     ));
     fireEvent.click(container.querySelector('[aria-label="Reveal API key"]')!);
-    expect(container.textContent).toContain("mnfst_secret");
+    expect(container.textContent).toContain("tuple_secret");
     expect(container.querySelector('[aria-label="Hide API key"]')).not.toBeNull();
   });
 
   it("hides key again on second toggle", () => {
     const { container } = render(() => (
-      <FrameworkSnippets {...defaultProps} apiKey="mnfst_secret" keyPrefix="mnfst_abc" hideFullKey />
+      <FrameworkSnippets {...defaultProps} apiKey="tuple_secret" keyPrefix="tuple_abc" hideFullKey />
     ));
     fireEvent.click(container.querySelector('[aria-label="Reveal API key"]')!);
     fireEvent.click(container.querySelector('[aria-label="Hide API key"]')!);
-    expect(container.textContent).not.toContain("mnfst_secret");
-    expect(container.textContent).toContain("mnfst_abc...");
+    expect(container.textContent).not.toContain("tuple_secret");
+    expect(container.textContent).toContain("tuple_abc...");
   });
 
   it("does not show eye toggle when no apiKey", () => {
     const { container } = render(() => (
-      <FrameworkSnippets {...defaultProps} keyPrefix="mnfst_abc" />
+      <FrameworkSnippets {...defaultProps} keyPrefix="tuple_abc" />
     ));
     expect(container.querySelector('[aria-label="Reveal API key"]')).toBeNull();
     expect(container.querySelector('[aria-label="Hide API key"]')).toBeNull();
@@ -259,25 +259,25 @@ describe("FrameworkSnippets", () => {
     const { container } = render(() => <FrameworkSnippets {...defaultProps} />);
     const tabs = container.querySelectorAll(".panel__tab");
     fireEvent.click(tabs[2]);
-    expect(localStorage.getItem("manifest_setup_toolkit")).toBe("vercel-ai-sdk");
+    expect(localStorage.getItem("tuple_setup_toolkit")).toBe("vercel-ai-sdk");
   });
 
   it("persists selected OpenAI language in localStorage", () => {
     const { container } = render(() => <FrameworkSnippets {...defaultProps} />);
     const langBtns = container.querySelectorAll(".toolkit-lang-toggle__btn");
     fireEvent.click(langBtns[1]);
-    expect(localStorage.getItem("manifest_setup_openai_lang")).toBe("typescript");
+    expect(localStorage.getItem("tuple_setup_openai_lang")).toBe("typescript");
   });
 
   it("restores toolkit tab from localStorage", () => {
-    localStorage.setItem("manifest_setup_toolkit", "curl");
+    localStorage.setItem("tuple_setup_toolkit", "curl");
     const { container } = render(() => <FrameworkSnippets {...defaultProps} />);
     const activeTab = container.querySelector(".panel__tab--active");
     expect(activeTab!.textContent).toContain("cURL");
   });
 
   it("restores OpenAI language from localStorage", () => {
-    localStorage.setItem("manifest_setup_openai_lang", "typescript");
+    localStorage.setItem("tuple_setup_openai_lang", "typescript");
     const { container } = render(() => <FrameworkSnippets {...defaultProps} />);
     expect(container.textContent).toContain('import OpenAI from "openai"');
   });
@@ -290,9 +290,9 @@ describe("FrameworkSnippets", () => {
 
   it("includes baseUrl in snippets", () => {
     const { container } = render(() => (
-      <FrameworkSnippets {...defaultProps} baseUrl="https://app.manifest.build/v1" />
+      <FrameworkSnippets {...defaultProps} baseUrl="https://app.tuple.ai/v1" />
     ));
-    expect(container.textContent).toContain("https://app.manifest.build/v1");
+    expect(container.textContent).toContain("https://app.tuple.ai/v1");
   });
 
   it("uses setup-method-tabs class", () => {
@@ -335,7 +335,7 @@ describe("FrameworkSnippets", () => {
   it("copies snippet with real key after revealing", async () => {
     const writeTextMock = vi.mocked(navigator.clipboard.writeText);
     const { container } = render(() => (
-      <FrameworkSnippets {...defaultProps} apiKey="mnfst_real_key" keyPrefix="mnfst_re" hideFullKey />
+      <FrameworkSnippets {...defaultProps} apiKey="tuple_real_key" keyPrefix="tuple_re" hideFullKey />
     ));
     // Reveal the key via the code block eye toggle
     fireEvent.click(container.querySelector('[aria-label="Reveal API key in code"]')!);
@@ -344,25 +344,25 @@ describe("FrameworkSnippets", () => {
     await fireEvent.click(copyBtn!);
     expect(writeTextMock).toHaveBeenCalled();
     const copiedText = writeTextMock.mock.calls[0][0];
-    expect(copiedText).toContain("mnfst_real_key");
+    expect(copiedText).toContain("tuple_real_key");
   });
 
   it("copies snippet with masked key when no full apiKey provided", async () => {
     const writeTextMock = vi.mocked(navigator.clipboard.writeText);
     const { container } = render(() => (
-      <FrameworkSnippets {...defaultProps} keyPrefix="mnfst_pre" />
+      <FrameworkSnippets {...defaultProps} keyPrefix="tuple_pre" />
     ));
     const copyBtn = container.querySelector('.setup-cli-block__actions [aria-label="Copy to clipboard"]');
     expect(copyBtn).not.toBeNull();
     await fireEvent.click(copyBtn!);
     expect(writeTextMock).toHaveBeenCalled();
     const copiedText = writeTextMock.mock.calls[0][0];
-    expect(copiedText).toContain("mnfst_pre...");
+    expect(copiedText).toContain("tuple_pre...");
   });
 
   it("shows eye toggle in code block when apiKey provided", () => {
     const { container } = render(() => (
-      <FrameworkSnippets {...defaultProps} apiKey="mnfst_secret" keyPrefix="mnfst_se" hideFullKey />
+      <FrameworkSnippets {...defaultProps} apiKey="tuple_secret" keyPrefix="tuple_se" hideFullKey />
     ));
     const eyeBtn = container.querySelector('.setup-cli-block__actions [aria-label="Reveal API key in code"]');
     expect(eyeBtn).not.toBeNull();
@@ -385,7 +385,7 @@ describe("FrameworkSnippets", () => {
 
   it("shows code block copy button even when key hidden", () => {
     const { container } = render(() => (
-      <FrameworkSnippets {...defaultProps} apiKey="mnfst_secret" keyPrefix="mnfst_se" hideFullKey />
+      <FrameworkSnippets {...defaultProps} apiKey="tuple_secret" keyPrefix="tuple_se" hideFullKey />
     ));
     const copyBtn = container.querySelector('.setup-cli-block__actions [aria-label="Copy to clipboard"]');
     expect(copyBtn).not.toBeNull();
@@ -395,10 +395,10 @@ describe("FrameworkSnippets", () => {
     const { container } = render(() => (
       <FrameworkSnippets
         {...defaultProps}
-        customHeaders={{ "x-manifest-tier": "premium", "x-app": "billing" }}
+        customHeaders={{ "x-tuple-tier": "premium", "x-app": "billing" }}
       />
     ));
-    expect(container.textContent).toContain("x-manifest-tier");
+    expect(container.textContent).toContain("x-tuple-tier");
     expect(container.textContent).toContain("premium");
     expect(container.textContent).toContain("x-app");
     expect(container.textContent).toContain("billing");
@@ -415,12 +415,12 @@ describe("FrameworkSnippets", () => {
       <FrameworkSnippets
         {...defaultProps}
         defaultToolkit="openai-sdk"
-        customHeaders={{ "x-manifest-tier": "premium" }}
+        customHeaders={{ "x-tuple-tier": "premium" }}
       />
     ));
     // We're inside the python tab by default for openai-sdk; switch to TS via
     // localStorage isn't reliable here, so just assert the python form rendered.
     expect(container.textContent).toContain("default_headers");
-    expect(container.textContent).toContain("x-manifest-tier");
+    expect(container.textContent).toContain("x-tuple-tier");
   });
 });

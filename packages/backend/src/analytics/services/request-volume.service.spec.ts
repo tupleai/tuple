@@ -90,8 +90,8 @@ describe('RequestVolumeService (#2511 request-level volume)', () => {
     // The trio fold: custom:<uuid> providers group as 'custom'.
     expect(sql).toContain("THEN 'custom'");
     expect(sql).toContain("t.request_status NOT IN ('pending', 'cancelled', 'ok', 'success')");
-    // Zero-attempt failures remain visible and are attributed to Manifest.
-    expect(sql).toContain("COALESCE(t.provider, 'manifest')");
+    // Zero-attempt failures remain visible and are attributed to Tuple.
+    expect(sql).toContain("COALESCE(t.provider, 'tuple')");
   });
 
   it('scopes to one connection by terminal attribution', async () => {

@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryColumn } from 'typeorm';
-import type { AuthType } from 'manifest-shared';
+import type { AuthType } from 'tuple-shared';
 import { timestampType, timestampDefault } from '../common/utils/postgres-sql';
 import type { DiscoveredModel } from '../model-discovery/model-fetcher';
 

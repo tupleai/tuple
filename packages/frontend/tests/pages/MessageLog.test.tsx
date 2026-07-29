@@ -892,17 +892,17 @@ describe('MessageLog', () => {
     expect(query.origin).toBeUndefined();
   });
 
-  it('narrows the log to Manifest-authored failures via the origin filter', async () => {
+  it('narrows the log to Tuple-authored failures via the origin filter', async () => {
     mockGetMessages.mockResolvedValue(messagesData);
     const { container } = render(() => <MessageLog />);
     await vi.waitFor(() => expect(mockGetMessages).toHaveBeenCalled());
 
     const originSelect = selectWithOption(container, 'All origins');
-    await fireEvent.change(originSelect, { target: { value: 'manifest' } });
+    await fireEvent.change(originSelect, { target: { value: 'tuple' } });
 
     await vi.waitFor(() => {
       const last = mockGetMessages.mock.calls.at(-1)![0] as Record<string, string>;
-      expect(last.origin).toBe('manifest');
+      expect(last.origin).toBe('tuple');
     });
   });
 
@@ -1875,12 +1875,12 @@ describe('MessageLog', () => {
   });
 
   describe('global mode title and CTA (Bug 2 + Bug 3)', () => {
-    it("renders 'Requests - Manifest' title without agent prefix in global mode", () => {
+    it("renders 'Requests - Tuple' title without agent prefix in global mode", () => {
       mockAgentName = '';
       mockGetMessages.mockResolvedValue(messagesData);
       const { container } = render(() => <MessageLog />);
       const title = container.querySelector('title');
-      expect(title?.textContent).toBe('Requests - Manifest');
+      expect(title?.textContent).toBe('Requests - Tuple');
     });
 
     it('renders agent-scoped title in agent mode', () => {
@@ -1889,7 +1889,7 @@ describe('MessageLog', () => {
       const { container } = render(() => <MessageLog />);
       const title = container.querySelector('title');
       expect(title?.textContent).toContain('test-agent');
-      expect(title?.textContent).toContain('Requests - Manifest');
+      expect(title?.textContent).toContain('Requests - Tuple');
     });
 
     it("does not render 'undefined' in the title in global mode", () => {

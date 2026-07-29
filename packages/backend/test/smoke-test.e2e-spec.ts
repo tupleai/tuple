@@ -118,13 +118,13 @@ describe('ST-01: Auth', () => {
 /*  ST-02 · Create agent                                               */
 /* ------------------------------------------------------------------ */
 describe('ST-02: Create agent', () => {
-  it('creates agent and returns mnfst_* API key', async () => {
+  it('creates agent and returns tuple_* API key', async () => {
     const res = await auth(api().post('/api/v1/agents'))
       .send({ name: 'Smoke Agent' })
       .expect(201);
 
     expect(res.body.agent.name).toBe('smoke-agent');
-    expect(res.body.apiKey).toMatch(/^mnfst_/);
+    expect(res.body.apiKey).toMatch(/^tuple_/);
 
     smokeAgentName = res.body.agent.name;
     smokeOtlpKey = res.body.apiKey;
@@ -270,7 +270,7 @@ describe('ST-06: Proxy message recorded', () => {
 
     expect(res.body.choices).toBeDefined();
     expect(res.body.choices[0].message.content).toBe('OK');
-    expect(res.headers['x-manifest-tier']).toBeDefined();
+    expect(res.headers['x-tuple-tier']).toBeDefined();
     expect(mockCallLog.length).toBeGreaterThan(0);
 
     // The proxy records the message asynchronously; poll briefly
@@ -373,7 +373,7 @@ describe('ST-09: Fallback chain', () => {
 
     // Should succeed via fallback model-c
     expect(res.status).toBe(200);
-    expect(res.headers['x-manifest-fallback-from']).toBeDefined();
+    expect(res.headers['x-tuple-fallback-from']).toBeDefined();
 
     // Verify call order: model-a (primary) → model-b (fallback 0) → model-c (fallback 1)
     const models = mockCallLog.map((c) => c.model);

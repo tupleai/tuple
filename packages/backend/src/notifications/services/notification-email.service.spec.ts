@@ -27,7 +27,7 @@ import { createProvider } from './email-providers/resolve-provider';
 
 function createMockConfig(overrides: Record<string, string> = {}): ConfigService {
   const values: Record<string, string> = {
-    'app.notificationFromEmail': 'noreply@manifest.build',
+    'app.notificationFromEmail': 'noreply@tuple.ai',
     ...overrides,
   };
   return {
@@ -112,7 +112,7 @@ describe('NotificationEmailService', () => {
     expect(mockSend).toHaveBeenCalledWith(
       expect.objectContaining({
         to: 'user@test.com',
-        from: 'Manifest <noreply@mg.example.com>',
+        from: 'Tuple <noreply@mg.example.com>',
       }),
     );
     expect(sendEmail).not.toHaveBeenCalled();
@@ -142,7 +142,7 @@ describe('NotificationEmailService', () => {
 
     expect(mockSend).toHaveBeenCalledWith(
       expect.objectContaining({
-        from: expect.stringContaining('Manifest <'),
+        from: expect.stringContaining('Tuple <'),
       }),
     );
   });

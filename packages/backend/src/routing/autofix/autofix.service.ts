@@ -8,7 +8,7 @@ import { Tenant } from '../../entities/tenant.entity';
 import { isSelfHosted } from '../../common/utils/detect-self-hosted';
 import type { ForwardResult } from '../proxy/provider-client';
 import type { ProxyApiMode } from '../proxy/proxy-types';
-import type { AuthType } from 'manifest-shared';
+import type { AuthType } from 'tuple-shared';
 import { HEALING_CLIENT, HealContractError, type HealingClient } from './healing-client';
 import { normalizeProviderError } from './provider-error-normalizer';
 import { scrubSecrets } from '../../common/utils/secret-scrub';
@@ -340,7 +340,7 @@ export class AutofixService {
       // Defensive backstop: the common reforward failure is handled inside
       // runHealOnce (which preserves the chain), so this only fires on a truly
       // unexpected throw (e.g. reading the failed retry body). Degrade to the
-      // original provider error — never a Manifest 500.
+      // original provider error — never a Tuple 500.
       this.logger.warn(`autofix failed, using original error: ${(err as Error).message}`);
       return {
         forward: originalForward,

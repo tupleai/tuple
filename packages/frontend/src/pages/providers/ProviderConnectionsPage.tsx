@@ -79,7 +79,7 @@ const PAGE_COPY: Record<
   }
 > = {
   subscriptions: {
-    title: 'Subscriptions | Manifest',
+    title: 'Subscriptions | Tuple',
     heading: 'Subscriptions',
     subtitle: 'Use your current plans with any supported provider.',
     addLabel: 'Connect',
@@ -90,7 +90,7 @@ const PAGE_COPY: Record<
     activePlural: 'connections',
   },
   byok: {
-    title: 'Usage-based | Manifest',
+    title: 'Usage-based | Tuple',
     heading: 'Usage-based',
     subtitle: 'Connect providers you pay per token or per usage with your own API keys.',
     addLabel: 'Connect',
@@ -105,7 +105,7 @@ const PAGE_COPY: Record<
     activePlural: 'keys',
   },
   local: {
-    title: 'Local | Manifest',
+    title: 'Local | Tuple',
     heading: 'Local',
     subtitle: 'Connect to LLM servers running on your machine.',
     addLabel: 'Connect',

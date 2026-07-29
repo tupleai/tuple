@@ -321,9 +321,9 @@ components:
           type: string
           minLength: 1
           description: >
-            Opaque id of the gateway tenant this request belongs to (Manifest's
+            Opaque id of the gateway tenant this request belongs to (Tuple's
             Tenant.id). Optional on the wire; recorded so a failure can be
-            attributed to a tenant. Manifest always sends it on the proxy path.
+            attributed to a tenant. Tuple always sends it on the proxy path.
         provider: { type: string, minLength: 1, example: openai }
         model:
           type: string
@@ -335,7 +335,7 @@ components:
         authType:
           type: string
           enum: [api_key, subscription, local]
-          description: Provider credential route. Optional during the Manifest rollout.
+          description: Provider credential route. Optional during the Tuple rollout.
         api:
           type: string
           enum: [responses, chat_completions, messages]

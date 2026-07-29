@@ -4,7 +4,7 @@ import { existsSync } from 'fs';
  * Detects whether the app is running in the self-hosted version.
  *
  * Priority:
- * 1. Explicit `MANIFEST_MODE` env var — always wins
+ * 1. Explicit `TUPLE_MODE` env var — always wins
  *    - `selfhosted` (canonical) or legacy `local` → self-hosted
  *    - `cloud` → cloud
  * 2. Auto-detect a containerised runtime → self-hosted
@@ -14,7 +14,7 @@ import { existsSync } from 'fs';
  * 3. Default → cloud
  */
 export function isSelfHosted(): boolean {
-  const explicit = process.env['MANIFEST_MODE'];
+  const explicit = process.env['TUPLE_MODE'];
   if (explicit === 'cloud') return false;
   if (explicit === 'selfhosted' || explicit === 'local') return true;
   if (process.env['KUBERNETES_SERVICE_HOST']) return true;

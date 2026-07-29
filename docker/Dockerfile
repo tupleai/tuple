@@ -21,11 +21,11 @@ FROM deps AS build
 COPY packages/shared packages/shared
 COPY packages/frontend packages/frontend
 COPY packages/backend packages/backend
-COPY packages/manifest packages/manifest
+COPY packages/tuple packages/tuple
 # Marks this bundle as a self-hosted build so the frontend reveals the
 # version badge baked in at build time. Cloud CI builds never set this.
-ENV VITE_MANIFEST_SELFHOSTED=true
-RUN npx turbo build --filter=manifest-backend --filter=manifest-frontend --filter=manifest-shared
+ENV VITE_TUPLE_SELFHOSTED=true
+RUN npx turbo build --filter=tuple-backend --filter=tuple-frontend --filter=tuple-shared
 
 # Stage 3: Production dependencies only. npm ci runs with --ignore-scripts
 # so nothing is compiled — all runtime deps are pure JS, making the glibc
@@ -64,12 +64,12 @@ RUN --mount=type=cache,target=/root/.npm \
 FROM gcr.io/distroless/nodejs24-debian13:nonroot@sha256:b087b405441cd3e8eab9bd53ae3dd1c2b824e7ce13f25c5e9bb353fbdb3f4544 AS runtime
 WORKDIR /app
 
-LABEL org.opencontainers.image.title="Manifest" \
+LABEL org.opencontainers.image.title="Tuple" \
       org.opencontainers.image.description="Open-source AI model router. Plug your agents into any provider and send each query to the right model." \
-      org.opencontainers.image.url="https://manifest.build" \
-      org.opencontainers.image.documentation="https://manifest.build/docs" \
-      org.opencontainers.image.source="https://github.com/mnfst/manifest" \
-      org.opencontainers.image.vendor="MNFST Inc." \
+      org.opencontainers.image.url="https://tuple.ai" \
+      org.opencontainers.image.documentation="https://tuple.ai/docs" \
+      org.opencontainers.image.source="https://github.com/tupleai/tuple" \
+      org.opencontainers.image.vendor="Tuple.ai" \
       org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.base.name="gcr.io/distroless/nodejs24-debian13:nonroot" \
       org.opencontainers.image.base.digest="sha256:b087b405441cd3e8eab9bd53ae3dd1c2b824e7ce13f25c5e9bb353fbdb3f4544"
@@ -89,10 +89,10 @@ COPY --from=build --chown=nonroot:nonroot /app/packages/backend/dist packages/ba
 COPY --from=build --chown=nonroot:nonroot /app/packages/frontend/dist packages/frontend/dist
 COPY --chown=nonroot:nonroot packages/shared/package.json packages/shared/
 COPY --chown=nonroot:nonroot packages/backend/package.json packages/backend/
-# The telemetry sender reads the canonical Manifest version from this
-# file at boot. Without it, readManifestVersion() falls back to "unknown"
+# The telemetry sender reads the canonical Tuple version from this
+# file at boot. Without it, readTupleVersion() falls back to "unknown"
 # and the sender ends up posting invalid semver to the ingest endpoint.
-COPY --chown=nonroot:nonroot packages/manifest/package.json packages/manifest/
+COPY --chown=nonroot:nonroot packages/tuple/package.json packages/tuple/
 
 EXPOSE 2099
 

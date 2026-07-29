@@ -42,13 +42,13 @@ describe('ErrorBreakdownService', () => {
     { origin: 'transport', error_class: 'timeout', count: '2' },
   ];
 
-  it('separates provider failures from Manifest-origin and transport errors', async () => {
+  it('separates provider failures from Tuple-origin and transport errors', async () => {
     const { service } = makeService(GROUPS, 81);
     const result = await service.getBreakdown({ tenantId: 't1', range: '30d' });
 
     expect(result.provider_errors).toBe(15);
     expect(result.transport_errors).toBe(2);
-    expect(result.manifest_errors).toBe(4);
+    expect(result.tuple_errors).toBe(4);
     expect(result.total_errors).toBe(21);
     expect(result.successful).toBe(81);
   });
@@ -79,7 +79,7 @@ describe('ErrorBreakdownService', () => {
     expect(result.provider_error_rate).toBeCloseTo(15 / 96, 10);
   });
 
-  it('counts a malformed caller request as a Manifest error, never a provider fault', async () => {
+  it('counts a malformed caller request as a Tuple error, never a provider fault', async () => {
     const { service } = makeService(
       [
         { origin: 'provider', error_class: 'server_error', count: '3' },
@@ -91,7 +91,7 @@ describe('ErrorBreakdownService', () => {
     const result = await service.getBreakdown({ tenantId: 't1' });
 
     expect(result.provider_errors).toBe(3);
-    expect(result.manifest_errors).toBe(10);
+    expect(result.tuple_errors).toBe(10);
     // Before the `request` origin existed these 9 rows were recorded as provider
     // 400s and dragged the reliability number down with them.
     expect(result.provider_error_rate).toBeCloseTo(3 / 10, 10);
@@ -131,7 +131,7 @@ describe('ErrorBreakdownService', () => {
 
     expect(result.total_errors).toBe(0);
     expect(result.provider_errors).toBe(0);
-    expect(result.manifest_errors).toBe(0);
+    expect(result.tuple_errors).toBe(0);
     expect(result.provider_error_rate).toBe(0);
     expect(result.by_class).toEqual({});
     expect(result.by_origin).toEqual({

@@ -19,7 +19,7 @@ vi.mock("@solidjs/meta", () => ({
 }));
 
 // Mock the Overview module that AgentOverview re-exports.
-// This prevents the deep dependency chain (which requires manifest-shared to be
+// This prevents the deep dependency chain (which requires tuple-shared to be
 // built) from being triggered in tests. Behavioral coverage is in Overview.test.tsx.
 vi.mock("../../src/pages/Overview.js", () => ({
   default: () => <div data-testid="overview-stub">AgentOverview content</div>,

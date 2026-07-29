@@ -1,7 +1,7 @@
 import {
   buildTelemetryConfig,
   DEFAULT_TELEMETRY_ENDPOINT,
-  readManifestVersion,
+  readTupleVersion,
 } from './telemetry.config';
 
 describe('buildTelemetryConfig', () => {
@@ -9,7 +9,7 @@ describe('buildTelemetryConfig', () => {
     const cfg = buildTelemetryConfig({ NODE_ENV: 'production' });
     expect(cfg.enabled).toBe(true);
     expect(cfg.endpoint).toBe(DEFAULT_TELEMETRY_ENDPOINT);
-    expect(cfg.manifestVersion).toEqual(expect.any(String));
+    expect(cfg.tupleVersion).toEqual(expect.any(String));
   });
 
   it('is disabled outside production so dev instances never phone home', () => {
@@ -18,18 +18,18 @@ describe('buildTelemetryConfig', () => {
     expect(buildTelemetryConfig({}).enabled).toBe(false);
   });
 
-  it('is disabled when MANIFEST_TELEMETRY_DISABLED is "1" or "true" even in production', () => {
+  it('is disabled when TUPLE_TELEMETRY_DISABLED is "1" or "true" even in production', () => {
     expect(
-      buildTelemetryConfig({ NODE_ENV: 'production', MANIFEST_TELEMETRY_DISABLED: '1' }).enabled,
+      buildTelemetryConfig({ NODE_ENV: 'production', TUPLE_TELEMETRY_DISABLED: '1' }).enabled,
     ).toBe(false);
     expect(
-      buildTelemetryConfig({ NODE_ENV: 'production', MANIFEST_TELEMETRY_DISABLED: 'true' }).enabled,
+      buildTelemetryConfig({ NODE_ENV: 'production', TUPLE_TELEMETRY_DISABLED: 'true' }).enabled,
     ).toBe(false);
   });
 
   it('ignores unrecognised disable values (opt-out must be explicit)', () => {
     expect(
-      buildTelemetryConfig({ NODE_ENV: 'production', MANIFEST_TELEMETRY_DISABLED: 'yes' }).enabled,
+      buildTelemetryConfig({ NODE_ENV: 'production', TUPLE_TELEMETRY_DISABLED: 'yes' }).enabled,
     ).toBe(true);
   });
 
@@ -61,9 +61,9 @@ describe('buildTelemetryConfig', () => {
     ).toBe('http://127.0.0.1:9999/ingest');
   });
 
-  it('is disabled when the Manifest version cannot be read', () => {
+  it('is disabled when the Tuple version cannot be read', () => {
     // Simulates a misconfigured image that ships without
-    // packages/manifest/package.json. readManifestVersion() falls back to
+    // packages/tuple/package.json. readTupleVersion() falls back to
     // "unknown", which the ingest would reject as invalid semver — better
     // to stay silent than to spam the endpoint.
     jest.isolateModules(() => {
@@ -79,15 +79,15 @@ describe('buildTelemetryConfig', () => {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const mod = require('./telemetry.config') as typeof import('./telemetry.config');
       const cfg = mod.buildTelemetryConfig({ NODE_ENV: 'production' });
-      expect(cfg.manifestVersion).toBe('unknown');
+      expect(cfg.tupleVersion).toBe('unknown');
       expect(cfg.enabled).toBe(false);
     });
   });
 });
 
-describe('readManifestVersion', () => {
-  it('returns a semver-shaped string from the real manifest/package.json', () => {
-    const version = readManifestVersion();
+describe('readTupleVersion', () => {
+  it('returns a semver-shaped string from the real tuple/package.json', () => {
+    const version = readTupleVersion();
     expect(version).toMatch(/^\d+\.\d+\.\d+/);
   });
 
@@ -104,7 +104,7 @@ describe('readManifestVersion', () => {
       });
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const mod = require('./telemetry.config') as typeof import('./telemetry.config');
-      expect(mod.readManifestVersion()).toBe('unknown');
+      expect(mod.readTupleVersion()).toBe('unknown');
     });
   });
 
@@ -116,7 +116,7 @@ describe('readManifestVersion', () => {
       });
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const mod = require('./telemetry.config') as typeof import('./telemetry.config');
-      expect(mod.readManifestVersion()).toBe('unknown');
+      expect(mod.readTupleVersion()).toBe('unknown');
     });
   });
 });

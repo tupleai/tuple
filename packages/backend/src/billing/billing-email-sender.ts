@@ -11,7 +11,7 @@ export function formatPlanName(plan: string | null | undefined): string {
   const normalized = (plan ?? '').trim().toLowerCase();
   if (normalized === 'pro') return 'Pro';
   if (normalized === 'free') return 'Free';
-  if (!normalized) return 'Manifest';
+  if (!normalized) return 'Tuple';
   return normalized.charAt(0).toUpperCase() + normalized.slice(1);
 }
 
@@ -20,30 +20,30 @@ export function getBillingEmailFrom(explicit?: string | null): string {
     explicit ||
     process.env['EMAIL_FROM'] ||
     process.env['NOTIFICATION_FROM_EMAIL'] ||
-    'noreply@manifest.build'
+    'noreply@tuple.ai'
   );
 }
 
 function normalizeAppUrl(appUrl: string): string {
-  return appUrl.replace(/\/+$/, '') || 'https://app.manifest.build';
+  return appUrl.replace(/\/+$/, '') || 'https://app.tuple.ai';
 }
 
 export function getBillingAppUrl(explicit?: string | null): string {
   return normalizeAppUrl(
-    explicit || process.env['BETTER_AUTH_URL'] || 'https://app.manifest.build',
+    explicit || process.env['BETTER_AUTH_URL'] || 'https://app.tuple.ai',
   );
 }
 
 export function subscriptionEmailSubject(kind: SubscriptionPlanEmailProps['kind'], plan: string) {
-  if (kind === 'plan_changed') return `Your Manifest plan changed to ${plan}`;
-  if (kind === 'cancellation_confirmed') return `Your Manifest ${plan} cancellation is scheduled`;
-  return `Your Manifest ${plan} plan is active`;
+  if (kind === 'plan_changed') return `Your Tuple plan changed to ${plan}`;
+  if (kind === 'cancellation_confirmed') return `Your Tuple ${plan} cancellation is scheduled`;
+  return `Your Tuple ${plan} plan is active`;
 }
 
 export function usageEmailSubject(kind: PlanUsageEmailProps['kind']) {
   return kind === 'requests_limit_reached'
-    ? 'Your Manifest monthly request limit has been reached'
-    : 'Your Manifest workspace has used 80% of monthly requests';
+    ? 'Your Tuple monthly request limit has been reached'
+    : 'Your Tuple workspace has used 80% of monthly requests';
 }
 
 export async function sendSubscriptionPlanEmail(
@@ -59,7 +59,7 @@ export async function sendSubscriptionPlanEmail(
     subject: subscriptionEmailSubject(props.kind, props.planName),
     html,
     text,
-    from: `Manifest <${getBillingEmailFrom(fromEmail)}>`,
+    from: `Tuple <${getBillingEmailFrom(fromEmail)}>`,
   });
 }
 
@@ -76,6 +76,6 @@ export async function sendPlanUsageEmail(
     subject: usageEmailSubject(props.kind),
     html,
     text,
-    from: `Manifest <${getBillingEmailFrom(fromEmail)}>`,
+    from: `Tuple <${getBillingEmailFrom(fromEmail)}>`,
   });
 }

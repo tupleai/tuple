@@ -27,7 +27,7 @@ import {
   PLATFORM_LABELS,
   PLATFORMS_BY_CATEGORY,
   platformIcon,
-} from 'manifest-shared';
+} from 'tuple-shared';
 
 const Settings: Component = () => {
   const params = useParams<{ agentName: string }>();
@@ -94,7 +94,7 @@ const Settings: Component = () => {
 
   const baseUrl = () => {
     const host = window.location.hostname;
-    if (host === 'app.manifest.build') return 'https://app.manifest.build/v1';
+    if (host === 'app.tuple.ai') return 'https://app.tuple.ai/v1';
     return `${window.location.origin}/v1`;
   };
 
@@ -144,7 +144,7 @@ const Settings: Component = () => {
 
   return (
     <div class="container--sm">
-      <Title>{agentDisplayName() ?? agentName()} Settings - Manifest</Title>
+      <Title>{agentDisplayName() ?? agentName()} Settings - Tuple</Title>
       <Meta
         name="description"
         content={`Configure settings for ${agentDisplayName() ?? agentName()}.`}
@@ -249,7 +249,7 @@ const Settings: Component = () => {
           <div class="settings-card__body">
             <span class="settings-card__label-title">Harness API key</span>
             <span class="settings-card__label-desc" style="font-size: 14px;">
-              This key authenticates your harness's requests to Manifest. Rotating it generates a
+              This key authenticates your harness's requests to Tuple. Rotating it generates a
               new key and immediately invalidates the current one.
             </span>
             <div class="settings-card__key-row">

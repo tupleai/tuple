@@ -28,36 +28,36 @@ describe('resolveFrontendDir', () => {
     return require('./frontend-path') as typeof import('./frontend-path');
   }
 
-  it('returns env var path when MANIFEST_FRONTEND_DIR is set and valid', () => {
-    process.env['MANIFEST_FRONTEND_DIR'] = '/custom/frontend';
+  it('returns env var path when TUPLE_FRONTEND_DIR is set and valid', () => {
+    process.env['TUPLE_FRONTEND_DIR'] = '/custom/frontend';
     mockExistsSync.mockImplementation((p) => p === join('/custom/frontend', 'index.html'));
     const { resolveFrontendDir } = loadModule();
     expect(resolveFrontendDir()).toBe('/custom/frontend');
   });
 
   it('skips env var when directory has no index.html', () => {
-    process.env['MANIFEST_FRONTEND_DIR'] = '/bad/path';
+    process.env['TUPLE_FRONTEND_DIR'] = '/bad/path';
     mockExistsSync.mockImplementation((p) => p === monorepoIndex);
     const { resolveFrontendDir } = loadModule();
     expect(resolveFrontendDir()).toBe(join(__dirname, '..', '..', '..', '..', 'frontend', 'dist'));
   });
 
   it('returns monorepo path when env var is absent', () => {
-    delete process.env['MANIFEST_FRONTEND_DIR'];
+    delete process.env['TUPLE_FRONTEND_DIR'];
     mockExistsSync.mockImplementation((p) => p === monorepoIndex);
     const { resolveFrontendDir } = loadModule();
     expect(resolveFrontendDir()).toBe(join(__dirname, '..', '..', '..', '..', 'frontend', 'dist'));
   });
 
   it('returns embedded path when monorepo path fails', () => {
-    delete process.env['MANIFEST_FRONTEND_DIR'];
+    delete process.env['TUPLE_FRONTEND_DIR'];
     mockExistsSync.mockImplementation((p) => p === embeddedIndex);
     const { resolveFrontendDir } = loadModule();
     expect(resolveFrontendDir()).toBe(join(__dirname, '..', '..', '..', '..', 'public'));
   });
 
   it('returns null when nothing matches', () => {
-    delete process.env['MANIFEST_FRONTEND_DIR'];
+    delete process.env['TUPLE_FRONTEND_DIR'];
     const { resolveFrontendDir } = loadModule();
     expect(resolveFrontendDir()).toBeNull();
   });

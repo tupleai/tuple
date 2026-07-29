@@ -5,7 +5,7 @@ import request from 'supertest';
 import { createTestApp, TEST_API_KEY, TEST_TENANT_ID, TEST_AGENT_ID } from './helpers';
 
 // End-to-end guard for the error taxonomy: /api/v1/errors/breakdown must split a
-// provider's own failures from Manifest's config/policy/internal rejections and
+// provider's own failures from Tuple's config/policy/internal rejections and
 // from transport errors, so "my errors" never conflates "the provider is down"
 // with "I forgot to add an API key".
 
@@ -48,7 +48,7 @@ beforeAll(async () => {
   await insertMessage(ds, { status: 'rate_limited', error_origin: 'provider', error_class: 'rate_limit' });
   await insertMessage(ds, { status: 'rate_limited', error_origin: 'provider', error_class: 'rate_limit' });
   await insertMessage(ds, { status: 'error', error_origin: 'provider', error_class: 'server_error' });
-  // 2 Manifest-origin config errors (missing key) — NOT provider failures.
+  // 2 Tuple-origin config errors (missing key) — NOT provider failures.
   await insertMessage(ds, { status: 'error', error_origin: 'config', error_class: 'no_provider_key' });
   await insertMessage(ds, { status: 'error', error_origin: 'config', error_class: 'no_provider_key' });
   // 1 transport timeout.
@@ -60,7 +60,7 @@ afterAll(async () => {
 });
 
 describe('GET /api/v1/errors/breakdown', () => {
-  it('separates provider, transport and Manifest-origin errors', async () => {
+  it('separates provider, transport and Tuple-origin errors', async () => {
     const res = await request(app.getHttpServer())
       .get('/api/v1/errors/breakdown?range=24h')
       .set('x-api-key', TEST_API_KEY)
@@ -69,7 +69,7 @@ describe('GET /api/v1/errors/breakdown', () => {
     expect(res.body.successful).toBe(5);
     expect(res.body.total_errors).toBe(6);
     expect(res.body.provider_errors).toBe(3);
-    expect(res.body.manifest_errors).toBe(2);
+    expect(res.body.tuple_errors).toBe(2);
     expect(res.body.transport_errors).toBe(1);
   });
 

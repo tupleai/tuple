@@ -13,8 +13,8 @@ const RESEND_COOLDOWN_SECONDS = 60;
 // seeded only when SEED_DATA=true / non-production). Referenced solely inside the
 // `import.meta.env.DEV` branch below, so Vite strips both the button and these literals
 // from production builds — they never ship. The account exists only in a dev database.
-const DEV_EMAIL = 'admin@manifest.build';
-const DEV_PASSWORD = 'manifest';
+const DEV_EMAIL = 'admin@tuple.ai';
+const DEV_PASSWORD = 'tuple';
 
 const Login: Component = () => {
   const [email, setEmail] = createSignal('');
@@ -129,8 +129,8 @@ const Login: Component = () => {
 
   return (
     <>
-      <Title>Sign In - Manifest</Title>
-      <Meta name="description" content="Sign in to Manifest to monitor your AI harnesses." />
+      <Title>Sign In - Tuple</Title>
+      <Meta name="description" content="Sign in to Tuple to monitor your AI harnesses." />
       <div class="auth-header">
         <h1 class="auth-header__title">Welcome back</h1>
         <p class="auth-header__subtitle">Take control of your AI harness costs</p>
@@ -153,7 +153,7 @@ const Login: Component = () => {
             disabled={loading()}
             style="background:#f59e0b;color:#1f1400;font-weight:700;margin-bottom:0.75rem;"
           >
-            ⚡ Sign in as dev, admin@manifest.build
+            ⚡ Sign in as dev, admin@tuple.ai
           </button>
         )}
         {error() && (

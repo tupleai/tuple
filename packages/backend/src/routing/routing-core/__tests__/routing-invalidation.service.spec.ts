@@ -1,5 +1,5 @@
 import type { Repository } from 'typeorm';
-import type { ModelRoute } from 'manifest-shared';
+import type { ModelRoute } from 'tuple-shared';
 import { RoutingInvalidationService } from '../routing-invalidation.service';
 import { TierAssignment } from '../../../entities/tier-assignment.entity';
 import type { RoutingCacheService } from '../routing-cache.service';

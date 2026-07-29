@@ -15,7 +15,7 @@ import { Request } from 'express';
 import { AgentApiKey } from '../../entities/agent-api-key.entity';
 import {
   IngestionContext,
-  RequestWithManifestErrorContext,
+  RequestWithTupleErrorContext,
 } from '../interfaces/ingestion-context.interface';
 import { verifyKey, keyPrefix as computePrefix } from '../../common/utils/hash.util';
 import { API_KEY_PREFIX } from '../../common/constants/api-key.constants';
@@ -52,7 +52,7 @@ export class AgentKeyAuthGuard implements CanActivate, OnModuleInit, OnModuleDes
   private readonly CACHE_TTL_MS = 5 * 60 * 1000;
   private readonly MAX_CACHE_SIZE = 10_000;
   // Maps a rejected token's hash to when its rejection stops being trusted.
-  // Without this, every request bearing a wrong/revoked mnfst_ key runs a
+  // Without this, every request bearing a wrong/revoked tuple_ key runs a
   // fresh indexed DB lookup AND emits a warn log — so a single misconfigured
   // agent in a retry loop sustains DB load and floods the logs indefinitely.
   // The TTL is deliberately much shorter than CACHE_TTL_MS so a key that gets
@@ -76,7 +76,7 @@ export class AgentKeyAuthGuard implements CanActivate, OnModuleInit, OnModuleDes
 
   async onModuleInit(): Promise<void> {
     // Pre-migration API keys were hashed with a static salt
-    // ("manifest-api-key-salt"). The verifyKey path still accepts them for
+    // ("tuple-api-key-salt"). The verifyKey path still accepts them for
     // backward compatibility, but a leaked DB backup gives an attacker a
     // rainbow-table head start. Surface a one-shot warning so operators
     // know to rotate them via the dashboard.
@@ -133,7 +133,7 @@ export class AgentKeyAuthGuard implements CanActivate, OnModuleInit, OnModuleDes
       throw new UnauthorizedException('Invalid API key format');
     }
 
-    return this.validateMnfstToken(request, token);
+    return this.validateTupleToken(request, token);
   }
 
   invalidateCache(key: string) {
@@ -162,7 +162,7 @@ export class AgentKeyAuthGuard implements CanActivate, OnModuleInit, OnModuleDes
     return true;
   }
 
-  private async validateMnfstToken(request: Request, token: string): Promise<boolean> {
+  private async validateTupleToken(request: Request, token: string): Promise<boolean> {
     const hashed = cacheKey(token);
     const now = Date.now();
 
@@ -251,10 +251,10 @@ export class AgentKeyAuthGuard implements CanActivate, OnModuleInit, OnModuleDes
 
     if (keyRecord.expires_at && new Date(keyRecord.expires_at) < new Date()) {
       // An expired key still identifies its agent, so this rejection is the one
-      // auth failure Manifest can attribute and record (M004). The other four
+      // auth failure Tuple can attribute and record (M004). The other four
       // (M001–M003, M005) never resolve a tenant and stay unrecorded — see
-      // UNRECORDABLE_MANIFEST_CODES.
-      (request as Request & RequestWithManifestErrorContext).manifestErrorContext = {
+      // UNRECORDABLE_TUPLE_CODES.
+      (request as Request & RequestWithTupleErrorContext).tupleErrorContext = {
         tenantId: keyRecord.tenant_id,
         agentId: keyRecord.agent_id,
         agentName: keyRecord.agent.name,

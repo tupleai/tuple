@@ -15,7 +15,7 @@ import {
   type AuthType,
   type ProviderParamSpec,
   type RequestParamDefaults,
-} from 'manifest-shared';
+} from 'tuple-shared';
 import { TenantCtx, TenantContext } from '../common/decorators/tenant-context.decorator';
 import { AgentModelParamsService } from './routing-core/agent-model-params.service';
 import { ProviderParamSpecService } from './routing-core/provider-param-spec.service';

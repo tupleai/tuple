@@ -1,1 +1,1 @@
-export { MODEL_PREFIX_MAP, inferProviderFromModel } from 'manifest-shared';
+export { MODEL_PREFIX_MAP, inferProviderFromModel } from 'tuple-shared';

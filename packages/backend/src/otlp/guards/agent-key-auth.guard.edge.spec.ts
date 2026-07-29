@@ -93,14 +93,14 @@ describe('AgentKeyAuthGuard edge cases', () => {
     guard.onModuleDestroy();
   });
 
-  describe('validateMnfstToken with broken relations', () => {
+  describe('validateTupleToken with broken relations', () => {
     // The candidate query left-joins agent + tenant. If either relation fails
     // to hydrate (race during a delete, foreign-key drift, missing JOIN
     // result), the guard now rejects with a clean UnauthorizedException (401)
     // instead of dereferencing null and surfacing a TypeError as a 500. These
     // tests pin that hardened behavior.
     it('rejects with 401 when keyRecord.agent is null', async () => {
-      const token = 'mnfst_missing-agent-key';
+      const token = 'tuple_missing-agent-key';
       mockGetMany.mockResolvedValue([
         {
           id: 'key-no-agent',
@@ -118,7 +118,7 @@ describe('AgentKeyAuthGuard edge cases', () => {
     });
 
     it('rejects with 401 when keyRecord.tenant is null', async () => {
-      const token = 'mnfst_missing-tenant-key';
+      const token = 'tuple_missing-tenant-key';
       mockGetMany.mockResolvedValue([
         {
           id: 'key-no-tenant',
@@ -136,7 +136,7 @@ describe('AgentKeyAuthGuard edge cases', () => {
     });
 
     it('rejects with 401 when both keyRecord.agent and keyRecord.tenant are null', async () => {
-      const token = 'mnfst_both-null-key';
+      const token = 'tuple_both-null-key';
       mockGetMany.mockResolvedValue([
         {
           id: 'key-both-null',
@@ -154,7 +154,7 @@ describe('AgentKeyAuthGuard edge cases', () => {
     });
 
     it('remembers the rejection so an identical retry is served from the negative cache', async () => {
-      const token = 'mnfst_orphan-retry-key';
+      const token = 'tuple_orphan-retry-key';
       mockGetMany.mockResolvedValue([
         {
           id: 'key-orphan-retry',
@@ -178,7 +178,7 @@ describe('AgentKeyAuthGuard edge cases', () => {
     });
 
     it('does not cache a positive entry when agent is null (rejects before cache.set)', async () => {
-      const token = 'mnfst_no-cache-on-fail-key';
+      const token = 'tuple_no-cache-on-fail-key';
       mockGetMany.mockResolvedValue([
         {
           id: 'key-uncached',

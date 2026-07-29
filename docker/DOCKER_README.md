@@ -1,35 +1,35 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/mnfst/manifest/HEAD/.github/assets/logo-white.svg" />
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/mnfst/manifest/HEAD/.github/assets/logo-dark.svg" />
-    <img src="https://raw.githubusercontent.com/mnfst/manifest/HEAD/.github/assets/logo-dark.svg" alt="Manifest" height="53" title="Manifest"/>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/tupleai/tuple/HEAD/.github/assets/wordmark-white.png" />
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/tupleai/tuple/HEAD/.github/assets/wordmark-dark.png" />
+    <img src="https://raw.githubusercontent.com/tupleai/tuple/HEAD/.github/assets/wordmark-dark.png" alt="Tuple" height="53" title="Tuple"/>
   </picture>
 </p>
 <p align="center">
-  <a href="https://hub.docker.com/r/manifestdotbuild/manifest"><img src="https://img.shields.io/docker/pulls/manifestdotbuild/manifest?color=2496ED&label=docker%20pulls" alt="Docker pulls" /></a>
+  <a href="https://hub.docker.com/r/tupleai/tuple"><img src="https://img.shields.io/docker/pulls/tupleai/tuple?color=2496ED&label=docker%20pulls" alt="Docker pulls" /></a>
   &nbsp;
-  <a href="https://github.com/mnfst/manifest/stargazers"><img src="https://img.shields.io/github/stars/mnfst/manifest?style=flat" alt="GitHub stars" /></a>
+  <a href="https://github.com/tupleai/tuple/stargazers"><img src="https://img.shields.io/github/stars/tupleai/tuple?style=flat" alt="GitHub stars" /></a>
   &nbsp;
-  <a href="https://github.com/mnfst/manifest/blob/main/LICENSE"><img src="https://img.shields.io/github/license/mnfst/manifest?color=blue" alt="license" /></a>
+  <a href="https://github.com/tupleai/tuple/blob/main/LICENSE"><img src="https://img.shields.io/github/license/tupleai/tuple?color=blue" alt="license" /></a>
   &nbsp;
   <a href="https://discord.gg/FepAked3W7"><img src="https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white" alt="Discord" /></a>
 </p>
 
-## What is Manifest?
+## What is Tuple?
 
-Manifest is a smart model router for **AI agents** like OpenClaw, Hermes, or anything speaking the OpenAI-compatible HTTP API. It sits between your agents and your providers (API keys, subscriptions, or local models) and sends each request to the right one. Simple questions go to fast, cheap models. Hard problems go to the powerful ones. One endpoint for every provider, and a smaller bill as a bonus.
+Tuple is a smart model router for **AI agents** like OpenClaw, Hermes, or anything speaking the OpenAI-compatible HTTP API. It sits between your agents and your providers (API keys, subscriptions, or local models) and sends each request to the right one. Simple questions go to fast, cheap models. Hard problems go to the powerful ones. One endpoint for every provider, and a smaller bill as a bonus.
 
 - One endpoint, every provider: send each request to the right model
 - Automatic fallbacks: if a model fails, the next one picks up
 - Set limits: don't exceed your budget
 - Self-hosted: your requests, your providers, your data
 
-![manifest-gh](https://raw.githubusercontent.com/mnfst/manifest/HEAD/.github/assets/manifest-screenshot.png)
+![tuple-gh](https://raw.githubusercontent.com/tupleai/tuple/HEAD/.github/assets/tuple-routing-hero.png)
 
 ## Table of contents
 
 - [Supported providers](#supported-providers)
-- [Manifest vs OpenRouter](#manifest-vs-openrouter)
+- [Tuple vs OpenRouter](#tuple-vs-openrouter)
 - [Installation](#installation)
   - [Option 1: Quickstart install script (recommended)](#option-1-quickstart-install-script-recommended)
   - [Option 2: Docker Compose (manual)](#option-2-docker-compose-manual)
@@ -49,11 +49,11 @@ Manifest is a smart model router for **AI agents** like OpenClaw, Hermes, or any
 
 Works with 300+ models across OpenAI, Anthropic, Google Gemini, DeepSeek, xAI, Mistral, Qwen, MiniMax, Kimi, Amazon Nova, Z.ai, OpenRouter, Ollama, and any provider with an OpenAI-compatible API. Connect with an API key, or reuse an existing paid subscription (ChatGPT Plus/Pro, Claude Max/Pro, Kimi Coding Plan, GLM Coding Plan, etc.) where supported.
 
-## Manifest vs OpenRouter
+## Tuple vs OpenRouter
 
-|              | Manifest                                          | OpenRouter                                          |
+|              | Tuple                                          | OpenRouter                                          |
 | ------------ | ------------------------------------------------- | --------------------------------------------------- |
-| Architecture | Your Manifest instance forwards to your providers | Cloud proxy. All traffic goes through their servers |
+| Architecture | Your Tuple instance forwards to your providers | Cloud proxy. All traffic goes through their servers |
 | Cost         | Free                                              | 5% fee on every API call                            |
 | Source code  | MIT, fully open                                   | Proprietary                                         |
 | Data privacy | Self-hosted, no middleman                         | Prompts and responses pass through a third party    |
@@ -72,7 +72,7 @@ Three paths, ordered from fastest to most hands-on. All three end in the same pl
 One command. The installer downloads the compose file, generates the secrets, and brings up the stack. First boot pulls the app image and Postgres, so give it up to a couple of minutes.
 
 ```bash
-bash <(curl -sSL https://raw.githubusercontent.com/mnfst/manifest/main/docker/install.sh)
+bash <(curl -sSL https://raw.githubusercontent.com/tupleai/tuple/main/docker/install.sh)
 ```
 
 <details>
@@ -81,7 +81,7 @@ bash <(curl -sSL https://raw.githubusercontent.com/mnfst/manifest/main/docker/in
 Download the script:
 
 ```bash
-curl -sSLO https://raw.githubusercontent.com/mnfst/manifest/main/docker/install.sh
+curl -sSLO https://raw.githubusercontent.com/tupleai/tuple/main/docker/install.sh
 ```
 
 Review it (optional):
@@ -109,20 +109,20 @@ Same underlying flow as the install script, but you drive it yourself so you can
 1. Download the compose file and the env template into the same directory:
 
 ```bash
-curl -O https://raw.githubusercontent.com/mnfst/manifest/main/docker/docker-compose.yml
-curl -O https://raw.githubusercontent.com/mnfst/manifest/main/docker/.env.example
+curl -O https://raw.githubusercontent.com/tupleai/tuple/main/docker/docker-compose.yml
+curl -O https://raw.githubusercontent.com/tupleai/tuple/main/docker/.env.example
 cp .env.example .env
 ```
 
 2. Open `.env` in your editor and set `BETTER_AUTH_SECRET` and
-   `MANIFEST_ENCRYPTION_KEY` to two **different** random strings. Generate each with:
+   `TUPLE_ENCRYPTION_KEY` to two **different** random strings. Generate each with:
 
 ```bash
 openssl rand -hex 32
 ```
 
-`MANIFEST_ENCRYPTION_KEY` encrypts the provider API keys and OAuth tokens
-Manifest stores. Left unset it falls back to `BETTER_AUTH_SECRET`, which means
+`TUPLE_ENCRYPTION_KEY` encrypts the provider API keys and OAuth tokens
+Tuple stores. Left unset it falls back to `BETTER_AUTH_SECRET`, which means
 one leaked session-signing secret also decrypts every stored credential. Set it
 before first boot — adding it later means re-encrypting what is already stored.
 
@@ -134,7 +134,7 @@ before first boot — adding it later means re-encrypting what is already stored
 docker compose up -d
 ```
 
-Give it up to a couple of minutes on a cold pull — you can watch startup with `docker compose logs -f manifest`.
+Give it up to a couple of minutes on a cold pull — you can watch startup with `docker compose logs -f tuple`.
 
 4. Open [http://localhost:2099](http://localhost:2099) and sign up. The first account you create becomes the admin.
 
@@ -157,10 +157,10 @@ If you already have PostgreSQL running, replace `user`, `pass`, and `host` with 
 ```bash
 docker run -d \
   -p 2099:2099 \
-  -e DATABASE_URL=postgresql://user:pass@host:5432/manifest \
+  -e DATABASE_URL=postgresql://user:pass@host:5432/tuple \
   -e BETTER_AUTH_SECRET=$(openssl rand -hex 32) \
   -e BETTER_AUTH_URL=http://localhost:2099 \
-  manifestdotbuild/manifest
+  tupleai/tuple
 ```
 
 </details>
@@ -173,10 +173,10 @@ $secret = -join ((48..57 + 97..122) | Get-Random -Count 64 | ForEach-Object { [c
 
 docker run -d `
   -p 2099:2099 `
-  -e DATABASE_URL=postgresql://user:pass@host:5432/manifest `
+  -e DATABASE_URL=postgresql://user:pass@host:5432/tuple `
   -e BETTER_AUTH_SECRET=$secret `
   -e BETTER_AUTH_URL=http://localhost:2099 `
-  manifestdotbuild/manifest
+  tupleai/tuple
 ```
 
 </details>
@@ -189,10 +189,10 @@ Generate a 64-character hex secret with any tool you trust, then:
 ```cmd
 docker run -d ^
   -p 2099:2099 ^
-  -e DATABASE_URL=postgresql://user:pass@host:5432/manifest ^
+  -e DATABASE_URL=postgresql://user:pass@host:5432/tuple ^
   -e BETTER_AUTH_SECRET=<your-64-char-secret> ^
   -e BETTER_AUTH_URL=http://localhost:2099 ^
-  manifestdotbuild/manifest
+  tupleai/tuple
 ```
 
 </details>
@@ -206,28 +206,28 @@ Signing up leaves you with an empty instance. Three steps to a routed request:
 1. **Connect a provider.** In the sidebar, **Providers → Usage-based** to paste
    an API key (OpenAI, Anthropic, Gemini, …), **Subscriptions** to reuse a plan
    you already pay for, or **Local** for Ollama / LM Studio / llama.cpp.
-   Manifest discovers the available models as soon as the connection is saved.
+   Tuple discovers the available models as soon as the connection is saved.
 
 2. **Copy your agent's key.** Each agent has its own key, shown when you create
-   it and under the agent's **Settings**. It starts with `mnfst_`.
+   it and under the agent's **Settings**. It starts with `tuple_`.
 
 3. **Point something at it.** The endpoint is OpenAI-compatible, so any SDK or
    agent that takes a base URL works — use `http://localhost:2099/v1` and the
-   `mnfst_` key. To check it end to end:
+   `tuple_` key. To check it end to end:
 
 ```bash
 curl -X POST http://localhost:2099/v1/chat/completions \
-  -H "Authorization: Bearer mnfst_YOUR_KEY_HERE" \
+  -H "Authorization: Bearer tuple_YOUR_KEY_HERE" \
   -H "Content-Type: application/json" \
   -d '{"model": "auto", "messages": [{"role": "user", "content": "Hello"}]}'
 ```
 
-`"model": "auto"` asks Manifest to route. Any other model name is treated as an
+`"model": "auto"` asks Tuple to route. Any other model name is treated as an
 explicit choice and falls back to your routing config if it matches nothing.
 
-Errors from Manifest itself carry an `M###` code, a plain-English cause, and a
+Errors from Tuple itself carry an `M###` code, a plain-English cause, and a
 link to the matching page under
-[manifest.build/docs/errors](https://manifest.build/docs/errors) — including
+[tuple.ai/docs/errors](https://tuple.ai/docs/errors) — including
 `M100` (no provider connected yet) and `M003`/`M005` (bad or unknown key), the
 three you are most likely to hit on a fresh install.
 
@@ -236,8 +236,8 @@ three you are most likely to hit on a fresh install.
 Published images are signed with cosign keyless signing (Sigstore). Verify before pulling:
 
 ```bash
-cosign verify manifestdotbuild/manifest:<version> \
-  --certificate-identity-regexp="^https://github.com/mnfst/manifest/" \
+cosign verify tupleai/tuple:<version> \
+  --certificate-identity-regexp="^https://github.com/tupleai/tuple/" \
   --certificate-oidc-issuer="https://token.actions.githubusercontent.com"
 ```
 
@@ -272,7 +272,7 @@ both. A mismatch fails the login with "Invalid origin".
 By default the compose file binds port `2099` to `127.0.0.1` only. The dashboard is reachable from the host but not from other machines on the network. To expose it on the LAN:
 
 1. Edit `docker-compose.yml` and change the `ports` line from `"127.0.0.1:2099:2099"` to `"2099:2099"`.
-2. In `.env`, set `BETTER_AUTH_URL` to the host you'll reach the dashboard on, e.g. `http://192.168.1.20:2099` or `https://manifest.mydomain.com`. This MUST match the URL in the browser or Better Auth will reject the login with "Invalid origin".
+2. In `.env`, set `BETTER_AUTH_URL` to the host you'll reach the dashboard on, e.g. `http://192.168.1.20:2099` or `https://tuple.mydomain.com`. This MUST match the URL in the browser or Better Auth will reject the login with "Invalid origin".
 3. `docker compose up -d` to apply.
 
 If you see "Invalid origin" on the login page, `BETTER_AUTH_URL` doesn't match the URL you're accessing the dashboard on. The host matters as much as the port.
@@ -293,30 +293,30 @@ Images are built for both `linux/amd64` and `linux/arm64`.
 
 ## Upgrading
 
-Manifest ships a new image on every release. To upgrade an existing compose install:
+Tuple ships a new image on every release. To upgrade an existing compose install:
 
 ```bash
 docker compose pull
 docker compose up -d
 ```
 
-Database migrations run automatically on boot, no manual steps. Your data in the `pgdata` volume is preserved across upgrades. Pin to a specific major version (e.g. `manifestdotbuild/manifest:5`) in `docker-compose.yml` if you want control over when major upgrades happen.
+Database migrations run automatically on boot, no manual steps. Your data in the `pgdata` volume is preserved across upgrades. Pin to a specific major version (e.g. `tupleai/tuple:5`) in `docker-compose.yml` if you want control over when major upgrades happen.
 
 ## Backup & persistence
 
-All state lives in the `pgdata` named volume mounted at `/var/lib/postgresql/data` in the `postgres` service. Nothing else in the Manifest container is stateful.
+All state lives in the `pgdata` named volume mounted at `/var/lib/postgresql/data` in the `postgres` service. Nothing else in the Tuple container is stateful.
 
 **Back up** (from the host, with the stack running):
 
 ```bash
-docker compose exec -T postgres pg_dump -U manifest manifest > manifest-backup-$(date +%F).sql
+docker compose exec -T postgres pg_dump -U tuple tuple > tuple-backup-$(date +%F).sql
 ```
 
 **Restore** into a fresh stack:
 
 ```bash
 docker compose up -d postgres
-cat manifest-backup-2026-04-12.sql | docker compose exec -T postgres psql -U manifest manifest
+cat tuple-backup-2026-04-12.sql | docker compose exec -T postgres psql -U tuple tuple
 docker compose up -d
 ```
 
@@ -329,7 +329,7 @@ docker compose down -v    # ⚠  destroys all data
 
 ## Connecting local LLM servers
 
-The self-hosted Manifest container can reach any OpenAI-compatible server running on your host via `host.docker.internal:<port>`. This works on Docker Desktop (macOS/Windows) out of the box, and on Linux with Docker Engine 20.10 or later.
+The self-hosted Tuple container can reach any OpenAI-compatible server running on your host via `host.docker.internal:<port>`. This works on Docker Desktop (macOS/Windows) out of the box, and on Linux with Docker Engine 20.10 or later.
 
 Because the container detects self-hosted mode automatically (via `/.dockerenv`), it lets you add custom providers with `http://` and private/loopback URLs — cloud-metadata endpoints (169.254.169.254, etc.) stay blocked.
 
@@ -342,19 +342,19 @@ ollama pull llama3.1:8b
 ```
 
 2. In the dashboard, go to Providers → API Keys → click the **Ollama** tile.
-3. Manifest reaches Ollama at `http://host.docker.internal:11434` and syncs the available models.
+3. Tuple reaches Ollama at `http://host.docker.internal:11434` and syncs the available models.
 
 ### LM Studio
 
-1. Install LM Studio from https://lmstudio.ai, load at least one chat model, and start the local server. **Bind to `0.0.0.0`** so the Manifest container can reach it:
+1. Install LM Studio from https://lmstudio.ai, load at least one chat model, and start the local server. **Bind to `0.0.0.0`** so the Tuple container can reach it:
    - GUI: Developer tab → enable "Serve on Local Network" (LM Studio persists this across restarts).
    - CLI: `lms server start --bind 0.0.0.0 --port 1234 --cors`
 2. Providers → API Keys → click the **LM Studio** tile.
-3. Manifest probes `http://host.docker.internal:1234/v1`, discovers your loaded models, and connects them in one click.
+3. Tuple probes `http://host.docker.internal:1234/v1`, discovers your loaded models, and connects them in one click.
 
 ### llama.cpp
 
-1. Build `llama-server` from the [ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) repo (or grab a release binary), then start it with a GGUF model bound to `0.0.0.0` so the Manifest container can reach it:
+1. Build `llama-server` from the [ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp) repo (or grab a release binary), then start it with a GGUF model bound to `0.0.0.0` so the Tuple container can reach it:
 
    ```bash
    ./llama-server -m models/llama-3.1-8b-instruct.Q4_K_M.gguf --host 0.0.0.0 --port 8080
@@ -363,7 +363,7 @@ ollama pull llama3.1:8b
    `llama-server` only listens on `0.0.0.0` if you pass `--host 0.0.0.0`; the default bind isn't reachable from Docker.
 
 2. Providers → API Keys → click the **llama.cpp** tile.
-3. Manifest probes `http://host.docker.internal:8080/v1`, lists the model your server loaded, and connects it in one click. Pre-b3800 builds that don't expose `/v1/models` get a hint to upgrade or fall back to **Add custom provider**.
+3. Tuple probes `http://host.docker.internal:8080/v1`, lists the model your server loaded, and connects it in one click. Pre-b3800 builds that don't expose `/v1/models` get a hint to upgrade or fall back to **Add custom provider**.
 
 ### Any other OpenAI-compatible server
 
@@ -379,15 +379,15 @@ If Ollama runs on a different host on your LAN, set `OLLAMA_HOST` in `.env` to t
 
 ### Podman / rootless containers
 
-Podman doesn't ship `/.dockerenv` or `host.docker.internal`. Manifest still
+Podman doesn't ship `/.dockerenv` or `host.docker.internal`. Tuple still
 auto-detects Podman via `/run/.containerenv` and treats the install as
 self-hosted, but the canonical hostname for reaching the host from inside
 a Podman container is `host.containers.internal` (Podman 4+ exposes this
 by default; older versions need `--add-host=host.containers.internal:host-gateway`).
-If you run Manifest as one Podman service and your LLM server (llama.cpp,
-Ollama, etc.) as another, point Manifest at the service name on the shared
+If you run Tuple as one Podman service and your LLM server (llama.cpp,
+Ollama, etc.) as another, point Tuple at the service name on the shared
 network — e.g. `http://llamacpp:8080/v1` — and **Add custom provider** will
-accept it as long as `MANIFEST_MODE=selfhosted` (the bundled compose file
+accept it as long as `TUPLE_MODE=selfhosted` (the bundled compose file
 sets this automatically).
 
 ## Environment variables
@@ -396,17 +396,17 @@ sets this automatically).
 | -------------------- | -------- | ----------------------- | --------------------------------------------- |
 | `DATABASE_URL`       | Yes      | --                      | PostgreSQL connection string                  |
 | `BETTER_AUTH_SECRET` | Yes      | --                      | Session signing secret (min 32 chars)         |
-| `MANIFEST_ENCRYPTION_KEY` | Recommended | falls back to `BETTER_AUTH_SECRET` | Separate 32+ char key encrypting stored provider keys and OAuth tokens. The install script generates one; set it before first boot, since introducing it later means re-encrypting what is already stored. |
+| `TUPLE_ENCRYPTION_KEY` | Recommended | falls back to `BETTER_AUTH_SECRET` | Separate 32+ char key encrypting stored provider keys and OAuth tokens. The install script generates one; set it before first boot, since introducing it later means re-encrypting what is already stored. |
 | `BETTER_AUTH_URL`    | No       | `http://localhost:${PORT}` | Public URL. Must match the URL in the browser |
 | `PORT`               | No       | `2099`                  | Dashboard port — sets both the published host port and the internal listener |
 | `OLLAMA_HOST`        | No       | `http://host.docker.internal:11434` | Ollama endpoint for the built-in tile. Override to point at a LAN-hosted Ollama. |
-| `MANIFEST_MODE`      | No       | auto (Docker → selfhosted) | `selfhosted` or `cloud`. `local` is a legacy alias. Self-hosted mode allows private/http URLs for custom providers. |
-| `MANIFEST_DISABLE_HSTS` | No    | unset                   | Set `1` to silence the boot warning about serving over plain HTTP on a LAN |
+| `TUPLE_MODE`      | No       | auto (Docker → selfhosted) | `selfhosted` or `cloud`. `local` is a legacy alias. Self-hosted mode allows private/http URLs for custom providers. |
+| `TUPLE_DISABLE_HSTS` | No    | unset                   | Set `1` to silence the boot warning about serving over plain HTTP on a LAN |
 | `THROTTLE_LIMIT` / `THROTTLE_TTL` | No | `100` / `60000`   | Rate limit: requests per window, window in ms  |
 | `DB_POOL_MAX` / `AUTH_DB_POOL_MAX` | No | `30` / `10`      | PostgreSQL pool sizes (app pool, Better Auth pool) |
 | `SENTRY_DSN`         | No       | unset                   | Opt-in error monitoring. Sentry is not initialised unless set |
-| `MANIFEST_TELEMETRY_DISABLED` | No | `0`               | Set `1` to disable anonymous usage telemetry  |
-| `TELEMETRY_ENDPOINT` | No       | `https://telemetry.manifest.build/v1/report` | Send the usage report to your own collector instead |
+| `TUPLE_TELEMETRY_DISABLED` | No | `0`               | Set `1` to disable anonymous usage telemetry  |
+| `TELEMETRY_ENDPOINT` | No       | `https://telemetry.tuple.ai/v1/report` | Send the usage report to your own collector instead |
 
 `NODE_ENV` and `SEED_DATA` are deliberately fixed by the compose file and are
 not knobs here: the image is a production artifact, and the demo-data seeder
@@ -414,28 +414,28 @@ refuses to run under `NODE_ENV=production` regardless of `SEED_DATA`. Use the
 first-run setup wizard to create your admin account.
 
 Full env var reference:
-[manifest.build/docs/reference/environment-variables](https://manifest.build/docs/reference/environment-variables)
+[tuple.ai/docs/reference/environment-variables](https://tuple.ai/docs/reference/environment-variables)
 
 ## Anonymous usage telemetry
 
-Manifest sends a small anonymous usage report once per 24h so the maintainers
+Tuple sends a small anonymous usage report once per 24h so the maintainers
 can see how the project is being used. Aggregates only — no prompts, no
 message contents, no API keys, nothing that identifies a user. The report is
-a random install UUID (generated once, no PII), the Manifest version, and
+a random install UUID (generated once, no PII), the Tuple version, and
 aggregate counters grouped by provider, routing tier, auth type, agent
 platform, OS, and arch.
 
-To disable, set `MANIFEST_TELEMETRY_DISABLED=1` in your `.env` file and
+To disable, set `TUPLE_TELEMETRY_DISABLED=1` in your `.env` file and
 restart the container. The full field list is published at
-[manifest.build/docs/self-hosted#telemetry](https://manifest.build/docs/self-hosted#telemetry).
+[tuple.ai/docs/self-hosted#telemetry](https://tuple.ai/docs/self-hosted#telemetry).
 
 ## Links
 
-- [GitHub](https://github.com/mnfst/manifest)
-- [Website](https://manifest.build)
-- [Docs](https://manifest.build/docs)
+- [GitHub](https://github.com/tupleai/tuple)
+- [Website](https://tuple.ai)
+- [Docs](https://tuple.ai/docs)
 - [Discord](https://discord.gg/FepAked3W7)
 
 ## License
 
-[MIT](https://github.com/mnfst/manifest/blob/main/LICENSE)
+[MIT](https://github.com/tupleai/tuple/blob/main/LICENSE)

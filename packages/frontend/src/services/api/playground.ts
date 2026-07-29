@@ -4,7 +4,7 @@ import type {
   PlaygroundHistoryRunSummary,
   PlaygroundRunResult,
   PlaygroundStreamEvent,
-} from 'manifest-shared';
+} from 'tuple-shared';
 import { BASE_URL, fetchJson, parseErrorMessage } from './core.js';
 
 export type {
@@ -13,7 +13,7 @@ export type {
   PlaygroundHistoryRunSummary,
   PlaygroundMetrics,
   PlaygroundRunResult,
-} from 'manifest-shared';
+} from 'tuple-shared';
 
 /** Resolved value of a completed stream (the terminal `done` event). */
 export interface PlaygroundStreamResult {

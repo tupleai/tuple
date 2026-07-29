@@ -7,7 +7,7 @@ import type {
   PlaygroundHistoryColumn,
   PlaygroundHistoryRunDetail,
   PlaygroundHistoryRunSummary,
-} from 'manifest-shared';
+} from 'tuple-shared';
 import { PlaygroundRun } from '../entities/playground-run.entity';
 import { PlaygroundColumn } from '../entities/playground-column.entity';
 

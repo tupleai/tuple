@@ -2,7 +2,7 @@
  * Kiro authenticates through the AWS SSO OIDC device authorization flow — the
  * same flow `kiro-cli login --use-device-flow` drives. Replicating it
  * server-side (instead of reading the local kiro-cli token cache) is what lets
- * Manifest Cloud connect a Kiro subscription: nothing here touches the local
+ * Tuple Cloud connect a Kiro subscription: nothing here touches the local
  * filesystem or a local binary, so it works identically on a laptop and on a
  * shared cloud server.
  *
@@ -24,7 +24,7 @@ export const KIRO_OIDC_DEFAULT_REGION = 'us-east-1';
 // AWS Builder ID. Google / GitHub social logins are surfaced on this same
 // hosted page, so a single start URL covers every Kiro sign-in method.
 export const KIRO_DEFAULT_START_URL = 'https://view.awsapps.com/start';
-export const KIRO_CLIENT_NAME = 'Manifest';
+export const KIRO_CLIENT_NAME = 'Tuple';
 export const KIRO_CLIENT_TYPE = 'public';
 export const KIRO_DEVICE_CODE_GRANT = 'urn:ietf:params:oauth:grant-type:device_code';
 export const KIRO_REFRESH_GRANT = 'refresh_token';

@@ -79,7 +79,7 @@ describe('applyRequestParamDefaults', () => {
     });
   });
 
-  it('lets configured Manifest params win over request body values at the same path', () => {
+  it('lets configured Tuple params win over request body values at the same path', () => {
     const body: Record<string, unknown> = {
       messages: [],
       temperature: 0.4,
@@ -88,7 +88,7 @@ describe('applyRequestParamDefaults', () => {
     expect(merged).toEqual({ messages: [], temperature: 0.8 });
   });
 
-  it('keeps request body params that are not configured in Manifest', () => {
+  it('keeps request body params that are not configured in Tuple', () => {
     const body: Record<string, unknown> = {
       messages: [],
       temperature: 0.4,
@@ -103,7 +103,7 @@ describe('applyRequestParamDefaults', () => {
     });
   });
 
-  it('lets configured nested Manifest params win while preserving unconfigured nested siblings', () => {
+  it('lets configured nested Tuple params win while preserving unconfigured nested siblings', () => {
     const body: Record<string, unknown> = {
       messages: [],
       thinking: { type: 'enabled', vendor_note: 'client-only' },

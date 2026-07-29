@@ -25,7 +25,7 @@ async function revertTenantCanonicalScoping(ds: DataSource): Promise<void> {
 }
 
 const DB_URL =
-  process.env['DATABASE_URL'] ?? 'postgresql://myuser:mypassword@localhost:5432/manifest_duprepro';
+  process.env['DATABASE_URL'] ?? 'postgresql://myuser:mypassword@localhost:5432/tuple_duprepro';
 
 function makeDataSource(): DataSource {
   return new DataSource({

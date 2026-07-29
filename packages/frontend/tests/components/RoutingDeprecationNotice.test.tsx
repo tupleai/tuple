@@ -22,7 +22,7 @@ describe('RoutingDeprecationNotice', () => {
     render(() => <RoutingDeprecationNotice title="T">B</RoutingDeprecationNotice>);
     const link = screen.getByRole('link', { name: 'View more' }) as HTMLAnchorElement;
     expect(link.getAttribute('href')).toBe(
-      'https://manifest.build/blog/deprecating-rule-based-routing/',
+      'https://tuple.ai/blog/deprecating-rule-based-routing/',
     );
     expect(link.getAttribute('target')).toBe('_blank');
     expect(link.getAttribute('rel')).toBe('noopener noreferrer');

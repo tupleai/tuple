@@ -4,7 +4,7 @@ import ModelSelectDropdown from './ModelSelectDropdown.jsx';
 import SetupStepAddProvider from './SetupStepAddProvider.jsx';
 import { getAgentKey } from '../services/api.js';
 import { agentPlatform, agentCategory } from '../services/agent-platform-store.js';
-import { platformIcon } from 'manifest-shared';
+import { platformIcon } from 'tuple-shared';
 
 interface Props {
   open: boolean;
@@ -27,12 +27,12 @@ const RoutingInstructionModal: Component<Props> = (props) => {
 
   const baseUrl = () => {
     const host = window.location.hostname;
-    if (host === 'app.manifest.build') return 'https://app.manifest.build/v1';
+    if (host === 'app.tuple.ai') return 'https://app.tuple.ai/v1';
     return `${window.location.origin}/v1`;
   };
 
   const disableCmd = () =>
-    `openclaw config unset models.providers.manifest\nopenclaw config unset agents.defaults.models.manifest/auto\nopenclaw config set agents.defaults.model.primary ${modelOrPlaceholder()}\nopenclaw gateway restart`;
+    `openclaw config unset models.providers.tuple\nopenclaw config unset agents.defaults.models.tuple/auto\nopenclaw config set agents.defaults.model.primary ${modelOrPlaceholder()}\nopenclaw gateway restart`;
 
   const handleModelSelect = (cliValue: string) => {
     setSelectedModel(cliValue);
@@ -92,7 +92,7 @@ const RoutingInstructionModal: Component<Props> = (props) => {
           </div>
           <Show when={isEnable()}>
             <p class="modal-card__desc">
-              Connect your harness to Manifest to start routing requests.
+              Connect your harness to Tuple to start routing requests.
             </p>
           </Show>
 
@@ -101,7 +101,7 @@ const RoutingInstructionModal: Component<Props> = (props) => {
             fallback={
               <>
                 <p style="margin: 0 0 14px; font-size: var(--font-size-sm); color: hsl(var(--muted-foreground)); line-height: 1.5;">
-                  This will stop routing requests through Manifest and restore direct model access
+                  This will stop routing requests through Tuple and restore direct model access
                   in your OpenClaw harness.
                 </p>
 
@@ -131,13 +131,13 @@ const RoutingInstructionModal: Component<Props> = (props) => {
                     <div>
                       <span class="modal-terminal__prompt">$</span>
                       <span class="modal-terminal__code">
-                        openclaw config unset models.providers.manifest
+                        openclaw config unset models.providers.tuple
                       </span>
                     </div>
                     <div style="margin-top: 8px;">
                       <span class="modal-terminal__prompt">$</span>
                       <span class="modal-terminal__code">
-                        openclaw config unset agents.defaults.models.manifest/auto
+                        openclaw config unset agents.defaults.models.tuple/auto
                       </span>
                     </div>
                     <div style="margin-top: 8px;">

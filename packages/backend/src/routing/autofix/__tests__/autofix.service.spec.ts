@@ -163,35 +163,35 @@ describe('AutofixService', () => {
   describe('resolveEnabled (deployment-mode default)', () => {
     let savedMode: string | undefined;
     beforeEach(() => {
-      savedMode = process.env.MANIFEST_MODE;
+      savedMode = process.env.TUPLE_MODE;
     });
     afterEach(() => {
-      if (savedMode === undefined) delete process.env.MANIFEST_MODE;
-      else process.env.MANIFEST_MODE = savedMode;
+      if (savedMode === undefined) delete process.env.TUPLE_MODE;
+      else process.env.TUPLE_MODE = savedMode;
     });
 
     it('an explicit true/false overrides the mode default', () => {
-      process.env.MANIFEST_MODE = 'selfhosted';
+      process.env.TUPLE_MODE = 'selfhosted';
       const service = makeService({});
       expect(service.resolveEnabled(true)).toBe(true);
       expect(service.resolveEnabled(false)).toBe(false);
     });
 
     it('a NULL/undefined flag inherits ON in cloud mode', () => {
-      process.env.MANIFEST_MODE = 'cloud';
+      process.env.TUPLE_MODE = 'cloud';
       const service = makeService({});
       expect(service.resolveEnabled(null)).toBe(true);
       expect(service.resolveEnabled(undefined)).toBe(true);
     });
 
     it('a NULL flag inherits OFF in self-hosted mode', () => {
-      process.env.MANIFEST_MODE = 'selfhosted';
+      process.env.TUPLE_MODE = 'selfhosted';
       const service = makeService({});
       expect(service.resolveEnabled(null)).toBe(false);
     });
 
     it('heals an unset agent in cloud (NULL → default ON)', async () => {
-      process.env.MANIFEST_MODE = 'cloud';
+      process.env.TUPLE_MODE = 'cloud';
       const client = makeHealingClient();
       client.heal.mockResolvedValue(patchedHeal());
       const reforward = jest.fn().mockResolvedValue(makeForward('{"ok":true}', 200));
@@ -205,7 +205,7 @@ describe('AutofixService', () => {
     });
 
     it('skips an unset agent in self-hosted (NULL → default OFF)', async () => {
-      process.env.MANIFEST_MODE = 'selfhosted';
+      process.env.TUPLE_MODE = 'selfhosted';
       const client = makeHealingClient();
       const { repo } = makeAgentRepo(() => ({ autofix_enabled: null }));
       const service = makeService({ client: client as unknown as HealingClient, repo });
@@ -1300,17 +1300,17 @@ describe('isActiveFor (the consent gate)', () => {
   /**
    * `defaultAgentEnabled` is `!isSelfHosted()`, resolved in the constructor, and
    * `isSelfHosted()` sniffs for `/.dockerenv` / `/run/.containerenv` / Kubernetes.
-   * Pin `MANIFEST_MODE` (priority 1, always wins) so these assertions don't invert
+   * Pin `TUPLE_MODE` (priority 1, always wins) so these assertions don't invert
    * when the suite runs inside a container.
    */
   async function withMode(mode: string, run: () => Promise<void>): Promise<void> {
-    const previous = process.env['MANIFEST_MODE'];
-    process.env['MANIFEST_MODE'] = mode;
+    const previous = process.env['TUPLE_MODE'];
+    process.env['TUPLE_MODE'] = mode;
     try {
       await run();
     } finally {
-      if (previous === undefined) delete process.env['MANIFEST_MODE'];
-      else process.env['MANIFEST_MODE'] = previous;
+      if (previous === undefined) delete process.env['TUPLE_MODE'];
+      else process.env['TUPLE_MODE'] = previous;
     }
   }
 

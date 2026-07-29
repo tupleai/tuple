@@ -1,19 +1,19 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 /**
- * Make every Manifest-originated error a first-class, debuggable message row.
+ * Make every Tuple-originated error a first-class, debuggable message row.
  *
  * 1. Adds `agent_messages.error_code`, the documented `M###` code behind the
  *    failure, so the dashboard can deep link to /docs/errors/<code>.
  * 2. Backfills it from `routing_reason` for the reasons that map to exactly one
- *    code. `manifest_rate_limited` is deliberately left NULL: it used to cover
+ *    code. `tuple_rate_limited` is deliberately left NULL: it used to cover
  *    M201 / M202 / M203 (per-user, per-IP, concurrency) and cannot be resolved
  *    retroactively.
  * 3. Clears the placeholder `model`/`provider`/`routing_tier` that the canned
- *    stub path stamped on failed Manifest rows ('manifest' / 'manifest' /
+ *    stub path stamped on failed Tuple rows ('tuple' / 'tuple' /
  *    'simple'). Those values are not a real model, provider, or routing decision
  *    — they only polluted the Messages filter dropdowns and put a meaningless
- *    SIMPLE tier badge on setup errors. Only rows Manifest itself authored are
+ *    SIMPLE tier badge on setup errors. Only rows Tuple itself authored are
  *    touched, and only the failed ones (see the WHERE clause below).
  */
 export class AddMessageErrorCode1800200000000 implements MigrationInterface {
@@ -38,20 +38,20 @@ export class AddMessageErrorCode1800200000000 implements MigrationInterface {
              )
     `);
 
-    // `provider = 'manifest'` is the unambiguous marker: no real provider is
+    // `provider = 'tuple'` is the unambiguous marker: no real provider is
     // named that (custom ones are `custom:<uuid>`), and only the canned-stub path
     // ever wrote it. Keying on that rather than on `error_origin` also catches
     // the handful of failed stubs written between the canned-status change and
     // the taxonomy backfill, whose `error_origin` is still NULL.
     //
-    // `status <> 'ok'` protects a much older cohort: Manifest stubs that predate
+    // `status <> 'ok'` protects a much older cohort: Tuple stubs that predate
     // the canned-status change and were recorded as successes. They keep their
     // placeholder model, because they still count as messages and nulling it
     // would move them under "unknown model" in the cost breakdown.
     await queryRunner.query(`
       UPDATE agent_messages
          SET model = NULL, provider = NULL, routing_tier = NULL
-       WHERE provider = 'manifest'
+       WHERE provider = 'tuple'
          AND status IS DISTINCT FROM 'ok'
     `);
   }

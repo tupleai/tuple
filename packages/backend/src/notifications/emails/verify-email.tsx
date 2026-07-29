@@ -23,18 +23,18 @@ export function VerifyEmailEmail(props: VerifyEmailProps) {
   const {
     userName,
     verificationUrl,
-    logoUrl = 'https://app.manifest.build/manifest-logo.png',
+    logoUrl = 'https://app.tuple.ai/tuple-logo.png',
   } = props;
 
   return (
     <Html>
       <Head />
-      <Preview>Verify your email address to get started with Manifest</Preview>
+      <Preview>Verify your email address to get started with Tuple</Preview>
       <Body style={body}>
         <Container style={container}>
           {/* Logo */}
           <Section style={logoSection}>
-            <Img src={logoUrl} alt="Manifest" height="32" style={logoImg} />
+            <Img src={logoUrl} alt="Tuple" height="32" style={logoImg} />
           </Section>
 
           {/* Main content */}
@@ -68,9 +68,9 @@ export function VerifyEmailEmail(props: VerifyEmailProps) {
           <Hr style={divider} />
           <Section style={footer}>
             <Text style={footerMuted}>
-              © 2026 MNFST Inc. All rights reserved.{' '}
-              <Link href="https://manifest.build" style={footerLink}>
-                manifest.build
+              © 2026 Tuple.ai All rights reserved.{' '}
+              <Link href="https://tuple.ai" style={footerLink}>
+                tuple.ai
               </Link>
             </Text>
           </Section>

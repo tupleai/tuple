@@ -4,7 +4,7 @@ import type {
   PhoenixOperation,
   PhoenixProviderError,
 } from './phoenix.types';
-import type { RecordableManifestCode } from '../../common/errors/manifest-error';
+import type { RecordableTupleCode } from '../../common/errors/tuple-error';
 
 /**
  * How an Auto-fix attempt ended:
@@ -56,22 +56,22 @@ export interface AutofixRecord {
   original_http_status: number;
   chain: AutofixChainEntry[];
   /**
-   * Present when the healed failure was Manifest-blocked rather than a provider
+   * Present when the healed failure was Tuple-blocked rather than a provider
    * response (e.g. an M302 unknown model — no provider was contacted for the
    * original). The recorder uses the no-provider attempt marker to avoid
    * inventing an original Provider Attempt; the Request retains the caller's
    * model and the actual retry is the sole Attempt.
    */
-  manifestOrigin?: {
-    code: RecordableManifestCode;
-    /** The rendered `[🦚 Manifest M###] …` text the caller would have seen. */
+  tupleOrigin?: {
+    code: RecordableTupleCode;
+    /** The rendered `[↗ Tuple M###] …` text the caller would have seen. */
     message: string;
     /** The model the caller requested (kept as the row's `model` column). */
     model: string;
   };
 }
 
-/** The patched provider attempt, when Manifest actually sent one. */
+/** The patched provider attempt, when Tuple actually sent one. */
 export function getAutofixRetry(autofix: AutofixRecord | undefined): AutofixChainEntry | undefined {
   return autofix?.chain.find((entry) => entry.origin === 'autofix');
 }

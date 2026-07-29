@@ -1,12 +1,12 @@
 spec:
-  name: manifest
+  name: tuple
   region: nyc
   services:
-    - name: manifest
+    - name: tuple
       image:
         registry_type: DOCKER_HUB
-        registry: manifestdotbuild
-        repository: manifest
+        registry: tupleai
+        repository: tuple
         tag: "6"
       instance_count: 1
       instance_size_slug: apps-s-1vcpu-1gb
@@ -23,19 +23,19 @@ spec:
         - key: BIND_ADDRESS
           scope: RUN_TIME
           value: 0.0.0.0
-        - key: MANIFEST_MODE
+        - key: TUPLE_MODE
           scope: RUN_TIME
           value: selfhosted
         - key: DATABASE_URL
           scope: RUN_TIME
-          value: "${manifest-db.DATABASE_URL}&uselibpqcompat=true"
+          value: "${tuple-db.DATABASE_URL}&uselibpqcompat=true"
         - key: BETTER_AUTH_URL
           scope: RUN_TIME
           value: "${APP_URL}"
         - key: BETTER_AUTH_SECRET
           scope: RUN_TIME
           type: SECRET
-        - key: MANIFEST_ENCRYPTION_KEY
+        - key: TUPLE_ENCRYPTION_KEY
           scope: RUN_TIME
           type: SECRET
         - key: DB_POOL_MAX
@@ -45,6 +45,6 @@ spec:
           scope: RUN_TIME
           value: "5"
   databases:
-    - name: manifest-db
+    - name: tuple-db
       engine: PG
       version: "16"

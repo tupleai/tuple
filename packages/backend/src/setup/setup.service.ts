@@ -20,7 +20,7 @@ export class SetupService {
 
   /**
    * Returns true when running in the self-hosted version.
-   * Auto-detects Docker containers; can be overridden via MANIFEST_MODE env var.
+   * Auto-detects Docker containers; can be overridden via TUPLE_MODE env var.
    */
   isSelfHosted(): boolean {
     return isSelfHosted();

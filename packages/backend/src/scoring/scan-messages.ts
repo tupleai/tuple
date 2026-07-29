@@ -3,7 +3,7 @@ import { DEFAULT_CONFIG } from './config';
 import { KeywordTrie, TrieMatch } from './keyword-trie';
 import { extractUserTexts } from './text-extractor';
 import { detectSpecificity, SpecificityResult } from './specificity-detector';
-import type { SpecificityCategory } from 'manifest-shared';
+import type { SpecificityCategory } from 'tuple-shared';
 
 let defaultTrie: KeywordTrie | null = null;
 

@@ -1,6 +1,6 @@
-# Deploy Manifest on Heroku
+# Deploy Tuple on Heroku
 
-This guide deploys Manifest to a Heroku Cedar container-stack app with one web dyno and a Heroku Postgres Essential-0 database.
+This guide deploys Tuple to a Heroku Cedar container-stack app with one web dyno and a Heroku Postgres Essential-0 database.
 
 ## Prerequisites
 
@@ -14,7 +14,7 @@ This stack creates paid resources. Heroku no longer provides free dynos or free 
 Open the Heroku deploy link and choose an app name:
 
 ```text
-https://www.heroku.com/deploy?template=https://github.com/mnfst/manifest
+https://www.heroku.com/deploy?template=https://github.com/tupleai/tuple
 ```
 
 When Heroku asks for `BETTER_AUTH_URL`, enter the public URL for the app name you chose:
@@ -30,9 +30,9 @@ Heroku generates the session and encryption secrets, provisions Postgres as `DAT
 - Heroku app on the `container` stack.
 - One `basic` web dyno.
 - Heroku Postgres `essential-0`.
-- Runtime config for Manifest self-hosting, Postgres TLS, and conservative connection pools.
+- Runtime config for Tuple self-hosting, Postgres TLS, and conservative connection pools.
 
-## Open Manifest
+## Open Tuple
 
 Open the deployed app and create the first admin account. Fresh installs redirect to `/setup`; the first account you create becomes the admin.
 

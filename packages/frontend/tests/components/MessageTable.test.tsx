@@ -586,7 +586,7 @@ describe('MessageTable', () => {
         />
       ));
       // A provider rate limit is just a failure — it must not link to the
-      // Manifest spend-limits page, and shows the binary Failed pill.
+      // Tuple spend-limits page, and shows the binary Failed pill.
       expect(container.querySelector('a')).toBeNull();
       expect(container.querySelector('.status-badge--error')!.textContent).toContain('Failed');
       expect(container.textContent).not.toContain('rate_limited');
@@ -788,7 +788,7 @@ describe('MessageTable', () => {
     });
 
     it('does not expand when an interactive element inside the row is clicked', () => {
-      // A Manifest policy-limit row renders an <a> link to the limits page.
+      // A Tuple policy-limit row renders an <a> link to the limits page.
       // Clicking it must NOT toggle the row (the handler bails on
       // button/a/[role=button]).
       const { container } = render(() => (

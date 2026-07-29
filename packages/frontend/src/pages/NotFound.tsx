@@ -5,7 +5,7 @@ import type { Component } from "solid-js";
 const NotFound: Component = () => {
   return (
     <>
-      <Title>Page Not Found - Manifest</Title>
+      <Title>Page Not Found - Tuple</Title>
       <div class="not-found">
         <span class="not-found__code">404</span>
         <h1 class="not-found__title">Page not found</h1>

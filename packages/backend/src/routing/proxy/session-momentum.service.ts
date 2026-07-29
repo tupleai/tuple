@@ -1,6 +1,6 @@
 import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { Tier } from '../../scoring/types';
-import type { SpecificityCategory } from 'manifest-shared';
+import type { SpecificityCategory } from 'tuple-shared';
 
 interface MomentumEntry {
   tiers: Tier[];

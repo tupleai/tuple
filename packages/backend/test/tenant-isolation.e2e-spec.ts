@@ -116,7 +116,7 @@ beforeAll(async () => {
     tenant_id: TEST_TENANT_ID,
     agent_id: TEST_AGENT_ID,
     name: 'a-fast-lane',
-    header_key: 'x-manifest-tier',
+    header_key: 'x-tuple-tier',
     header_value: 'fast',
     badge_color: 'indigo',
     sort_order: 0,

@@ -5,7 +5,7 @@ import { AgentModelParamsService } from '../routing-core/agent-model-params.serv
 import { ProviderParamSpecService } from '../routing-core/provider-param-spec.service';
 import { ResolveAgentService } from '../routing-core/resolve-agent.service';
 import { TenantContext } from '../../common/decorators/tenant-context.decorator';
-import { getProviderParamSpecs, type ProviderParamSpecCatalog } from 'manifest-shared';
+import { getProviderParamSpecs, type ProviderParamSpecCatalog } from 'tuple-shared';
 
 const ctx: TenantContext = { tenantId: 'tenant-1', userId: 'user-1' };
 const mockAgent = { id: 'agent-1', tenant_id: 'tenant-1' };

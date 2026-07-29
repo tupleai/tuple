@@ -1,4 +1,4 @@
-import { MAX_KEYS_PER_PROVIDER, type ModelRoute } from 'manifest-shared';
+import { MAX_KEYS_PER_PROVIDER, type ModelRoute } from 'tuple-shared';
 import { ProviderService } from '../provider.service';
 import { TenantProvider } from '../../../entities/tenant-provider.entity';
 import { TierAssignment } from '../../../entities/tier-assignment.entity';
@@ -56,7 +56,7 @@ const makeRepo = (agents: AgentRow[] = ['agent-1']) => ({
 });
 
 describe('ProviderService — route-only cleanup paths', () => {
-  const previousMode = process.env['MANIFEST_MODE'];
+  const previousMode = process.env['TUPLE_MODE'];
   let providerRepo: ReturnType<typeof makeRepo>;
   let tierRepo: ReturnType<typeof makeRepo>;
   let specRepo: ReturnType<typeof makeRepo>;
@@ -71,7 +71,7 @@ describe('ProviderService — route-only cleanup paths', () => {
   let svc: ProviderService;
 
   beforeEach(() => {
-    process.env['MANIFEST_MODE'] = 'selfhosted';
+    process.env['TUPLE_MODE'] = 'selfhosted';
     providerRepo = makeRepo();
     tierRepo = makeRepo();
     specRepo = makeRepo();
@@ -96,8 +96,8 @@ describe('ProviderService — route-only cleanup paths', () => {
   });
 
   afterAll(() => {
-    if (previousMode === undefined) delete process.env['MANIFEST_MODE'];
-    else process.env['MANIFEST_MODE'] = previousMode;
+    if (previousMode === undefined) delete process.env['TUPLE_MODE'];
+    else process.env['TUPLE_MODE'] = previousMode;
   });
 
   describe('removeProvider — route guards', () => {
@@ -1075,7 +1075,7 @@ describe('ProviderService — route-only cleanup paths', () => {
     });
 
     it('filters legacy built-in local providers from cloud routing', async () => {
-      process.env['MANIFEST_MODE'] = 'cloud';
+      process.env['TUPLE_MODE'] = 'cloud';
       providerRepo.find.mockResolvedValue([
         { id: 'p1', provider: 'ollama', auth_type: 'local', is_active: true },
         { id: 'p2', provider: 'custom:runtime-id', auth_type: 'local', is_active: true },
@@ -1848,16 +1848,16 @@ describe('ProviderService — symmetric provider↔agent auto-connect', () => {
 });
 
 describe('ProviderService — getFreshSubscriptionCredential', () => {
-  const PREV_KEY = process.env.MANIFEST_ENCRYPTION_KEY;
+  const PREV_KEY = process.env.TUPLE_ENCRYPTION_KEY;
   let providerRepo: ReturnType<typeof makeRepo>;
   let svc: ProviderService;
 
   beforeAll(() => {
-    process.env.MANIFEST_ENCRYPTION_KEY = 'unit-test-encryption-key-1234567890';
+    process.env.TUPLE_ENCRYPTION_KEY = 'unit-test-encryption-key-1234567890';
   });
   afterAll(() => {
-    if (PREV_KEY === undefined) delete process.env.MANIFEST_ENCRYPTION_KEY;
-    else process.env.MANIFEST_ENCRYPTION_KEY = PREV_KEY;
+    if (PREV_KEY === undefined) delete process.env.TUPLE_ENCRYPTION_KEY;
+    else process.env.TUPLE_ENCRYPTION_KEY = PREV_KEY;
   });
 
   beforeEach(() => {

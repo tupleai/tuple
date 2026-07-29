@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
 import { Agent } from '../../entities/agent.entity';
 import { AgentMessage } from '../../entities/agent-message.entity';
-import { ManifestRequest } from '../../entities/request.entity';
+import { TupleRequest } from '../../entities/request.entity';
 import { AutofixService } from '../../routing/autofix/autofix.service';
 import {
   rangeToInterval,
@@ -429,7 +429,7 @@ export class AutofixStatsService {
   ): Promise<AutofixStatsResponse['needs_attention']> {
     const qb = this.messageRepo
       .createQueryBuilder('at')
-      .leftJoin(ManifestRequest, 'r', 'r.id = at.request_id')
+      .leftJoin(TupleRequest, 'r', 'r.id = at.request_id')
       .select('LEFT(at.error_message, 200)', 'error_message')
       .addSelect('at.provider', 'provider')
       .addSelect('at.model', 'model')

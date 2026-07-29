@@ -1,4 +1,4 @@
-import type { ModelRoute } from 'manifest-shared';
+import type { ModelRoute } from 'tuple-shared';
 import type { DiscoveredModel } from '../../model-discovery/model-fetcher';
 import { unambiguousRoute } from '../routing-core/route-helpers';
 

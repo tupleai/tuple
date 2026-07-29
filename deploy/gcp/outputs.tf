@@ -1,16 +1,16 @@
 output "service_url" {
-  description = "Manifest Cloud Run URL."
-  value       = google_cloud_run_v2_service.manifest.uri
+  description = "Tuple Cloud Run URL."
+  value       = google_cloud_run_v2_service.tuple.uri
 }
 
 output "health_check_url" {
-  description = "Manifest health check URL."
-  value       = "${google_cloud_run_v2_service.manifest.uri}/api/v1/health"
+  description = "Tuple health check URL."
+  value       = "${google_cloud_run_v2_service.tuple.uri}/api/v1/health"
 }
 
 output "database_instance" {
   description = "Cloud SQL instance name."
-  value       = google_sql_database_instance.manifest.name
+  value       = google_sql_database_instance.tuple.name
 }
 
 output "database_url_secret" {

@@ -88,7 +88,7 @@ describe('snapshotRequestParams', () => {
     ).toEqual({ thinking: { type: 'enabled', budget_tokens: 4096 } });
   });
 
-  it('records saved Manifest params over client body values at the same path', () => {
+  it('records saved Tuple params over client body values at the same path', () => {
     expect(
       snapshotRequestParams({
         body: { temperature: 0.4, messages: [] },
@@ -98,7 +98,7 @@ describe('snapshotRequestParams', () => {
     ).toEqual({ temperature: 0.8, thinking: { type: 'disabled' } });
   });
 
-  it('records client body params that are not configured in Manifest', () => {
+  it('records client body params that are not configured in Tuple', () => {
     expect(
       snapshotRequestParams({
         body: { temperature: 0.4, messages: [] },

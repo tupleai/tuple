@@ -1,7 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 import type { Repository } from 'typeorm';
-import type { ModelRoute } from 'manifest-shared';
-import { TIER_SLOTS } from 'manifest-shared';
+import type { ModelRoute } from 'tuple-shared';
+import { TIER_SLOTS } from 'tuple-shared';
 import { TierService } from '../tier.service';
 import { TierAssignment } from '../../../entities/tier-assignment.entity';
 import type { DiscoveredModel } from '../../../model-discovery/model-fetcher';

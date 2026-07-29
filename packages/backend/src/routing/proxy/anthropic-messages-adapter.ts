@@ -1,7 +1,7 @@
 /**
  * Translates between the public Anthropic Messages API format
  * (POST /v1/messages) and the internal chat-completions request/response
- * format used by Manifest's routing pipeline. Mirrors `responses-adapter.ts`
+ * format used by Tuple's routing pipeline. Mirrors `responses-adapter.ts`
  * for the OpenAI Responses API.
  */
 import { randomUUID } from 'crypto';
@@ -449,7 +449,7 @@ function transformStreamChunk(chunk: string, state: StreamState): string | null 
     // (providers don't guarantee reasoning is fully flushed before content).
     // For text we close it and reopen a fresh thinking block — splitting text
     // across blocks is fine because each Anthropic text block is independent.
-    // For an in-progress tool_use we DROP the late reasoning: Manifest's
+    // For an in-progress tool_use we DROP the late reasoning: Tuple's
     // Anthropic-compat layer assumes thinking blocks precede tool_use and
     // replays them in that shape on the next turn, so emitting a transcript
     // like `thinking → tool_use → thinking` would produce a stream we can't

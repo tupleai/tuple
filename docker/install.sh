@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Manifest — self-host install and upgrade helper
+# Tuple — self-host install and upgrade helper
 #
 # Downloads the Docker Compose file and the `.env.example` template,
-# generates a BETTER_AUTH_SECRET and a MANIFEST_ENCRYPTION_KEY, writes them
+# generates a BETTER_AUTH_SECRET and a TUPLE_ENCRYPTION_KEY, writes them
 # into a local `.env`, then brings up the stack. Designed for first-time
 # self-hosters who want a one-command setup. Give it a couple of minutes —
 # Docker needs to pull the app image and Postgres on a cold cache.
@@ -10,11 +10,11 @@
 # walk you through creating the first admin account.
 #
 # Usage:
-#   bash install.sh                  # install into $HOME/manifest
-#   bash install.sh --dir /opt/mnfst # install into a custom directory
+#   bash install.sh                  # install into $HOME/tuple
+#   bash install.sh --dir /opt/tuple # install into a custom directory
 #   bash install.sh --port 8080      # serve the dashboard on a different port
-#   bash install.sh --upgrade        # safely upgrade $HOME/manifest
-#   bash install.sh --upgrade --dir /opt/mnfst
+#   bash install.sh --upgrade        # safely upgrade $HOME/tuple
+#   bash install.sh --upgrade --dir /opt/tuple
 #   bash install.sh --dry-run        # print what would happen, do nothing
 #   bash install.sh --yes            # skip confirmation prompt (non-interactive)
 #
@@ -24,26 +24,26 @@
 # file; `.env` and `docker-compose.override.yml` remain untouched.
 #
 # Review before running:
-#   curl -sSLO https://raw.githubusercontent.com/mnfst/manifest/main/docker/install.sh
+#   curl -sSLO https://raw.githubusercontent.com/tupleai/tuple/main/docker/install.sh
 #   less install.sh
 #   bash install.sh --dry-run
 #   bash install.sh
 #
 # If you trust the source, one-shot:
-#   bash <(curl -sSL https://raw.githubusercontent.com/mnfst/manifest/main/docker/install.sh)
+#   bash <(curl -sSL https://raw.githubusercontent.com/tupleai/tuple/main/docker/install.sh)
 
 set -euo pipefail
 
-# Override via MANIFEST_INSTALLER_SOURCE when you need the installer to
+# Override via TUPLE_INSTALLER_SOURCE when you need the installer to
 # pull files from somewhere other than `main` — a fork, a release branch,
 # or a local HTTP server hosting a pre-release copy (this is how the
 # Docker smoke CI exercises the script end-to-end against the branch
 # under test, not the published files on GitHub).
-REPO_RAW="${MANIFEST_INSTALLER_SOURCE:-https://raw.githubusercontent.com/mnfst/manifest/main/docker}"
-# Default to $HOME/manifest so running the one-liner from inside another
+REPO_RAW="${TUPLE_INSTALLER_SOURCE:-https://raw.githubusercontent.com/tupleai/tuple/main/docker}"
+# Default to $HOME/tuple so running the one-liner from inside another
 # project (a git worktree, a dotfiles checkout, etc.) doesn't silently
-# litter that directory with `./manifest/`.
-DEFAULT_DIR="${HOME:-.}/manifest"
+# litter that directory with `./tuple/`.
+DEFAULT_DIR="${HOME:-.}/tuple"
 INSTALL_DIR="$DEFAULT_DIR"
 HOST_PORT=2099
 DRY_RUN=0
@@ -122,7 +122,7 @@ elif [[ -e "$INSTALL_DIR" && -n "$(ls -A "$INSTALL_DIR" 2>/dev/null || true)" ]]
   if [[ -f "$INSTALL_DIR/docker-compose.yml" && -f "$INSTALL_DIR/.env" ]]; then
     RESUME=1
   else
-    die "$INSTALL_DIR already exists, is not empty, and does not look like a Manifest install (no docker-compose.yml + .env). Pass --dir to choose another location, or remove it first."
+    die "$INSTALL_DIR already exists, is not empty, and does not look like a Tuple install (no docker-compose.yml + .env). Pass --dir to choose another location, or remove it first."
   fi
 fi
 
@@ -179,7 +179,7 @@ else
   operation="install"
 fi
 
-log "Manifest self-host ${operation}"
+log "Tuple self-host ${operation}"
 printf '    Install directory: %s\n' "$INSTALL_DIR"
 printf '    Dashboard port:    %s\n' "$HOST_PORT"
 printf '    Source:            %s\n' "$REPO_RAW"
@@ -189,7 +189,7 @@ if [[ "$RESUME" -eq 1 && "$UPGRADE" -eq 0 ]]; then
 fi
 echo
 
-if [[ "$UPGRADE" -eq 1 ]] && ! grep -q '^# manifest-compose-version:' "$COMPOSE_PATH"; then
+if [[ "$UPGRADE" -eq 1 ]] && ! grep -q '^# tuple-compose-version:' "$COMPOSE_PATH"; then
   warn "This is the first managed Compose upgrade for this installation."
   warn "The current docker-compose.yml will be backed up and replaced."
   warn "Move custom edits to .env or docker-compose.override.yml after the upgrade."
@@ -240,8 +240,8 @@ if [[ "$UPGRADE" -eq 1 ]]; then
     NEW_COMPOSE_PATH="$(mktemp "$INSTALL_DIR/.docker-compose.yml.XXXXXX")"
     curl -sSLf "$REPO_RAW/docker-compose.yml" -o "$NEW_COMPOSE_PATH" \
       || die "Failed to download docker-compose.yml"
-    grep -qE '^# manifest-compose-version: [0-9]+$' "$NEW_COMPOSE_PATH" \
-      || die "Downloaded docker-compose.yml is not a managed Manifest Compose file."
+    grep -qE '^# tuple-compose-version: [0-9]+$' "$NEW_COMPOSE_PATH" \
+      || die "Downloaded docker-compose.yml is not a managed Tuple Compose file."
     docker compose --env-file "$ENV_PATH" -f "$NEW_COMPOSE_PATH" config --quiet \
       || die "Downloaded docker-compose.yml is invalid for the existing .env."
 
@@ -280,12 +280,12 @@ else
       || die "Failed to download .env.example"
   fi
 
-  log "Generating BETTER_AUTH_SECRET and MANIFEST_ENCRYPTION_KEY"
+  log "Generating BETTER_AUTH_SECRET and TUPLE_ENCRYPTION_KEY"
   if [[ "$DRY_RUN" -eq 1 ]]; then
     SECRET="<generated-at-install-time>"
     ENCRYPTION_KEY="<generated-at-install-time>"
     printf '    \033[2m$ openssl rand -hex 32   # BETTER_AUTH_SECRET\033[0m\n'
-    printf '    \033[2m$ openssl rand -hex 32   # MANIFEST_ENCRYPTION_KEY\033[0m\n'
+    printf '    \033[2m$ openssl rand -hex 32   # TUPLE_ENCRYPTION_KEY\033[0m\n'
   else
     SECRET="$(gen_secret)"
     # A second, independent key. Left unset the backend falls back to
@@ -300,13 +300,13 @@ else
   log "Writing secrets into .env"
   if [[ "$DRY_RUN" -eq 1 ]]; then
     printf '    \033[2m$ replace "BETTER_AUTH_SECRET=" → "BETTER_AUTH_SECRET=<generated>" in %s\033[0m\n' "$ENV_PATH"
-    printf '    \033[2m$ replace "# MANIFEST_ENCRYPTION_KEY=" → "MANIFEST_ENCRYPTION_KEY=<generated>" in %s\033[0m\n' "$ENV_PATH"
+    printf '    \033[2m$ replace "# TUPLE_ENCRYPTION_KEY=" → "TUPLE_ENCRYPTION_KEY=<generated>" in %s\033[0m\n' "$ENV_PATH"
   else
     if ! grep -qE '^BETTER_AUTH_SECRET=$' "$ENV_PATH"; then
       die "Expected empty BETTER_AUTH_SECRET= line not found in $ENV_PATH — refusing to proceed."
     fi
-    if ! grep -qE '^# MANIFEST_ENCRYPTION_KEY=$' "$ENV_PATH"; then
-      die "Expected commented # MANIFEST_ENCRYPTION_KEY= line not found in $ENV_PATH — refusing to proceed."
+    if ! grep -qE '^# TUPLE_ENCRYPTION_KEY=$' "$ENV_PATH"; then
+      die "Expected commented # TUPLE_ENCRYPTION_KEY= line not found in $ENV_PATH — refusing to proceed."
     fi
     # Line-based rewrite — no sed, no quoting edge cases. openssl rand -hex
     # produces only [0-9a-f], so interpolation into the line is safe.
@@ -314,8 +314,8 @@ else
     while IFS= read -r line || [[ -n "$line" ]]; do
       if [[ "$line" == "BETTER_AUTH_SECRET=" ]]; then
         new_content+="BETTER_AUTH_SECRET=$SECRET"$'\n'
-      elif [[ "$line" == "# MANIFEST_ENCRYPTION_KEY=" ]]; then
-        new_content+="MANIFEST_ENCRYPTION_KEY=$ENCRYPTION_KEY"$'\n'
+      elif [[ "$line" == "# TUPLE_ENCRYPTION_KEY=" ]]; then
+        new_content+="TUPLE_ENCRYPTION_KEY=$ENCRYPTION_KEY"$'\n'
       else
         new_content+="$line"$'\n'
       fi
@@ -335,7 +335,7 @@ else
 fi
 
 if [[ "$DRY_RUN" -eq 1 ]]; then
-  if [[ "$UPGRADE" -eq 1 && "${MANIFEST_INSTALLER_SKIP_PULL:-0}" != "1" ]]; then
+  if [[ "$UPGRADE" -eq 1 && "${TUPLE_INSTALLER_SKIP_PULL:-0}" != "1" ]]; then
     printf '    \033[2m$ (cd %s && docker compose pull)\033[0m\n' "$INSTALL_DIR"
   fi
   printf '    \033[2m$ (cd %s && docker compose up -d)\033[0m\n' "$INSTALL_DIR"
@@ -343,7 +343,7 @@ if [[ "$DRY_RUN" -eq 1 ]]; then
   exit 0
 fi
 
-if [[ "$UPGRADE" -eq 1 && "${MANIFEST_INSTALLER_SKIP_PULL:-0}" != "1" ]]; then
+if [[ "$UPGRADE" -eq 1 && "${TUPLE_INSTALLER_SKIP_PULL:-0}" != "1" ]]; then
   log "Pulling release images"
   if ! (cd "$INSTALL_DIR" && docker compose pull); then
     restore_previous_compose 0
@@ -364,11 +364,11 @@ if ! (cd "$INSTALL_DIR" && docker compose up -d); then
   die "docker compose up failed"
 fi
 
-log "Waiting for Manifest to become healthy (up to 120s)"
+log "Waiting for Tuple to become healthy (up to 120s)"
 HEALTH_URL="http://127.0.0.1:${HOST_PORT}/api/v1/health"
 for _ in $(seq 1 24); do
   if curl -sSf "$HEALTH_URL" >/dev/null 2>&1; then
-    log "Manifest is up."
+    log "Tuple is up."
     if [[ "$UPGRADE" -eq 1 ]]; then
       cat <<EOF
 
@@ -386,7 +386,7 @@ EOF
   Next:   1. Create your admin account — the first visit walks you through it.
           2. Connect a provider: Providers → Usage-based (API key) or
              Subscriptions, in the dashboard sidebar.
-          3. Copy your agent's mnfst_ key and point your agent at
+          3. Copy your agent's tuple_ key and point your agent at
              http://localhost:${HOST_PORT}/v1
 
   Config: $INSTALL_DIR/.env  (secrets, OAuth keys, email provider)
@@ -408,9 +408,9 @@ done
 
 if [[ "$UPGRADE" -eq 1 ]]; then
   restore_previous_compose 1
-  die "Manifest did not become healthy after the upgrade. The previous Compose configuration was restored."
+  die "Tuple did not become healthy after the upgrade. The previous Compose configuration was restored."
 fi
 
-warn "Manifest did not become healthy within 120s. Check logs with:"
-warn "  (cd $INSTALL_DIR && docker compose logs -f manifest)"
+warn "Tuple did not become healthy within 120s. Check logs with:"
+warn "  (cd $INSTALL_DIR && docker compose logs -f tuple)"
 exit 1

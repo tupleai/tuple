@@ -1,20 +1,20 @@
 import { Column, Entity, Index, PrimaryColumn } from 'typeorm';
 import { timestampType } from '../common/utils/postgres-sql';
 import type { CallerAttribution } from '../routing/proxy/caller-classifier';
-import type { AutofixStatus } from 'manifest-shared';
+import type { AutofixStatus } from 'tuple-shared';
 
 /**
- * One request made by a caller to Manifest.
+ * One request made by a caller to Tuple.
  *
  * Provider work belongs in agent_messages. A row with no attempts is valid:
- * Manifest may reject a request before choosing or contacting a provider.
+ * Tuple may reject a request before choosing or contacting a provider.
  */
 @Entity('requests')
 @Index(['tenant_id', 'agent_id', 'timestamp'])
 @Index(['tenant_id', 'timestamp'])
 @Index(['tenant_id', 'trace_id'])
 @Index(['tenant_id', 'status', 'timestamp'])
-export class ManifestRequest {
+export class TupleRequest {
   @PrimaryColumn('varchar')
   id!: string;
 

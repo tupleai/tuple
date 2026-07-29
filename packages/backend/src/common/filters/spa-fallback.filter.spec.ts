@@ -5,8 +5,8 @@ jest.mock('../utils/frontend-path', () => ({
 }));
 
 const SAMPLE_HTML =
-  '<html><head><meta property="og:url" content="https://app.manifest.build" />' +
-  '<meta property="og:image" content="https://app.manifest.build/og-image.png" /></head>' +
+  '<html><head><meta property="og:url" content="https://app.tuple.ai" />' +
+  '<meta property="og:image" content="https://app.tuple.ai/og-image.png" /></head>' +
   '<body>SPA</body></html>';
 
 jest.mock('fs', () => ({
@@ -117,13 +117,13 @@ describe('SpaFallbackFilter', () => {
     });
 
     it('rewrites og: tags when BETTER_AUTH_URL is provided', () => {
-      const filter = loadFilter('https://manifest.example.com');
+      const filter = loadFilter('https://tuple.example.com');
       const { host, res } = createMockHost('GET', '/');
       filter.catch(exception, host);
       const sent = (res.send as jest.Mock).mock.calls[0][0] as string;
-      expect(sent).toContain('content="https://manifest.example.com"');
-      expect(sent).toContain('content="https://manifest.example.com/og-image.png"');
-      expect(sent).not.toContain('https://app.manifest.build');
+      expect(sent).toContain('content="https://tuple.example.com"');
+      expect(sent).toContain('content="https://tuple.example.com/og-image.png"');
+      expect(sent).not.toContain('https://app.tuple.ai');
     });
 
     it('leaves og: tags alone when BETTER_AUTH_URL is empty', () => {
@@ -131,7 +131,7 @@ describe('SpaFallbackFilter', () => {
       const { host, res } = createMockHost('GET', '/');
       filter.catch(exception, host);
       const sent = (res.send as jest.Mock).mock.calls[0][0] as string;
-      expect(sent).toContain('content="https://app.manifest.build"');
+      expect(sent).toContain('content="https://app.tuple.ai"');
     });
 
     it('falls back to process.env when no constructor arg is provided', () => {

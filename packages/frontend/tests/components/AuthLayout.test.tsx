@@ -23,7 +23,7 @@ describe("AuthLayout", () => {
     expect(imgs.length).toBe(2);
   });
 
-  it("links logo to manifest website", () => {
+  it("links logo to tuple website", () => {
     const { container } = render(() => (
       <AuthLayout>
         <span>Content</span>
@@ -31,6 +31,6 @@ describe("AuthLayout", () => {
     ));
     const link = container.querySelector(".auth-logo__link") as HTMLAnchorElement;
     expect(link).toBeDefined();
-    expect(link.getAttribute("href")).toBe("https://manifest.build");
+    expect(link.getAttribute("href")).toBe("https://tuple.ai");
   });
 });

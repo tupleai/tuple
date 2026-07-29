@@ -5,7 +5,7 @@ import type { Plugin } from 'vite';
 /**
  * Serves the hosted Wingman SPA from a loopback origin during `vite serve`.
  *
- * The drawer used to iframe `https://wingman.manifest.build` directly and pass
+ * The drawer used to iframe `https://wingman.tuple.ai` directly and pass
  * it the dashboard's own origin as the gateway to test. That stopped working:
  * a public HTTPS page reaching `http://localhost:<port>` is a local-network
  * request, which Chrome (≥ 138) gates behind the Local Network Access
@@ -45,7 +45,7 @@ export function resolveWingmanDrawerUrl(upstream: string, port: number): string 
 
 export function wingmanDevProxy(options: { port: number; upstream: string }): Plugin {
   return {
-    name: 'manifest:wingman-dev-proxy',
+    name: 'tuple:wingman-dev-proxy',
     apply: 'serve',
     configureServer(server) {
       // Only proxy a remote SPA. A contributor who points VITE_WINGMAN_URL at

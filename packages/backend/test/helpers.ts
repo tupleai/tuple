@@ -18,7 +18,7 @@ import { appConfig } from '../src/config/app.config';
 import { IS_PUBLIC_KEY } from '../src/common/decorators/public.decorator';
 import { hashKey, keyPrefix } from '../src/common/utils/hash.util';
 import { AgentMessage } from '../src/entities/agent-message.entity';
-import { ManifestRequest } from '../src/entities/request.entity';
+import { TupleRequest } from '../src/entities/request.entity';
 import { ApiKey } from '../src/entities/api-key.entity';
 import { Tenant } from '../src/entities/tenant.entity';
 import { Agent } from '../src/entities/agent.entity';
@@ -58,11 +58,11 @@ export const TEST_USER_ID = 'test-user-001';
 export const TEST_API_KEY = 'test-api-key-001';
 export const TEST_TENANT_ID = 'test-tenant-001';
 export const TEST_AGENT_ID = 'test-agent-001';
-export const TEST_OTLP_KEY = 'mnfst_test-otlp-key-001';
+export const TEST_OTLP_KEY = 'tuple_test-otlp-key-001';
 
 const entities = [
   AgentMessage,
-  ManifestRequest,
+  TupleRequest,
   ApiKey,
   Tenant,
   Agent,

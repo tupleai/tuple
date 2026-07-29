@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ALL_TIERS, AUTH_TYPES, TIER_SLOTS } from 'manifest-shared';
+import { ALL_TIERS, AUTH_TYPES, TIER_SLOTS } from 'tuple-shared';
 import { PROVIDER_BY_ID_OR_ALIAS } from '../common/constants/providers';
 import { Agent } from '../entities/agent.entity';
 import { AgentMessage } from '../entities/agent-message.entity';
@@ -43,7 +43,7 @@ export class PayloadBuilderService {
     private readonly agents: Repository<Agent>,
   ) {}
 
-  async build(installId: string, manifestVersion: string): Promise<TelemetryPayloadV1> {
+  async build(installId: string, tupleVersion: string): Promise<TelemetryPayloadV1> {
     const [providerRows, tierRows, authRows, totals, agentsTotal, agentPlatformRows] =
       await Promise.all([
         this.messagesByProvider(),
@@ -57,7 +57,7 @@ export class PayloadBuilderService {
     return {
       schema_version: TELEMETRY_SCHEMA_VERSION,
       install_id: installId,
-      manifest_version: manifestVersion,
+      tuple_version: tupleVersion,
       messages_total: Number(totals.total),
       messages_by_provider: this.collapseProviders(providerRows),
       // Defense in depth: whitelist tier and auth_type values against the

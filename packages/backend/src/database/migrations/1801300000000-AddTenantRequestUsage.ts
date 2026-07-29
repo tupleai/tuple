@@ -8,8 +8,8 @@ import { toLocalSqlTimestamp, toSqlTimestamp } from '../../common/utils/postgres
 
 // Keep the migration self-contained: these are the request-level origins at
 // this schema version, matching the legacy quota query it replaces.
-const MANIFEST_ERROR_ORIGINS = ['config', 'policy', 'internal', 'request'] as const;
-const MANIFEST_ERROR_ORIGIN_SQL_LIST = MANIFEST_ERROR_ORIGINS.map((origin) => `'${origin}'`).join(
+const TUPLE_ERROR_ORIGINS = ['config', 'policy', 'internal', 'request'] as const;
+const TUPLE_ERROR_ORIGIN_SQL_LIST = TUPLE_ERROR_ORIGINS.map((origin) => `'${origin}'`).join(
   ', ',
 );
 
@@ -87,11 +87,11 @@ export class AddTenantRequestUsage1801300000000 implements MigrationInterface {
             IF (OLD."timestamp" AT TIME ZONE '${storageTimeZoneSql}') AT TIME ZONE 'UTC'
                  < counter_cutover_at
                OR COALESCE(OLD.superseded, false)
-               OR OLD.error_origin IN (${MANIFEST_ERROR_ORIGIN_SQL_LIST}) THEN
+               OR OLD.error_origin IN (${TUPLE_ERROR_ORIGIN_SQL_LIST}) THEN
               RETURN NEW;
             END IF;
           ELSIF COALESCE(NEW.superseded, false)
-             OR NEW.error_origin IN (${MANIFEST_ERROR_ORIGIN_SQL_LIST}) THEN
+             OR NEW.error_origin IN (${TUPLE_ERROR_ORIGIN_SQL_LIST}) THEN
             RETURN NEW;
           END IF;
 
@@ -113,7 +113,7 @@ export class AddTenantRequestUsage1801300000000 implements MigrationInterface {
                ) < counter_cutover_at
                AND (
                  prior."error_origin" IS NULL
-                 OR prior."error_origin" NOT IN (${MANIFEST_ERROR_ORIGIN_SQL_LIST})
+                 OR prior."error_origin" NOT IN (${TUPLE_ERROR_ORIGIN_SQL_LIST})
                )
           ) THEN
             UPDATE "requests"

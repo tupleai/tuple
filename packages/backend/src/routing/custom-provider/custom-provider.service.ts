@@ -13,8 +13,8 @@ import {
   CANONICAL_LOCAL_IDS,
   SHARED_PROVIDER_BY_ID_OR_ALIAS,
   normalizeProviderName,
-} from 'manifest-shared';
-import type { AuthType } from 'manifest-shared';
+} from 'tuple-shared';
+import type { AuthType } from 'tuple-shared';
 import {
   CustomProvider,
   CustomProviderApiKind,

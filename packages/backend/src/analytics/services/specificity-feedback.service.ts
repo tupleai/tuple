@@ -2,7 +2,7 @@ import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AgentMessage } from '../../entities/agent-message.entity';
-import { SpecificityCategory, SPECIFICITY_CATEGORIES } from 'manifest-shared';
+import { SpecificityCategory, SPECIFICITY_CATEGORIES } from 'tuple-shared';
 
 /**
  * Lets users mark a specificity-routed message as miscategorized. The flag

@@ -6,7 +6,7 @@
  * DiscoveredModel objects cached in tenant_providers.cached_models.
  */
 
-import type { AuthType, ModelCapability, ModelModality } from 'manifest-shared';
+import type { AuthType, ModelCapability, ModelModality } from 'tuple-shared';
 
 /**
  * Default context-window size assumed when a provider's API or the pricing

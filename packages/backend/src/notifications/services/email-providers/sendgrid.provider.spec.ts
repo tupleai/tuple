@@ -87,7 +87,7 @@ describe('SendGridProvider', () => {
       to: 'user@test.com',
       subject: 'Test',
       html: '<p>Hi</p>',
-      from: 'Manifest <custom@test.com>',
+      from: 'Tuple <custom@test.com>',
     });
 
     const body = JSON.parse((global.fetch as jest.Mock).mock.calls[0][1].body);

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { randomUUID } from 'crypto';
-import type { AuthType, RequestParamDefaults } from 'manifest-shared';
+import type { AuthType, RequestParamDefaults } from 'tuple-shared';
 import { AgentModelParams } from '../../entities/agent-model-params.entity';
 import { RoutingCacheService } from './routing-cache.service';
 

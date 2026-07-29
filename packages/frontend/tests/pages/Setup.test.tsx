@@ -47,7 +47,7 @@ describe('Setup page', () => {
   async function renderSetup() {
     const result = render(() => <Setup />);
     await waitFor(() => {
-      expect(screen.queryByText('Welcome to Manifest')).toBeDefined();
+      expect(screen.queryByText('Welcome to Tuple')).toBeDefined();
     });
     return result;
   }
@@ -75,7 +75,7 @@ describe('Setup page', () => {
 
   it('renders the welcome headline and form after status check', async () => {
     await renderSetup();
-    expect(screen.getByText('Welcome to Manifest')).toBeDefined();
+    expect(screen.getByText('Welcome to Tuple')).toBeDefined();
     expect(screen.getByPlaceholderText('Your name')).toBeDefined();
     expect(screen.getByPlaceholderText('you@example.com')).toBeDefined();
     expect(screen.getByPlaceholderText('At least 8 characters')).toBeDefined();

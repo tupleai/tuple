@@ -4,7 +4,7 @@ import { Brackets, In } from 'typeorm';
 import { MessagesQueryService } from './messages-query.service';
 import { AgentMessage } from '../../entities/agent-message.entity';
 import { CustomProvider } from '../../entities/custom-provider.entity';
-import { MANIFEST_ORIGIN_PREDICATE } from './query-helpers';
+import { TUPLE_ORIGIN_PREDICATE } from './query-helpers';
 import type { MessageStatusFilter, MessageTriggerFilter } from '../dto/messages-query.dto';
 
 describe('MessagesQueryService', () => {
@@ -811,7 +811,7 @@ describe('MessagesQueryService', () => {
   });
 
   function runWithOrigin(params: {
-    origin?: 'manifest' | 'provider' | 'transport' | 'config' | 'policy' | 'internal' | 'request';
+    origin?: 'tuple' | 'provider' | 'transport' | 'config' | 'policy' | 'internal' | 'request';
     error_class?: string;
   }): Promise<jest.Mock> {
     mockGetRawOne.mockResolvedValueOnce({ total: 0 });
@@ -830,7 +830,7 @@ describe('MessagesQueryService', () => {
     const andWhereSpy = await runWithOrigin({});
     // No origin predicate of any kind: the log is the complete event listing.
     expect(
-      andWhereSpy.mock.calls.find(([clause]) => clause === MANIFEST_ORIGIN_PREDICATE),
+      andWhereSpy.mock.calls.find(([clause]) => clause === TUPLE_ORIGIN_PREDICATE),
     ).toBeUndefined();
     expect(
       andWhereSpy.mock.calls.find(([clause]) => clause === 'at.error_origin = :originFilter'),
@@ -842,10 +842,10 @@ describe('MessagesQueryService', () => {
     ).toBeUndefined();
   });
 
-  it('shows only Manifest-originated errors when origin=manifest', async () => {
-    const andWhereSpy = await runWithOrigin({ origin: 'manifest' });
+  it('shows only Tuple-originated errors when origin=tuple', async () => {
+    const andWhereSpy = await runWithOrigin({ origin: 'tuple' });
     expect(
-      andWhereSpy.mock.calls.find(([clause]) => clause === MANIFEST_ORIGIN_PREDICATE),
+      andWhereSpy.mock.calls.find(([clause]) => clause === TUPLE_ORIGIN_PREDICATE),
     ).toBeDefined();
   });
 

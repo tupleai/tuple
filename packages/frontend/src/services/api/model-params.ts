@@ -1,8 +1,8 @@
 import { fetchJson, fetchMutate, routingPath } from './core.js';
 import type { AuthType } from './routing.js';
-import type { ProviderParamSpec, RequestParamDefaults } from 'manifest-shared';
+import type { ProviderParamSpec, RequestParamDefaults } from 'tuple-shared';
 
-export type { ProviderParamSpec } from 'manifest-shared';
+export type { ProviderParamSpec } from 'tuple-shared';
 
 /**
  * Per-route saved request body defaults. The frontend fetches the full set

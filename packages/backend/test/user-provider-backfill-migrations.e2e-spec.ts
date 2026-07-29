@@ -11,7 +11,7 @@ import { runMessageProviderBackfill } from '../src/database/backfills/backfill-m
 import { TypeOrmBackfillGateway } from '../src/database/backfills/backfill-message-providers.gateway';
 
 const DB_URL =
-  process.env['DATABASE_URL'] ?? 'postgresql://myuser:mypassword@localhost:5432/manifest_duprepro';
+  process.env['DATABASE_URL'] ?? 'postgresql://myuser:mypassword@localhost:5432/tuple_duprepro';
 
 /**
  * Live-upgrade reproduction for the message → connection attribution backfill.

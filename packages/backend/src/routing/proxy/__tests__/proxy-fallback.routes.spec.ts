@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import type { ModelRoute } from 'manifest-shared';
+import type { ModelRoute } from 'tuple-shared';
 import { ProxyFallbackService } from '../proxy-fallback.service';
 import { ProviderKeyService } from '../../routing-core/provider-key.service';
 import { CustomProvider } from '../../../entities/custom-provider.entity';

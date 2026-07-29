@@ -279,7 +279,7 @@ describe('OpenaiOauthController', () => {
       expect(getCsp(res)).toMatch(/^default-src 'none'; script-src 'nonce-[A-Za-z0-9+/=]+'$/);
       const html = res.send.mock.calls[0][0] as string;
       expect(html).toContain('Login successful!');
-      expect(html).toContain('manifest-oauth-success');
+      expect(html).toContain('tuple-oauth-success');
     });
 
     it('renders HTML failure page when ok is not "1"', () => {
@@ -288,7 +288,7 @@ describe('OpenaiOauthController', () => {
       ctrl.done('0', res);
       const html = res.send.mock.calls[0][0] as string;
       expect(html).toContain('Login failed');
-      expect(html).toContain('manifest-oauth-error');
+      expect(html).toContain('tuple-oauth-error');
     });
 
     it('generates a unique nonce on every render', () => {

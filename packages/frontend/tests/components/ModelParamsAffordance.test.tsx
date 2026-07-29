@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, fireEvent, screen, waitFor, configure } from '@solidjs/testing-library';
-import type { ProviderParamSpec } from 'manifest-shared';
+import type { ProviderParamSpec } from 'tuple-shared';
 
 vi.mock('solid-js/web', async (importOriginal) => {
   const mod = await importOriginal<typeof import('solid-js/web')>();

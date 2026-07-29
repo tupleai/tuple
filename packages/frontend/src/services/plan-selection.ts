@@ -1,4 +1,4 @@
-const PREFIX = 'manifest_plan_chosen_';
+const PREFIX = 'tuple_plan_chosen_';
 
 export function markPlanChosen(userId: string): void {
   try {

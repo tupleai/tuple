@@ -42,7 +42,7 @@ describe('oauthDoneHtml', () => {
   it('includes nonce attribute on script tag when provided', () => {
     const html = oauthDoneHtml(true, 'test-nonce-123');
     expect(html).toContain('nonce="test-nonce-123"');
-    expect(html).toContain('manifest-oauth-success');
+    expect(html).toContain('tuple-oauth-success');
   });
 
   it('omits nonce attribute when not provided', () => {
@@ -53,7 +53,7 @@ describe('oauthDoneHtml', () => {
 
   it('renders error message when success is false', () => {
     const html = oauthDoneHtml(false, 'nonce-abc');
-    expect(html).toContain('manifest-oauth-error');
+    expect(html).toContain('tuple-oauth-error');
     expect(html).toContain('Login failed');
     expect(html).toContain('nonce="nonce-abc"');
   });

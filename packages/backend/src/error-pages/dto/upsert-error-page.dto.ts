@@ -25,7 +25,7 @@ export class UpsertErrorPageDto {
   @IsString() h1!: string;
   @IsOptional() @IsString() body_what?: string;
   @IsOptional() @IsString() body_fix?: string;
-  @IsOptional() @IsString() body_manifest?: string;
+  @IsOptional() @IsString() body_tuple?: string;
   @IsOptional() @IsString() sample_message?: string;
   @IsOptional() @IsArray() faq?: ErrorPageFaqItem[];
   @IsObject() stats!: ErrorPageStats;

@@ -1,5 +1,5 @@
-import type { AuthType } from 'manifest-shared';
-import { supportsSubscriptionProvider } from 'manifest-shared';
+import type { AuthType } from 'tuple-shared';
+import { supportsSubscriptionProvider } from 'tuple-shared';
 
 type ProviderAuthRecord = {
   provider: string;
@@ -10,6 +10,6 @@ export function isSupportedSubscriptionProvider(provider: string): boolean {
   return supportsSubscriptionProvider(provider);
 }
 
-export function isManifestUsableProvider(record: ProviderAuthRecord): boolean {
+export function isTupleUsableProvider(record: ProviderAuthRecord): boolean {
   return record.auth_type !== 'subscription' || isSupportedSubscriptionProvider(record.provider);
 }

@@ -1,10 +1,10 @@
 import {
   classifyHttpErrorClass,
   classifyMessageError,
-  isManifestErrorOrigin,
+  isTupleErrorOrigin,
   ERROR_CLASSES,
   ERROR_ORIGINS,
-  MANIFEST_ERROR_ORIGINS,
+  TUPLE_ERROR_ORIGINS,
   TRANSPORT_NETWORK_HTTP_STATUS,
   TRANSPORT_TIMEOUT_HTTP_STATUS,
   REQUEST_STATUSES,
@@ -24,16 +24,16 @@ describe('error-taxonomy constants', () => {
     expect(TRANSPORT_TIMEOUT_HTTP_STATUS).toBe(504);
   });
 
-  it('keeps every manifest origin inside the origin set', () => {
-    for (const origin of MANIFEST_ERROR_ORIGINS) {
+  it('keeps every tuple origin inside the origin set', () => {
+    for (const origin of TUPLE_ERROR_ORIGINS) {
       expect(ERROR_ORIGINS).toContain(origin);
     }
   });
 
-  it('counts a caller-malformed request as Manifest-originated, not a provider fault', () => {
-    // `request` must live in MANIFEST_ERROR_ORIGINS: that membership is what keeps
-    // it out of provider_error_rate and inside the `origin=manifest` shorthand.
-    expect(MANIFEST_ERROR_ORIGINS).toContain('request');
+  it('counts a caller-malformed request as Tuple-originated, not a provider fault', () => {
+    // `request` must live in TUPLE_ERROR_ORIGINS: that membership is what keeps
+    // it out of provider_error_rate and inside the `origin=tuple` shorthand.
+    expect(TUPLE_ERROR_ORIGINS).toContain('request');
     expect(ERROR_ORIGINS).toContain('request');
   });
 
@@ -89,15 +89,15 @@ describe('classifyMessageError', () => {
     ['key_expired', 'config', 'auth'],
     ['limit_exceeded', 'policy', 'limit_exceeded'],
     ['plan_request_limit_exceeded', 'policy', 'plan_request_limit_exceeded'],
-    ['manifest_rate_limited', 'policy', 'rate_limit'],
-    ['manifest_ip_rate_limited', 'policy', 'rate_limit'],
-    ['manifest_concurrency_limited', 'policy', 'rate_limit'],
-    ['manifest_invalid_request', 'request', 'invalid_request'],
+    ['tuple_rate_limited', 'policy', 'rate_limit'],
+    ['tuple_ip_rate_limited', 'policy', 'rate_limit'],
+    ['tuple_concurrency_limited', 'policy', 'rate_limit'],
+    ['tuple_invalid_request', 'request', 'invalid_request'],
     ['model_not_available', 'request', 'not_found'],
-    ['manifest_internal_error', 'internal', 'internal'],
+    ['tuple_internal_error', 'internal', 'internal'],
     // Legacy alias, kept so rows written before the rename keep classifying.
     ['friendly_error', 'internal', 'internal'],
-  ])('maps the Manifest reason %s to %s/%s', (reason, origin, klass) => {
+  ])('maps the Tuple reason %s to %s/%s', (reason, origin, klass) => {
     expect(classifyMessageError({ status: 'error', routingReason: reason })).toEqual({
       error_origin: origin,
       error_class: klass,
@@ -187,7 +187,7 @@ describe('classifyMessageError', () => {
     });
   });
 
-  it('lets a Manifest reason win over an incidental HTTP status on a superseded row', () => {
+  it('lets a Tuple reason win over an incidental HTTP status on a superseded row', () => {
     expect(
       classifyMessageError({
         status: 'fallback_error',
@@ -212,19 +212,19 @@ describe('classifyMessageError', () => {
   });
 });
 
-describe('isManifestErrorOrigin', () => {
-  it.each(['config', 'policy', 'internal'])('returns true for the manifest origin %s', (origin) => {
-    expect(isManifestErrorOrigin(origin)).toBe(true);
+describe('isTupleErrorOrigin', () => {
+  it.each(['config', 'policy', 'internal'])('returns true for the tuple origin %s', (origin) => {
+    expect(isTupleErrorOrigin(origin)).toBe(true);
   });
 
   it.each(['provider', 'transport'])('returns false for the provider-side origin %s', (origin) => {
-    expect(isManifestErrorOrigin(origin)).toBe(false);
+    expect(isTupleErrorOrigin(origin)).toBe(false);
   });
 
   it('returns false for null / undefined / unknown', () => {
-    expect(isManifestErrorOrigin(null)).toBe(false);
-    expect(isManifestErrorOrigin(undefined)).toBe(false);
-    expect(isManifestErrorOrigin('nonsense')).toBe(false);
+    expect(isTupleErrorOrigin(null)).toBe(false);
+    expect(isTupleErrorOrigin(undefined)).toBe(false);
+    expect(isTupleErrorOrigin('nonsense')).toBe(false);
   });
 });
 

@@ -16,7 +16,7 @@ vi.mock('../../../src/services/api/core.js', () => ({
 
 import { getBillingStatus, updateBillingEmailPreferences } from '../../../src/services/api/billing';
 import { fetchJson, fetchMutate } from '../../../src/services/api/core';
-import { FREE_PLAN_REQUESTS_PER_MONTH, type BillingStatus } from 'manifest-shared';
+import { FREE_PLAN_REQUESTS_PER_MONTH, type BillingStatus } from 'tuple-shared';
 
 describe('billing API client', () => {
   beforeEach(() => {

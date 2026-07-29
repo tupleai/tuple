@@ -7,9 +7,9 @@ describe('AgentApiKey entity', () => {
   it('creates an instance with all fields', () => {
     const key = new AgentApiKey();
     key.id = 'aak-1';
-    key.key = 'mnfst_abc123';
+    key.key = 'tuple_abc123';
     key.key_hash = 'hash123';
-    key.key_prefix = 'mnfst_abc1';
+    key.key_prefix = 'tuple_abc1';
     key.label = 'default';
     key.tenant_id = 'tenant-1';
     key.agent_id = 'agent-1';
@@ -19,9 +19,9 @@ describe('AgentApiKey entity', () => {
     key.created_at = '2024-01-01T00:00:00Z';
 
     expect(key.id).toBe('aak-1');
-    expect(key.key).toBe('mnfst_abc123');
+    expect(key.key).toBe('tuple_abc123');
     expect(key.key_hash).toBe('hash123');
-    expect(key.key_prefix).toBe('mnfst_abc1');
+    expect(key.key_prefix).toBe('tuple_abc1');
     expect(key.label).toBe('default');
     expect(key.is_active).toBe(true);
     expect(key.expires_at).toBeNull();

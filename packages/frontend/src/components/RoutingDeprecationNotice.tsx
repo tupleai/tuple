@@ -2,7 +2,7 @@ import { type Component, type JSX } from 'solid-js';
 import '../styles/routing-deprecation.css';
 
 /** Blog post explaining why rule-based (complexity + task-specific) routing is being retired. */
-const DEPRECATION_BLOG_URL = 'https://manifest.build/blog/deprecating-rule-based-routing/';
+const DEPRECATION_BLOG_URL = 'https://tuple.ai/blog/deprecating-rule-based-routing/';
 
 export interface RoutingDeprecationNoticeProps {
   /** Short bold lead-in, e.g. "Complexity routing is being retired." */

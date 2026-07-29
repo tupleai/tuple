@@ -9,7 +9,7 @@ import {
   getSubscriptionExcludedModels,
   getSubscriptionCapabilities,
   type SubscriptionCapabilities,
-} from 'manifest-shared';
+} from 'tuple-shared';
 import { normalizeAnthropicShortModelId } from '../common/utils/anthropic-model-id';
 import { GOOGLE_VARIANT_RE } from '../model-prices/model-name-normalizer';
 

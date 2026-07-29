@@ -37,10 +37,10 @@ const configureDevProxy: NonNullable<ProxyOptions['configure']> = (proxy) => {
 
 const devProxyRoute: ProxyOptions = { target: backendTarget, configure: configureDevProxy };
 
-const manifestVersion = (() => {
+const tupleVersion = (() => {
   try {
     const pkg = JSON.parse(
-      readFileSync(resolve(import.meta.dirname, '../manifest/package.json'), 'utf-8'),
+      readFileSync(resolve(import.meta.dirname, '../tuple/package.json'), 'utf-8'),
     ) as { version?: string };
     return pkg.version ?? '';
   } catch {
@@ -51,14 +51,14 @@ const manifestVersion = (() => {
 // The hosted Wingman SPA, and the loopback port the dev proxy republishes it
 // on. `WINGMAN_PORT` is the same knob the backend reads for its dev CORS
 // allow-list and CSP `frame-src`, so the three stay in step.
-const HOSTED_WINGMAN_URL = 'https://wingman.manifest.build';
+const HOSTED_WINGMAN_URL = 'https://wingman.tuple.ai';
 const wingmanUpstream = process.env.VITE_WINGMAN_URL || HOSTED_WINGMAN_URL;
 const wingmanPort = Number(process.env.WINGMAN_PORT || process.env.VITE_WINGMAN_PORT || 3002);
 const wingmanDrawerUrl = resolveWingmanDrawerUrl(wingmanUpstream, wingmanPort);
 
 export default defineConfig(({ command }) => ({
   define: {
-    __MANIFEST_VERSION__: JSON.stringify(manifestVersion),
+    __TUPLE_VERSION__: JSON.stringify(tupleVersion),
     // The Wingman drawer and the orange "Dev" header badge are dev-only
     // affordances. They ship only when Vite runs in dev mode
     // (`vite serve`). Any production build — Docker self-hosted, Railway
@@ -77,7 +77,7 @@ export default defineConfig(({ command }) => ({
     wingmanDevProxy({ port: wingmanPort, upstream: wingmanUpstream }),
     codecovVitePlugin({
       enableBundleAnalysis: process.env.CODECOV_TOKEN !== undefined,
-      bundleName: 'manifest-frontend',
+      bundleName: 'tuple-frontend',
       uploadToken: process.env.CODECOV_TOKEN,
     }),
   ],
@@ -88,7 +88,7 @@ export default defineConfig(({ command }) => ({
     // strips the backend's headers — including
     // `Access-Control-Allow-Private-Network`, which Chrome's Private
     // Network Access enforcement now requires when the hosted Wingman
-    // SPA (https://wingman.manifest.build) calls into a loopback dev
+    // SPA (https://wingman.tuple.ai) calls into a loopback dev
     // backend. The dashboard itself is same-origin, so it doesn't need
     // Vite's CORS at all.
     cors: false,

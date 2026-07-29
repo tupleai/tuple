@@ -275,9 +275,9 @@ describe('validatePublicUrl', () => {
     );
   });
 
-  it('hints at MANIFEST_MODE=selfhosted when http is rejected (issue #1780)', async () => {
+  it('hints at TUPLE_MODE=selfhosted when http is rejected (issue #1780)', async () => {
     await expect(validatePublicUrl('http://llamacpp:8080/v1')).rejects.toThrow(
-      /MANIFEST_MODE=selfhosted/,
+      /TUPLE_MODE=selfhosted/,
     );
   });
 

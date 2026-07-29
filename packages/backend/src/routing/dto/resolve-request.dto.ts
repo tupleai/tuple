@@ -1,7 +1,7 @@
 import { IsArray, IsIn, IsNotEmpty, IsNumber, IsOptional, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { TIERS, SPECIFICITY_CATEGORIES } from 'manifest-shared';
+import { TIERS, SPECIFICITY_CATEGORIES } from 'tuple-shared';
 
 class MessageDto {
   @IsNotEmpty()

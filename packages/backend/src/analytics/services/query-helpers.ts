@@ -1,5 +1,5 @@
 import { ObjectLiteral, SelectQueryBuilder } from 'typeorm';
-import { MANIFEST_ERROR_ORIGINS } from 'manifest-shared';
+import { TUPLE_ERROR_ORIGINS } from 'tuple-shared';
 import { CustomProvider } from '../../entities/custom-provider.entity';
 
 export interface MetricWithTrend {
@@ -95,23 +95,23 @@ export function sqlCountMessages(alias = 'at'): string {
   return `COUNT(DISTINCT COALESCE(${alias}.request_id, ${alias}.id)) FILTER (WHERE ${alias}.status IS NULL OR (${alias}.status NOT IN ('pending', 'cancelled') AND ${alias}.status NOT IN (${list})))`;
 }
 
-/** Comma-quoted list of Manifest-originated error origins, e.g. `'config', 'policy', …`. */
-const MANIFEST_ORIGIN_SQL_LIST = MANIFEST_ERROR_ORIGINS.map((o) => `'${o}'`).join(', ');
+/** Comma-quoted list of Tuple-originated error origins, e.g. `'config', 'policy', …`. */
+const TUPLE_ORIGIN_SQL_LIST = TUPLE_ERROR_ORIGINS.map((o) => `'${o}'`).join(', ');
 
 /**
- * SQL predicate matching Manifest-originated errors (config / policy / internal
+ * SQL predicate matching Tuple-originated errors (config / policy / internal
  * / request) — the rows the caller gets back as HTTP 200 stubs or 4xx envelopes
- * without a provider ever being contacted. Backs the `origin=manifest` filter
+ * without a provider ever being contacted. Backs the `origin=tuple` filter
  * shorthand. Assumes the query builder aliases `agent_messages` as `at`.
  *
  * The Messages log used to hide `config` rows by default on the theory that "a
- * Manifest config error is not a message". It was the only surface that hid
+ * Tuple config error is not a message". It was the only surface that hid
  * them — the Overview's Recent Messages panel always showed them — so a user who
  * saw a "Failed: Setup" row there and clicked through found nothing, with no
  * filter anywhere to bring it back. Every origin is now listed by default;
  * callers narrow with `?origin=`.
  */
-export const MANIFEST_ORIGIN_PREDICATE = `at.error_origin IN (${MANIFEST_ORIGIN_SQL_LIST})`;
+export const TUPLE_ORIGIN_PREDICATE = `at.error_origin IN (${TUPLE_ORIGIN_SQL_LIST})`;
 
 export function downsample(data: number[], targetLen: number): number[] {
   if (data.length <= targetLen) return data;

@@ -8,7 +8,7 @@ import { OpencodeGoCatalogService } from '../model-discovery/opencode-go-catalog
 import { OllamaSyncService } from '../database/ollama-sync.service';
 import { PricingSyncService } from '../database/pricing-sync.service';
 import { ModelsDevSyncService } from '../database/models-dev-sync.service';
-import { resolveProviderMetadataIdentity } from 'manifest-shared';
+import { resolveProviderMetadataIdentity } from 'tuple-shared';
 import {
   inputModalitiesFromCapabilities,
   resolveModelCapabilityMetadata,

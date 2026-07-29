@@ -66,8 +66,8 @@ const Upgrade: Component = () => {
 
   return (
     <div class="account-modal account-modal--standalone">
-      <Title>Upgrade to Pro - Manifest</Title>
-      <Meta name="description" content="Upgrade Manifest to Pro for unlimited routed requests." />
+      <Title>Upgrade to Pro - Tuple</Title>
+      <Meta name="description" content="Upgrade Tuple to Pro for unlimited routed requests." />
       <div class="account-modal__inner account-modal__inner--upgrade">
         <Show when={window.history.length > 1}>
           <button
@@ -148,7 +148,7 @@ const Upgrade: Component = () => {
                     <p class="upgrade-plan-card__desc">For prototypes and small projects.</p>
                     <div class="upgrade-plan-card__cta">
                       <button class="btn btn--outline" onClick={() => navigate('/')}>
-                        Use Manifest for free
+                        Use Tuple for free
                       </button>
                     </div>
                     <div class="upgrade-plan-card__bottom">
@@ -245,7 +245,7 @@ const Upgrade: Component = () => {
                     <div class="upgrade-plan-card__cta">
                       <a
                         class="btn btn--primary"
-                        href="https://manifest.build/pricing"
+                        href="https://tuple.ai/pricing"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
@@ -278,7 +278,7 @@ const Upgrade: Component = () => {
                 </div>
                 <p class="upgrade-terms">
                   Subject to our{' '}
-                  <a href="https://manifest.build/terms" target="_blank" rel="noopener noreferrer">
+                  <a href="https://tuple.ai/terms" target="_blank" rel="noopener noreferrer">
                     terms and conditions
                   </a>
                 </p>
@@ -314,7 +314,7 @@ const Upgrade: Component = () => {
                   <div class="upgrade-plan-card__cta">
                     <a
                       class="btn btn--primary"
-                      href="https://manifest.build/pricing"
+                      href="https://tuple.ai/pricing"
                       target="_blank"
                       rel="noopener noreferrer"
                     >

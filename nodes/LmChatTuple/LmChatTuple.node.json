@@ -1,0 +1,22 @@
+{
+	"node": "n8n-nodes-tuple.lmChatTuple",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["AI"],
+	"subcategories": {
+		"AI": ["Language Models", "Root Nodes"],
+		"Language Models": ["Chat Models (Recommended)"]
+	},
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://github.com/tupleai/tuple/tree/main/integrations/n8n-nodes-tuple#credentials"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://github.com/tupleai/tuple/tree/main/integrations/n8n-nodes-tuple"
+			}
+		]
+	}
+}

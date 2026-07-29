@@ -1,1 +1,1 @@
-export const API_KEY_PREFIX = 'mnfst_' as const;
+export const API_KEY_PREFIX = 'tuple_' as const;

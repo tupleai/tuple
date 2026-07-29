@@ -15,7 +15,7 @@ import { ReasoningContentCache } from '../reasoning-content-cache';
 import { ModelPricingCacheService } from '../../../model-prices/model-pricing-cache.service';
 import { AgentModelParamsService } from '../../routing-core/agent-model-params.service';
 import { ProviderParamSpecService } from '../../routing-core/provider-param-spec.service';
-import { getProviderParamSpecs, type ProviderParamSpecCatalog } from 'manifest-shared';
+import { getProviderParamSpecs, type ProviderParamSpecCatalog } from 'tuple-shared';
 
 const specCatalog: ProviderParamSpecCatalog = [
   {
@@ -652,7 +652,7 @@ describe('ProxyFallbackService', () => {
       expect(forwarded.body.thinking).toBeUndefined();
     });
 
-    it('lets saved Manifest params override inbound body fields at the same path', async () => {
+    it('lets saved Tuple params override inbound body fields at the same path', async () => {
       providerClient.forward.mockResolvedValue({
         response: new Response('{}', { status: 200 }),
         isGoogle: false,

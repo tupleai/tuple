@@ -5,7 +5,7 @@ import { TenantScopedConfigs1792600000000 } from '../src/database/migrations/179
 import { AddRequestsAndProviderAttempts1801000000000 } from '../src/database/migrations/1801000000000-AddRequestsAndProviderAttempts';
 
 const DB_URL =
-  process.env['DATABASE_URL'] ?? 'postgresql://myuser:mypassword@localhost:5432/manifest_duprepro';
+  process.env['DATABASE_URL'] ?? 'postgresql://myuser:mypassword@localhost:5432/tuple_duprepro';
 
 function makeDataSource(): DataSource {
   return new DataSource({

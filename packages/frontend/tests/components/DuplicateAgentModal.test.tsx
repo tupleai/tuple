@@ -45,7 +45,7 @@ describe('DuplicateAgentModal', () => {
     });
     mockDuplicateAgent.mockResolvedValue({
       agent: { id: 'new-id', name: 'my-agent-copy', display_name: 'my-agent-copy' },
-      apiKey: 'mnfst_xyz',
+      apiKey: 'tuple_xyz',
       copied: {
         providers: 3,
         customProviders: 1,
@@ -120,7 +120,7 @@ describe('DuplicateAgentModal', () => {
       expect(mockToastSuccess).toHaveBeenCalled();
       expect(mockMarkAgentCreated).toHaveBeenCalledWith('my-agent-copy');
       expect(mockNavigate).toHaveBeenCalledWith('/harnesses/my-agent-copy', {
-        state: { newApiKey: 'mnfst_xyz' },
+        state: { newApiKey: 'tuple_xyz' },
       });
       expect(onClose).toHaveBeenCalled();
     });
@@ -289,7 +289,7 @@ describe('DuplicateAgentModal', () => {
 
     resolveDuplicate({
       agent: { id: 'new-id', name: 'my-agent-copy', display_name: 'my-agent-copy' },
-      apiKey: 'mnfst_xyz',
+      apiKey: 'tuple_xyz',
       copied: {
         providers: 0,
         customProviders: 0,

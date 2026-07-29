@@ -32,11 +32,11 @@ export const appConfig = registerAs('app', () => ({
   emailApiKey: process.env['EMAIL_API_KEY'] ?? '',
   emailDomain: process.env['EMAIL_DOMAIN'] ?? '',
   emailFrom:
-    process.env['EMAIL_FROM'] ?? process.env['NOTIFICATION_FROM_EMAIL'] ?? 'noreply@manifest.build',
+    process.env['EMAIL_FROM'] ?? process.env['NOTIFICATION_FROM_EMAIL'] ?? 'noreply@tuple.ai',
   // Legacy Mailgun-only (backward compat with older deployments).
   mailgunApiKey: process.env['MAILGUN_API_KEY'] ?? '',
   mailgunDomain: process.env['MAILGUN_DOMAIN'] ?? '',
-  notificationFromEmail: process.env['NOTIFICATION_FROM_EMAIL'] ?? 'noreply@manifest.build',
+  notificationFromEmail: process.env['NOTIFICATION_FROM_EMAIL'] ?? 'noreply@tuple.ai',
   dbPoolMax: Number(process.env['DB_POOL_MAX'] ?? 30),
   // Apply PgBouncer-safe planner defaults (jit off, larger work_mem, SSD-tuned
   // random_page_cost) as role-level defaults at boot. Set DB_TUNE_SESSION=false
@@ -55,8 +55,8 @@ export const appConfig = registerAs('app', () => ({
   // spike). Must be shorter than Railway's `drainingSeconds`. 0 disables it.
   shutdownDrainMs: Number(process.env['SHUTDOWN_DRAIN_MS'] ?? 10000),
   // When true, /api/v1/public/* endpoints expose aggregate stats without auth.
-  // Off by default — only Manifest Cloud's marketing homepage should enable it.
-  publicStatsEnabled: process.env['MANIFEST_PUBLIC_STATS'] === 'true',
+  // Off by default — only Tuple Cloud's marketing homepage should enable it.
+  publicStatsEnabled: process.env['TUPLE_PUBLIC_STATS'] === 'true',
   // Optional instance-wide override. When unset, request recordings follow the
   // Cloud plan policy (Free 7 days, Pro 365 days); non-billing deployments use
   // the 365-day default.

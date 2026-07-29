@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Run the Manifest docker-compose stack with Apple Containers (`container` CLI).
+# Run the Tuple docker-compose stack with Apple Containers (`container` CLI).
 #
 # Mirrors docker/docker-compose.yml as closely as Apple Containers allows:
 #   - postgres:16-alpine with a persistent data directory
-#   - manifest app wired to postgres, with health-wait before starting
+#   - tuple app wired to postgres, with health-wait before starting
 #   - host LLM access (Ollama / LM Studio) via the container gateway IP
 #     (Apple Containers has no host.docker.internal)
 #   - dashboard published on host loopback for a stable, VPN-safe URL
@@ -22,17 +22,17 @@
 #   ./deploy/apple-containers/start.sh status  # show container state and URLs
 #
 # Configuration comes from docker/.env (the same file as Docker Compose).
-# Override its path with MANIFEST_ENV_FILE. BETTER_AUTH_SECRET is required:
+# Override its path with TUPLE_ENV_FILE. BETTER_AUTH_SECRET is required:
 #   openssl rand -hex 32
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PG_CONTAINER="mnfst-postgres"
-APP_CONTAINER="mnfst-manifest"
+PG_CONTAINER="tuple-postgres"
+APP_CONTAINER="tuple-app"
 
-if [[ -n "${MANIFEST_ENV_FILE:-}" ]]; then
-  ENV_FILE="$MANIFEST_ENV_FILE"
+if [[ -n "${TUPLE_ENV_FILE:-}" ]]; then
+  ENV_FILE="$TUPLE_ENV_FILE"
 elif [[ -f "$SCRIPT_DIR/.env" ]]; then
   # Backward compatibility with early versions of this script.
   ENV_FILE="$SCRIPT_DIR/.env"
@@ -79,11 +79,11 @@ if [[ -f "$ENV_FILE" ]]; then
 fi
 
 PORT="${PORT:-2099}"
-POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-manifest}"
-PG_VOLUME="${MANIFEST_PG_VOLUME:-mnfst-postgres-data}"
+POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-tuple}"
+PG_VOLUME="${TUPLE_PG_VOLUME:-tuple-postgres-data}"
 POSTGRES_IMAGE="postgres:16-alpine@sha256:20edbde7749f822887a1a022ad526fde0a47d6b2be9a8364433605cf65099416"
 
-if [[ "$POSTGRES_PASSWORD" != "manifest" && -z "${DATABASE_URL:-}" ]]; then
+if [[ "$POSTGRES_PASSWORD" != "tuple" && -z "${DATABASE_URL:-}" ]]; then
   echo "error: DATABASE_URL must be set when POSTGRES_PASSWORD is customized." >&2
   echo "Percent-encode special characters in its password; see docker/.env.example." >&2
   exit 1
@@ -205,9 +205,9 @@ cmd_up() {
     container delete "$PG_CONTAINER" >/dev/null 2>&1 || true
     echo "starting postgres..."
     container run --detach --name "$PG_CONTAINER" \
-      --env POSTGRES_USER=manifest \
+      --env POSTGRES_USER=tuple \
       --env POSTGRES_PASSWORD="$POSTGRES_PASSWORD" \
-      --env POSTGRES_DB=manifest \
+      --env POSTGRES_DB=tuple \
       --env PGDATA=/var/lib/postgresql/data/pgdata \
       --volume "$PG_VOLUME:/var/lib/postgresql/data" \
       "$POSTGRES_IMAGE"
@@ -215,7 +215,7 @@ cmd_up() {
 
   echo "waiting for postgres to accept connections..."
   local attempt=0
-  until container exec "$PG_CONTAINER" pg_isready -U manifest -d manifest >/dev/null 2>&1; do
+  until container exec "$PG_CONTAINER" pg_isready -U tuple -d tuple >/dev/null 2>&1; do
     attempt=$((attempt + 1))
     if ! is_running "$PG_CONTAINER"; then
       echo "error: postgres stopped before becoming ready." >&2
@@ -232,10 +232,10 @@ cmd_up() {
     sleep 2
   done
   if ! container exec --env PGPASSWORD="$POSTGRES_PASSWORD" "$PG_CONTAINER" \
-    psql -h 127.0.0.1 -U manifest -d manifest -c 'SELECT 1' >/dev/null 2>&1; then
+    psql -h 127.0.0.1 -U tuple -d tuple -c 'SELECT 1' >/dev/null 2>&1; then
     echo "error: postgres rejected POSTGRES_PASSWORD." >&2
     echo "POSTGRES_PASSWORD only initializes a new volume; changing it later does not rotate the database password." >&2
-    echo "Restore the original password or explicitly rotate the manifest role in PostgreSQL." >&2
+    echo "Restore the original password or explicitly rotate the tuple role in PostgreSQL." >&2
     exit 1
   fi
   echo "postgres is ready."
@@ -253,7 +253,7 @@ cmd_up() {
   # Containers has no inter-container DNS by default, so use the IP. Translate
   # the bundled compose URL when present; custom URLs are left untouched.
   local database_url
-  database_url="${DATABASE_URL:-postgresql://manifest:manifest@${pg_ip}:5432/manifest}"
+  database_url="${DATABASE_URL:-postgresql://tuple:tuple@${pg_ip}:5432/tuple}"
   database_url="${database_url/@postgres:5432/@${pg_ip}:5432}"
 
   # The gateway reaches host services bound beyond loopback. Ollama and LM
@@ -262,12 +262,12 @@ cmd_up() {
   ollama_host="${OLLAMA_HOST:-http://${gateway}:11434}"
 
   if is_running "$APP_CONTAINER"; then
-    echo "manifest already running, recreating to pick up postgres address..."
+    echo "tuple already running, recreating to pick up postgres address..."
     container stop --time 15 "$APP_CONTAINER" >/dev/null
   fi
   container delete "$APP_CONTAINER" >/dev/null 2>&1 || true
 
-  echo "starting manifest..."
+  echo "starting tuple..."
   container run --detach --name "$APP_CONTAINER" \
     --memory 1g \
     --publish "127.0.0.1:${PORT}:${PORT}" \
@@ -275,7 +275,7 @@ cmd_up() {
     --env BIND_ADDRESS=0.0.0.0 \
     --env DATABASE_URL="$database_url" \
     --env BETTER_AUTH_SECRET="$BETTER_AUTH_SECRET" \
-    --env MANIFEST_ENCRYPTION_KEY="${MANIFEST_ENCRYPTION_KEY:-}" \
+    --env TUPLE_ENCRYPTION_KEY="${TUPLE_ENCRYPTION_KEY:-}" \
     --env BETTER_AUTH_URL="${BETTER_AUTH_URL:-http://localhost:${PORT}}" \
     --env OLLAMA_HOST="$ollama_host" \
     --env PROVIDER_TIMEOUT_MS="$PROVIDER_TIMEOUT_MS" \
@@ -283,7 +283,7 @@ cmd_up() {
     --env CODEX_SEMANTIC_OUTPUT_TIMEOUT_MS="$CODEX_SEMANTIC_OUTPUT_TIMEOUT_MS" \
     --env SEED_DATA=false \
     --env NODE_ENV=production \
-    --env MANIFEST_MODE="${MANIFEST_MODE:-selfhosted}" \
+    --env TUPLE_MODE="${TUPLE_MODE:-selfhosted}" \
     --env EMAIL_PROVIDER="${EMAIL_PROVIDER:-}" \
     --env EMAIL_API_KEY="${EMAIL_API_KEY:-}" \
     --env EMAIL_DOMAIN="${EMAIL_DOMAIN:-}" \
@@ -294,22 +294,22 @@ cmd_up() {
     --env GITHUB_CLIENT_SECRET="${GITHUB_CLIENT_SECRET:-}" \
     --env DISCORD_CLIENT_ID="${DISCORD_CLIENT_ID:-}" \
     --env DISCORD_CLIENT_SECRET="${DISCORD_CLIENT_SECRET:-}" \
-    --env MANIFEST_TELEMETRY_DISABLED="${MANIFEST_TELEMETRY_DISABLED:-0}" \
-    manifestdotbuild/manifest:latest
+    --env TUPLE_TELEMETRY_DISABLED="${TUPLE_TELEMETRY_DISABLED:-0}" \
+    tupleai/tuple:latest
 
-  echo "waiting for manifest to become healthy..."
+  echo "waiting for tuple to become healthy..."
   attempt=0
   # Mirrors the compose healthcheck: 90s start grace + retries.
   until curl -fsS "http://127.0.0.1:${PORT}/api/v1/health" >/dev/null 2>&1; do
     attempt=$((attempt + 1))
     if ! is_running "$APP_CONTAINER"; then
-      echo "error: manifest stopped before becoming healthy." >&2
+      echo "error: tuple stopped before becoming healthy." >&2
       echo "Container logs:" >&2
       container logs "$APP_CONTAINER" >&2 || true
       exit 1
     fi
     if [[ $attempt -ge 40 ]]; then
-      echo "error: manifest did not become healthy within 120s." >&2
+      echo "error: tuple did not become healthy within 120s." >&2
       echo "Container logs:" >&2
       container logs "$APP_CONTAINER" >&2 || true
       exit 1
@@ -318,7 +318,7 @@ cmd_up() {
   done
 
   echo ""
-  echo "Manifest is up: http://localhost:${PORT}"
+  echo "Tuple is up: http://localhost:${PORT}"
   echo "First boot: visit the URL above and complete the setup wizard at /setup."
 }
 

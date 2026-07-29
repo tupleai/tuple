@@ -156,20 +156,20 @@ function thinkingRouteContext(meta: RoutingMeta): ThinkingBlockRouteContext {
 
 export function buildMetaHeaders(meta: RoutingMeta): Record<string, string> {
   const headers: Record<string, string> = {
-    'X-Manifest-Tier': meta.tier,
-    'X-Manifest-Model': meta.model,
-    'X-Manifest-Provider': meta.provider,
-    'X-Manifest-Confidence': String(meta.confidence),
-    'X-Manifest-Reason': meta.reason,
-    'X-Manifest-Output-Modality': meta.output_modality ?? 'text',
-    'X-Manifest-Response-Mode': meta.response_mode ?? 'buffered',
+    'X-Tuple-Tier': meta.tier,
+    'X-Tuple-Model': meta.model,
+    'X-Tuple-Provider': meta.provider,
+    'X-Tuple-Confidence': String(meta.confidence),
+    'X-Tuple-Reason': meta.reason,
+    'X-Tuple-Output-Modality': meta.output_modality ?? 'text',
+    'X-Tuple-Response-Mode': meta.response_mode ?? 'buffered',
   };
   if (meta.specificity_category) {
-    headers['X-Manifest-Specificity'] = meta.specificity_category;
+    headers['X-Tuple-Specificity'] = meta.specificity_category;
   }
   if (meta.fallbackFromModel) {
-    headers['X-Manifest-Fallback-From'] = meta.fallbackFromModel;
-    headers['X-Manifest-Fallback-Index'] = String(meta.fallbackIndex ?? 0);
+    headers['X-Tuple-Fallback-From'] = meta.fallbackFromModel;
+    headers['X-Tuple-Fallback-Index'] = String(meta.fallbackIndex ?? 0);
   }
   return headers;
 }
@@ -178,7 +178,7 @@ function setHeaders(res: ExpressResponse, headers: Record<string, string>): void
   for (const [k, v] of Object.entries(headers)) res.setHeader(k, v);
 }
 
-type OpenAiErrorSource = 'provider' | 'manifest';
+type OpenAiErrorSource = 'provider' | 'tuple';
 
 export function buildOpenAiCompatibleError(
   status: number,
@@ -373,10 +373,10 @@ function handleFallbackExhausted(
   const classified = classifyProviderError(errorStatus, errorBody);
   res.status(errorStatus);
   setHeaders(res, metaHeaders);
-  res.setHeader('X-Manifest-Fallback-Exhausted', 'true');
+  res.setHeader('X-Tuple-Fallback-Exhausted', 'true');
   const responseBody = {
     error: buildOpenAiCompatibleError(errorStatus, errorBody, {
-      source: classified?.source ?? 'manifest',
+      source: classified?.source ?? 'tuple',
       code: classified?.code ?? 'fallback_exhausted',
       provider: meta.provider,
       model: meta.model,

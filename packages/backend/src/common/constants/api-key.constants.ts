@@ -1,1 +1,1 @@
-export { API_KEY_PREFIX } from 'manifest-shared';
+export { API_KEY_PREFIX } from 'tuple-shared';

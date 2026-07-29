@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@solidjs/testing-library';
 import { Show } from 'solid-js';
-import { FREE_PLAN_REQUESTS_PER_MONTH } from 'manifest-shared';
+import { FREE_PLAN_REQUESTS_PER_MONTH } from 'tuple-shared';
 
 const routerState = vi.hoisted(() => ({
   navigate: vi.fn(),
@@ -365,7 +365,7 @@ const { MOCK_FREE_PLAN_REQUESTS_PER_MONTH } = vi.hoisted(() => ({
   MOCK_FREE_PLAN_REQUESTS_PER_MONTH: 10_000,
 }));
 
-vi.mock('manifest-shared', () => ({
+vi.mock('tuple-shared', () => ({
   FREE_PLAN_REQUESTS_PER_MONTH: MOCK_FREE_PLAN_REQUESTS_PER_MONTH,
   PLAN_LIMITS: {
     free: { requestsPerMonth: MOCK_FREE_PLAN_REQUESTS_PER_MONTH },
@@ -727,7 +727,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   ensureStorageLike('localStorage').clear();
   ensureStorageLike('sessionStorage').clear();
-  localStorage.setItem('manifest_global_group', 'provider');
+  localStorage.setItem('tuple_global_group', 'provider');
   routerState.navigate.mockReset();
   routerState.params = { connectionId: 'conn-openai' };
   mockIsSelfHosted = true;
@@ -855,7 +855,7 @@ describe('GlobalOverview (analytics)', () => {
   });
 
   it('limits Free users to 7-day dashboard ranges and labels longer ranges as Pro-only', async () => {
-    localStorage.setItem('manifest_global_range', '365d');
+    localStorage.setItem('tuple_global_range', '365d');
     apiMocks.getBillingStatus.mockResolvedValue({
       enabled: true,
       plan: 'free',
@@ -873,7 +873,7 @@ describe('GlobalOverview (analytics)', () => {
     render(() => <GlobalOverview />);
 
     await waitFor(() => expect(screen.getByTestId('provider-chart-card')).toBeDefined());
-    await waitFor(() => expect(localStorage.getItem('manifest_global_range')).toBe('7d'));
+    await waitFor(() => expect(localStorage.getItem('tuple_global_range')).toBe('7d'));
     expect(apiMocks.getOverview).toHaveBeenCalledWith('7d');
 
     const rangeSelect = screen.getByRole('combobox') as HTMLSelectElement;
@@ -884,11 +884,11 @@ describe('GlobalOverview (analytics)', () => {
     expect(screen.getByText('Last 30 days · PRO')).toBeDefined();
 
     fireEvent.change(rangeSelect, { target: { value: '90d' } });
-    expect(localStorage.getItem('manifest_global_range')).toBe('7d');
+    expect(localStorage.getItem('tuple_global_range')).toBe('7d');
   });
 
   it('shows custom provider names instead of custom:<uuid> in provider series', async () => {
-    localStorage.setItem('manifest_global_group', 'provider');
+    localStorage.setItem('tuple_global_group', 'provider');
     const customSeries = {
       agents: ['openai', 'custom:cp-1'],
       timeseries: [{ hour: '2026-06-04 10:00:00', openai: 1200, 'custom:cp-1': 300 }],

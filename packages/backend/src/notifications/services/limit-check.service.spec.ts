@@ -5,7 +5,7 @@ import { NotificationEmailService } from './notification-email.service';
 import { EmailProviderConfigService } from './email-provider-config.service';
 import { NotificationLogService } from './notification-log.service';
 import { IngestEventBusService, IngestEvent } from '../../common/services/ingest-event-bus.service';
-import { ManifestRuntimeService } from '../../common/services/manifest-runtime.service';
+import { TupleRuntimeService } from '../../common/services/tuple-runtime.service';
 
 describe('LimitCheckService', () => {
   let service: LimitCheckService;
@@ -60,7 +60,7 @@ describe('LimitCheckService', () => {
       emailService,
       emailProviderConfig,
       ingestBus,
-      mockRuntime as unknown as ManifestRuntimeService,
+      mockRuntime as unknown as TupleRuntimeService,
       notificationLog,
     );
     service.onModuleInit();

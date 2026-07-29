@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { TIER_SLOTS } from 'manifest-shared';
+import { TIER_SLOTS } from 'tuple-shared';
 import { TenantCtx, TenantContext } from '../common/decorators/tenant-context.decorator';
 import { TierService } from './routing-core/tier.service';
 import { ResolveAgentService } from './routing-core/resolve-agent.service';

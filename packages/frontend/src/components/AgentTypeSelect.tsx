@@ -7,7 +7,7 @@ import {
   PLATFORM_LABELS,
   PLATFORMS_BY_CATEGORY,
   PLATFORM_ICONS,
-} from 'manifest-shared';
+} from 'tuple-shared';
 
 interface Props {
   category: AgentCategory | null;

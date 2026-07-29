@@ -10,35 +10,35 @@ describe('proxy-friendly-response', () => {
   describe('getDashboardUrl', () => {
     const prodConfig = {
       get: jest.fn((key: string) => {
-        if (key === 'app.betterAuthUrl') return 'https://app.manifest.build';
+        if (key === 'app.betterAuthUrl') return 'https://app.tuple.ai';
         return undefined;
       }),
     } as unknown as ConfigService;
 
     it('returns agent Overview URL when agentName provided without section', () => {
       expect(getDashboardUrl(prodConfig, 'my-agent')).toBe(
-        'https://app.manifest.build/agents/my-agent',
+        'https://app.tuple.ai/agents/my-agent',
       );
     });
 
     it('returns agent Routing URL when section is "routing"', () => {
       expect(getDashboardUrl(prodConfig, 'my-agent', 'routing')).toBe(
-        'https://app.manifest.build/agents/my-agent/routing',
+        'https://app.tuple.ai/agents/my-agent/routing',
       );
     });
 
     it('returns agent Limits URL when section is "limits"', () => {
       expect(getDashboardUrl(prodConfig, 'my-agent', 'limits')).toBe(
-        'https://app.manifest.build/agents/my-agent/limits',
+        'https://app.tuple.ai/agents/my-agent/limits',
       );
     });
 
     it('returns bare base URL (Workspace) when no agentName', () => {
-      expect(getDashboardUrl(prodConfig)).toBe('https://app.manifest.build');
+      expect(getDashboardUrl(prodConfig)).toBe('https://app.tuple.ai');
     });
 
     it('ignores section when no agentName is supplied', () => {
-      expect(getDashboardUrl(prodConfig, undefined, 'routing')).toBe('https://app.manifest.build');
+      expect(getDashboardUrl(prodConfig, undefined, 'routing')).toBe('https://app.tuple.ai');
     });
 
     it('falls back to localhost when no betterAuthUrl configured', () => {
@@ -77,36 +77,36 @@ describe('proxy-friendly-response', () => {
       expect(result.forward.isGoogle).toBe(false);
       expect(result.forward.isAnthropic).toBe(false);
       expect(result.forward.isChatGpt).toBe(false);
-      expect(result.meta.model).toBe('manifest');
-      expect(result.meta.provider).toBe('manifest');
+      expect(result.meta.model).toBe('tuple');
+      expect(result.meta.provider).toBe('tuple');
       expect(result.meta.confidence).toBe(1);
-      expect(result.meta.reason).toBe('manifest_internal_error');
+      expect(result.meta.reason).toBe('tuple_internal_error');
       // The rendered text rides on meta so the recorder can persist it verbatim
       // instead of a generic stand-in.
-      expect(result.meta.manifest_error_message).toBe('Hello world');
-      expect(result.meta.manifest_error_code).toBeUndefined();
+      expect(result.meta.tuple_error_message).toBe('Hello world');
+      expect(result.meta.tuple_error_code).toBeUndefined();
 
       const json = (await result.forward.response.json()) as Record<string, unknown>;
       expect(json.object).toBe('chat.completion');
-      expect((json.id as string).startsWith('chatcmpl-manifest-')).toBe(true);
+      expect((json.id as string).startsWith('chatcmpl-tuple-')).toBe(true);
 
       const choices = json.choices as { message: { role: string; content: string } }[];
       expect(choices[0].message.role).toBe('assistant');
       expect(choices[0].message.content).toBe('Hello world');
     });
 
-    it('carries the Manifest error code through meta when one is supplied', () => {
+    it('carries the Tuple error code through meta when one is supplied', () => {
       const result = buildFriendlyResponse(
-        '[🦚 Manifest M100] No anthropic API key yet.',
+        '[↗ Tuple M100] No anthropic API key yet.',
         false,
         'no_provider_key',
         'M100',
       );
 
       expect(result.meta.reason).toBe('no_provider_key');
-      expect(result.meta.manifest_error_code).toBe('M100');
-      expect(result.meta.manifest_error_message).toBe(
-        '[🦚 Manifest M100] No anthropic API key yet.',
+      expect(result.meta.tuple_error_code).toBe('M100');
+      expect(result.meta.tuple_error_message).toBe(
+        '[↗ Tuple M100] No anthropic API key yet.',
       );
     });
 

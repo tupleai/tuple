@@ -1,6 +1,6 @@
-# Deploy Manifest on DigitalOcean
+# Deploy Tuple on DigitalOcean
 
-This deploys Manifest on DigitalOcean App Platform with a web service and Dev PostgreSQL database. The deploy link uses DigitalOcean's Deploy to DigitalOcean flow, which reads `.do/deploy.template.yaml` from the public repository.
+This deploys Tuple on DigitalOcean App Platform with a web service and Dev PostgreSQL database. The deploy link uses DigitalOcean's Deploy to DigitalOcean flow, which reads `.do/deploy.template.yaml` from the public repository.
 
 ## Prerequisites
 
@@ -14,7 +14,7 @@ This stack creates paid resources, including an App Platform service and Dev Pos
 Open the DigitalOcean deploy link:
 
 ```text
-https://cloud.digitalocean.com/apps/new?repo=https://github.com/mnfst/manifest/tree/main
+https://cloud.digitalocean.com/apps/new?repo=https://github.com/tupleai/tuple/tree/main
 ```
 
 DigitalOcean prompts for the missing secret values before deployment. Generate and paste separate values for:
@@ -23,9 +23,9 @@ DigitalOcean prompts for the missing secret values before deployment. Generate a
 openssl rand -hex 32
 ```
 
-Use one generated value for `BETTER_AUTH_SECRET` and another for `MANIFEST_ENCRYPTION_KEY`.
+Use one generated value for `BETTER_AUTH_SECRET` and another for `TUPLE_ENCRYPTION_KEY`.
 
-## Open Manifest
+## Open Tuple
 
 After App Platform finishes deploying, open the app URL and create the first account. The first account becomes the admin.
 

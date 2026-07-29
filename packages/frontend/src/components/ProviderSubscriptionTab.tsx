@@ -97,7 +97,7 @@ const ProviderSubscriptionTab: Component<Props> = (props) => {
         <div class="provider-modal__add-custom">
           <a
             class="provider-modal__add-custom-chip"
-            href="https://github.com/mnfst/manifest/discussions/973"
+            href="https://github.com/tupleai/tuple/discussions/973"
             target="_blank"
             rel="noopener noreferrer"
           >

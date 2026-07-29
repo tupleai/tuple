@@ -65,7 +65,7 @@ if (!root) {
 render(
   () => (
     <MetaProvider>
-      <Title>Manifest</Title>
+      <Title>Tuple</Title>
       <ToastContainer />
       <Router>
         <Route path="/" component={App}>

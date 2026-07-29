@@ -31,7 +31,7 @@ const baseTier: HeaderTier = {
   id: "ht-1",
   agent_id: "agent-1",
   name: "Premium",
-  header_key: "x-manifest-tier",
+  header_key: "x-tuple-tier",
   header_value: "premium",
   badge_color: "indigo",
   sort_order: 0,
@@ -45,7 +45,7 @@ const baseTier: HeaderTier = {
 describe("HeaderTierSnippetModal", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockGetAgentKey.mockResolvedValue({ apiKey: "mnfst_abc", keyPrefix: "mnfst_abc" });
+    mockGetAgentKey.mockResolvedValue({ apiKey: "tuple_abc", keyPrefix: "tuple_abc" });
     Object.defineProperty(window, "location", {
       configurable: true,
       value: { hostname: "localhost", origin: "http://localhost:3001" },
@@ -85,25 +85,25 @@ describe("HeaderTierSnippetModal", () => {
       string,
       string
     >;
-    expect(headers).toEqual({ "x-manifest-tier": "premium" });
+    expect(headers).toEqual({ "x-tuple-tier": "premium" });
   });
 
-  it("uses window.location.origin + /v1 as the base URL on non-app.manifest.build hosts", () => {
+  it("uses window.location.origin + /v1 as the base URL on non-app.tuple.ai hosts", () => {
     const { getByTestId } = render(() => (
       <HeaderTierSnippetModal agentName="demo" tier={baseTier} onClose={vi.fn()} />
     ));
     expect(getByTestId("snippets-base-url").textContent).toBe("http://localhost:3001/v1");
   });
 
-  it("uses the production URL on app.manifest.build", () => {
+  it("uses the production URL on app.tuple.ai", () => {
     Object.defineProperty(window, "location", {
       configurable: true,
-      value: { hostname: "app.manifest.build", origin: "https://app.manifest.build" },
+      value: { hostname: "app.tuple.ai", origin: "https://app.tuple.ai" },
     });
     const { getByTestId } = render(() => (
       <HeaderTierSnippetModal agentName="demo" tier={baseTier} onClose={vi.fn()} />
     ));
-    expect(getByTestId("snippets-base-url").textContent).toBe("https://app.manifest.build/v1");
+    expect(getByTestId("snippets-base-url").textContent).toBe("https://app.tuple.ai/v1");
   });
 
   it("calls onClose when the close button is clicked", () => {
@@ -173,8 +173,8 @@ describe("HeaderTierSnippetModal", () => {
     const { findByTestId } = render(() => (
       <HeaderTierSnippetModal agentName="demo" tier={baseTier} onClose={vi.fn()} />
     ));
-    expect((await findByTestId("snippets-api-key")).textContent).toBe("mnfst_abc");
-    expect((await findByTestId("snippets-key-prefix")).textContent).toBe("mnfst_abc");
+    expect((await findByTestId("snippets-api-key")).textContent).toBe("tuple_abc");
+    expect((await findByTestId("snippets-key-prefix")).textContent).toBe("tuple_abc");
   });
 
   it("threads null apiKey when getAgentKey resolves with no keys", async () => {

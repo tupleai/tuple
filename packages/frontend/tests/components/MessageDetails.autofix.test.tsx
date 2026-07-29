@@ -167,7 +167,7 @@ describe('MessageDetails Auto-fix section', () => {
 
     await vi.waitFor(() => {
       expect(container.textContent).toContain(
-        'Manifest caught an error, repaired the request, and retried it successfully.',
+        'Tuple caught an error, repaired the request, and retried it successfully.',
       );
     });
 
@@ -256,7 +256,7 @@ describe('MessageDetails Auto-fix section', () => {
 
     await vi.waitFor(() => {
       expect(container.textContent).toContain(
-        'Manifest caught an error, repaired the request, and retried it successfully.',
+        'Tuple caught an error, repaired the request, and retried it successfully.',
       );
     });
     // Phrase present, no operations table, but the sibling link still renders.
@@ -396,7 +396,7 @@ describe('MessageDetails Auto-fix section', () => {
 
     await vi.waitFor(() => {
       expect(container.textContent).toContain(
-        'Manifest caught an error, repaired the request, and retried it successfully.',
+        'Tuple caught an error, repaired the request, and retried it successfully.',
       );
     });
 
@@ -440,7 +440,7 @@ describe('MessageDetails Auto-fix section', () => {
     // Phoenix's summary replaces the generic success phrase.
     expect(text).toContain('so it was capped at 8192');
     expect(text).not.toContain(
-      'Manifest caught an error, repaired the request, and retried it successfully.',
+      'Tuple caught an error, repaired the request, and retried it successfully.',
     );
     // Phoenix's authoritative per-op detail (the local fallback couldn't describe clamp_param).
     expect(text).toContain('Capped "max_tokens" at the maximum of 8192.');

@@ -11,7 +11,7 @@ import {
   selectMessageRowColumns,
   ERROR_MESSAGE_STATUSES,
   SUCCESS_STATUS_SQL_LIST,
-  MANIFEST_ORIGIN_PREDICATE,
+  TUPLE_ORIGIN_PREDICATE,
   CUSTOM_PROVIDER_JOIN_CONDITION,
   excludePlaygroundAgents,
   sqlExcludePlayground,
@@ -28,7 +28,7 @@ import type {
 import { computeCutoff, sqlCastFloat, sqlSanitizeCost } from '../../common/utils/postgres-sql';
 import { inferProviderFromModel } from '../../common/utils/provider-inference';
 import { TtlCache } from '../../common/utils/ttl-cache';
-import { ManifestRequest } from '../../entities/request.entity';
+import { TupleRequest } from '../../entities/request.entity';
 
 // The Messages-log "failed"/"errors" filters and every "messages" KPI count
 // share one definition of an error status (see query-helpers.sqlCountMessages).
@@ -166,8 +166,8 @@ export class MessagesQueryService {
     @InjectRepository(CustomProvider)
     private readonly customProviderRepo: Repository<CustomProvider>,
     @Optional()
-    @InjectRepository(ManifestRequest)
-    private readonly requestRepo?: Repository<ManifestRequest>,
+    @InjectRepository(TupleRequest)
+    private readonly requestRepo?: Repository<TupleRequest>,
     @Optional()
     @InjectRepository(TenantProvider)
     private readonly tenantProviderRepo?: Repository<TenantProvider>,
@@ -275,7 +275,7 @@ export class MessagesQueryService {
     } else if (params.status) {
       qb.andWhere('r.status = :requestStatus', { requestStatus: params.status });
     }
-    if (params.origin === 'manifest') {
+    if (params.origin === 'tuple') {
       qb.andWhere(`r.error_origin IN ('config', 'policy', 'internal', 'request')`);
     } else if (params.origin) {
       qb.andWhere('r.error_origin = :requestOrigin', { requestOrigin: params.origin });
@@ -716,11 +716,11 @@ export class MessagesQueryService {
     this.applyTriggerFilter(qb, params.triggers);
 
     // Error-origin scope. Nothing is hidden by default: the log is the complete
-    // event listing, and a Manifest setup error is exactly the row a user needs
-    // to see to fix their setup. `manifest` is a shorthand for every
-    // Manifest-authored origin at once.
-    if (params.origin === 'manifest') {
-      qb.andWhere(MANIFEST_ORIGIN_PREDICATE);
+    // event listing, and a Tuple setup error is exactly the row a user needs
+    // to see to fix their setup. `tuple` is a shorthand for every
+    // Tuple-authored origin at once.
+    if (params.origin === 'tuple') {
+      qb.andWhere(TUPLE_ORIGIN_PREDICATE);
     } else if (params.origin) {
       qb.andWhere('at.error_origin = :originFilter', { originFilter: params.origin });
     }

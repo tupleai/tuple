@@ -182,7 +182,7 @@ describe('Direction 1 – creating a NEW agent inherits every existing provider'
 
   it('creating an agent when the user has NO providers succeeds with an empty enabled list', async () => {
     // Snapshot then physically remove the provider so getProviders() returns an
-    // empty set (it filters by isManifestUsableProvider, which ignores
+    // empty set (it filters by isTupleUsableProvider, which ignores
     // is_active), proving the 0-provider create path is a safe no-op. Restore
     // the row + its A/B/C enabled rows afterwards so later isolation tests still run.
     const snapshot = await ds.getRepository(TenantProvider).findOneOrFail({

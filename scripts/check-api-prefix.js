@@ -6,24 +6,26 @@ const backendSrc = fs.readFileSync(
   'packages/backend/src/common/constants/api-key.constants.ts',
   'utf8',
 );
-const pluginSrc = fs.readFileSync(
+const sharedSrc = fs.readFileSync(
   'packages/shared/src/api-key.ts',
   'utf8',
 );
 
 const backendMatch = regex.exec(backendSrc);
-const pluginMatch = regex.exec(pluginSrc);
+const sharedMatch = regex.exec(sharedSrc);
+const backendReexportsShared =
+  /export\s*\{\s*API_KEY_PREFIX\s*\}\s*from\s*['"]tuple-shared['"]/.test(backendSrc);
 
-if (!backendMatch || !pluginMatch) {
-  console.error('Could not extract API_KEY_PREFIX from one or both packages');
+if (!sharedMatch || (!backendMatch && !backendReexportsShared)) {
+  console.error('Could not resolve API_KEY_PREFIX from the backend and shared packages');
   process.exit(1);
 }
 
-if (backendMatch[1] !== pluginMatch[1]) {
+if (backendMatch && backendMatch[1] !== sharedMatch[1]) {
   console.error(
-    `MISMATCH: backend="${backendMatch[1]}" plugin="${pluginMatch[1]}"`,
+    `MISMATCH: backend="${backendMatch[1]}" shared="${sharedMatch[1]}"`,
   );
   process.exit(1);
 }
 
-console.log(`OK: API_KEY_PREFIX="${backendMatch[1]}"`);
+console.log(`OK: API_KEY_PREFIX="${sharedMatch[1]}"`);

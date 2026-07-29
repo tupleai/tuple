@@ -1,15 +1,15 @@
 services:
-  manifest:
-    image: manifestdotbuild/manifest:6
+  tuple:
+    image: tupleai/tuple:6
     environment:
-      - SERVICE_URL_MANIFEST_2099
+      - SERVICE_URL_TUPLE_2099
       - PORT=2099
       - BIND_ADDRESS=0.0.0.0
-      - DATABASE_URL=postgresql://manifest:${SERVICE_PASSWORD_POSTGRES}@postgres:5432/manifest
+      - DATABASE_URL=postgresql://tuple:${SERVICE_PASSWORD_POSTGRES}@postgres:5432/tuple
       - BETTER_AUTH_SECRET=${SERVICE_HEX_64_AUTH}
-      - MANIFEST_ENCRYPTION_KEY=${SERVICE_HEX_64_ENCRYPTION}
-      - BETTER_AUTH_URL=${SERVICE_URL_MANIFEST_2099}
-      - MANIFEST_MODE=selfhosted
+      - TUPLE_ENCRYPTION_KEY=${SERVICE_HEX_64_ENCRYPTION}
+      - BETTER_AUTH_URL=${SERVICE_URL_TUPLE_2099}
+      - TUPLE_MODE=selfhosted
       - NODE_ENV=production
       - DB_POOL_MAX=10
       - AUTH_DB_POOL_MAX=5
@@ -30,16 +30,16 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      - POSTGRES_USER=manifest
+      - POSTGRES_USER=tuple
       - POSTGRES_PASSWORD=${SERVICE_PASSWORD_POSTGRES}
-      - POSTGRES_DB=manifest
+      - POSTGRES_DB=tuple
     volumes:
-      - manifest-postgres-data:/var/lib/postgresql/data
+      - tuple-postgres-data:/var/lib/postgresql/data
     healthcheck:
-      test: pg_isready -U manifest
+      test: pg_isready -U tuple
       interval: 5s
       timeout: 3s
       retries: 5
 
 volumes:
-  manifest-postgres-data:
+  tuple-postgres-data:

@@ -1,5 +1,5 @@
 import type { ProviderWireFormat, ProxyApiMode } from '../proxy/proxy-types';
-import type { AuthType } from 'manifest-shared';
+import type { AuthType } from 'tuple-shared';
 
 /**
  * Wire contract for the Phoenix healing service (mnfst/phoenix). Mirrors
@@ -40,12 +40,12 @@ export interface PhoenixProviderExchange {
 export interface HealRequest {
   /**
    * Correlates every heal within one logical request's retry chain — Phoenix's
-   * `traceId` (Manifest reuses the message-link group id). REQUIRED: Phoenix
+   * `traceId` (Tuple reuses the message-link group id). REQUIRED: Phoenix
    * rejects a heal request without it (`400`).
    */
   traceId: string;
   /**
-   * The Manifest tenant this request belongs to (`Tenant.id`). Attributes the
+   * The Tuple tenant this request belongs to (`Tenant.id`). Attributes the
    * failure to a customer so Phoenix can report affected tenants per issue and
    * browse a tenant's failures. Always available on the proxy heal path (the
    * agent key resolves a tenant), so we always send it; Phoenix treats it as an
@@ -58,7 +58,7 @@ export interface HealRequest {
   authType: AuthType;
   /**
    * Provider-facing wire protocol. `request` uses this shape, and Phoenix must
-   * return `healedBody` in the same shape so Manifest can resend it verbatim.
+   * return `healedBody` in the same shape so Tuple can resend it verbatim.
    */
   api: ProxyApiMode;
   url?: string;

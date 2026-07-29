@@ -55,7 +55,7 @@ describe('PlanPicker', () => {
     expect(screen.getByText('SSO / SAML')).toBeDefined();
     const link = container.querySelector('.plan-picker__cta') as HTMLAnchorElement;
     expect(link.textContent).toBe('Talk to sales');
-    expect(link.getAttribute('href')).toBe('https://manifest.build/pricing');
+    expect(link.getAttribute('href')).toBe('https://tuple.ai/pricing');
     expect(link.getAttribute('target')).toBe('_blank');
     expect(link.getAttribute('rel')).toBe('noopener noreferrer');
   });

@@ -123,7 +123,7 @@ describe('Agent Duplication (e2e)', () => {
       .expect(201);
 
     expect(res.body.agent.name).toBe('test-agent-copy');
-    expect(res.body.apiKey).toMatch(/^mnfst_/);
+    expect(res.body.apiKey).toMatch(/^tuple_/);
     // providers = 1 row copied (the global anthropic row gets a new enabled-provider row, not a clone)
     expect(res.body.copied).toEqual({
       providers: 1,
@@ -199,7 +199,7 @@ describe('Agent Duplication (e2e)', () => {
       id: 'ak-remap',
       key: 'enc-placeholder',
       key_hash: 'hash-remap',
-      key_prefix: 'mnfst_remap',
+      key_prefix: 'tuple_remap',
       label: 'remap key',
       tenant_id: TEST_TENANT_ID,
       agent_id: srcAgentId,

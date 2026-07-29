@@ -45,16 +45,16 @@ describe("Help", () => {
     expect(contactLink).toBeDefined();
   });
 
-  it("Calendly link has correct href", () => {
+  it("support link has correct href", () => {
     render(() => <Help />);
     const links = screen.getAllByRole("link");
     const bookLink = links.find((l) => l.textContent?.includes("Book"));
     expect(bookLink?.getAttribute("href")).toBe(
-      "https://calendly.com/sebastien-manifest/30min?month=2026-02",
+      "mailto:support@tuple.ai?subject=Tuple%20setup%20help",
     );
   });
 
-  it("Calendly link opens in new tab with noopener noreferrer", () => {
+  it("support link opens in new tab with noopener noreferrer", () => {
     render(() => <Help />);
     const links = screen.getAllByRole("link");
     const bookLink = links.find((l) => l.textContent?.includes("Book"));
@@ -67,14 +67,14 @@ describe("Help", () => {
     const links = screen.getAllByRole("link");
     const contactLink = links.find((l) => l.textContent?.includes("Contact"));
     expect(contactLink?.getAttribute("href")).toBe(
-      "mailto:sebastien@manifest.build",
+      "mailto:sebastien@tuple.ai",
     );
   });
 
   it("renders Title metadata", () => {
     const { container } = render(() => <Help />);
     const title = container.querySelector("title");
-    expect(title?.textContent).toContain("Help & Support - Manifest");
+    expect(title?.textContent).toContain("Help & Support - Tuple");
   });
 
   it("renders breadcrumb prompt text", () => {
@@ -96,7 +96,7 @@ describe("Help", () => {
   it("shows the support email address with the response window", () => {
     render(() => <Help />);
     expect(
-      screen.getByText(/sebastien@manifest.build/),
+      screen.getByText(/sebastien@tuple.ai/),
     ).toBeDefined();
     expect(
       screen.getByText(/we typically respond within 24 hours/),

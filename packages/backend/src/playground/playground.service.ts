@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 import type { Response as ExpressResponse } from 'express';
-import type { AuthType, PlaygroundStreamEvent } from 'manifest-shared';
+import type { AuthType, PlaygroundStreamEvent } from 'tuple-shared';
 import { AgentMessage } from '../entities/agent-message.entity';
 import { CustomProvider } from '../entities/custom-provider.entity';
 import { ProviderClient } from '../routing/proxy/provider-client';
@@ -34,7 +34,7 @@ import { PlaygroundHistoryService } from './playground-history.service';
 import { buildForwardBody, derivePromptForHistory } from './playground-payload';
 import { consumeProviderStream } from './playground-stream';
 import type { RunPlaygroundDto } from './dto/run-playground.dto';
-import { ManifestRequest } from '../entities/request.entity';
+import { TupleRequest } from '../entities/request.entity';
 
 @Injectable()
 export class PlaygroundService {
@@ -590,7 +590,7 @@ export class PlaygroundService {
       const getRepository = this.messageRepo.manager?.getRepository?.bind(this.messageRepo.manager);
       if (!getRepository) return;
       const errorMessage = scrubSecrets(errorBody).slice(0, 2000);
-      await getRepository(ManifestRequest).insert({
+      await getRepository(TupleRequest).insert({
         id: uuid(),
         tenant_id: agent.tenant_id,
         agent_id: agent.id,
@@ -626,14 +626,14 @@ export class PlaygroundService {
 
   private async insertPlaygroundRequest(
     attempt: Partial<AgentMessage>,
-    request: ManifestRequest,
+    request: TupleRequest,
   ): Promise<void> {
     const getRepository = this.messageRepo.manager?.getRepository?.bind(this.messageRepo.manager);
     if (!getRepository) {
       await this.messageRepo.insert(attempt);
       return;
     }
-    await getRepository(ManifestRequest).insert(request);
+    await getRepository(TupleRequest).insert(request);
     await this.messageRepo.insert(attempt);
   }
 

@@ -110,15 +110,15 @@ describe("OPENAI_API_TOGGLE", () => {
 
 describe("getVercelPythonSnippet", () => {
   it("returns a snippet with Vercel AI SDK Python title", () => {
-    const snippet = getVercelPythonSnippet("http://localhost/v1", "mnfst_key");
+    const snippet = getVercelPythonSnippet("http://localhost/v1", "tuple_key");
     expect(snippet.title).toBe("Vercel AI SDK (Python)");
   });
 
   it("includes AI SDK Python client code", () => {
-    const snippet = getVercelPythonSnippet("http://example.com/v1", "mnfst_abc");
+    const snippet = getVercelPythonSnippet("http://example.com/v1", "tuple_abc");
     expect(snippet.code).toContain("from ai_sdk import AIClient");
     expect(snippet.code).toContain("http://example.com/v1");
-    expect(snippet.code).toContain("mnfst_abc");
+    expect(snippet.code).toContain("tuple_abc");
     expect(snippet.code).toContain('model="auto"');
   });
 });
@@ -138,7 +138,7 @@ describe("getStoredFramework / storeFramework", () => {
   });
 
   it("returns python for invalid stored value", () => {
-    localStorage.setItem("manifest_setup_framework", "invalid");
+    localStorage.setItem("tuple_setup_framework", "invalid");
     expect(getStoredFramework()).toBe("python");
   });
 
@@ -172,7 +172,7 @@ describe("getStoredToolkit / storeToolkit", () => {
   });
 
   it("returns openai-sdk for invalid stored value", () => {
-    localStorage.setItem("manifest_setup_toolkit", "invalid");
+    localStorage.setItem("tuple_setup_toolkit", "invalid");
     expect(getStoredToolkit()).toBe("openai-sdk");
   });
 
@@ -206,7 +206,7 @@ describe("getStoredOpenAILang / storeOpenAILang", () => {
   });
 
   it("returns python for invalid stored value", () => {
-    localStorage.setItem("manifest_setup_openai_lang", "invalid");
+    localStorage.setItem("tuple_setup_openai_lang", "invalid");
     expect(getStoredOpenAILang()).toBe("python");
   });
 
@@ -227,20 +227,20 @@ describe("getStoredOpenAILang / storeOpenAILang", () => {
 
 describe("getPythonSnippets", () => {
   it("returns two snippets", () => {
-    const snippets = getPythonSnippets("http://localhost/v1", "mnfst_key");
+    const snippets = getPythonSnippets("http://localhost/v1", "tuple_key");
     expect(snippets).toHaveLength(2);
   });
 
   it("includes LangChain snippet with base_url and api_key", () => {
-    const snippets = getPythonSnippets("http://example.com/v1", "mnfst_abc");
+    const snippets = getPythonSnippets("http://example.com/v1", "tuple_abc");
     expect(snippets[0].title).toBe("LangChain");
     expect(snippets[0].code).toContain("http://example.com/v1");
-    expect(snippets[0].code).toContain("mnfst_abc");
+    expect(snippets[0].code).toContain("tuple_abc");
     expect(snippets[0].code).toContain("ChatOpenAI");
   });
 
   it("includes OpenAI SDK snippet", () => {
-    const snippets = getPythonSnippets("http://example.com/v1", "mnfst_abc");
+    const snippets = getPythonSnippets("http://example.com/v1", "tuple_abc");
     expect(snippets[1].title).toBe("OpenAI Python SDK");
     expect(snippets[1].code).toContain("from openai import OpenAI");
     expect(snippets[1].code).toContain("http://example.com/v1");
@@ -252,20 +252,20 @@ describe("getPythonSnippets", () => {
 
 describe("getTypeScriptSnippets", () => {
   it("returns two snippets", () => {
-    const snippets = getTypeScriptSnippets("http://localhost/v1", "mnfst_key");
+    const snippets = getTypeScriptSnippets("http://localhost/v1", "tuple_key");
     expect(snippets).toHaveLength(2);
   });
 
   it("includes Vercel AI SDK snippet", () => {
-    const snippets = getTypeScriptSnippets("http://example.com/v1", "mnfst_xyz");
+    const snippets = getTypeScriptSnippets("http://example.com/v1", "tuple_xyz");
     expect(snippets[0].title).toBe("Vercel AI SDK");
     expect(snippets[0].code).toContain("createOpenAI");
     expect(snippets[0].code).toContain("http://example.com/v1");
-    expect(snippets[0].code).toContain("mnfst_xyz");
+    expect(snippets[0].code).toContain("tuple_xyz");
   });
 
   it("includes OpenAI TS SDK snippet", () => {
-    const snippets = getTypeScriptSnippets("http://example.com/v1", "mnfst_xyz");
+    const snippets = getTypeScriptSnippets("http://example.com/v1", "tuple_xyz");
     expect(snippets[1].title).toBe("OpenAI TypeScript SDK");
     expect(snippets[1].code).toContain('import OpenAI from "openai"');
     expect(snippets[1].code).toContain("client.responses.create");
@@ -279,14 +279,14 @@ describe("getClaudeCodeSettingsSnippet", () => {
     const { getClaudeCodeSettingsSnippet } = await import(
       "../../src/services/framework-snippets"
     );
-    const snippet = getClaudeCodeSettingsSnippet("http://localhost:38240/v1", "mnfst_key");
+    const snippet = getClaudeCodeSettingsSnippet("http://localhost:38240/v1", "tuple_key");
     // Strict-parse to make sure it's valid JSON and shaped correctly.
     const parsed = JSON.parse(snippet);
     expect(parsed).toEqual({
       model: "auto",
       env: {
         ANTHROPIC_BASE_URL: "http://localhost:38240",
-        ANTHROPIC_AUTH_TOKEN: "mnfst_key",
+        ANTHROPIC_AUTH_TOKEN: "tuple_key",
       },
     });
     // No node command, no shell artifacts — pure JSON.
@@ -300,7 +300,7 @@ describe("getNanobotConfigSnippet", () => {
     const { getNanobotConfigSnippet } = await import(
       "../../src/services/framework-snippets"
     );
-    const snippet = getNanobotConfigSnippet("http://localhost:38240/v1", "mnfst_key");
+    const snippet = getNanobotConfigSnippet("http://localhost:38240/v1", "tuple_key");
     // Strict-parse to make sure it's valid JSON and shaped correctly.
     const parsed = JSON.parse(snippet);
     expect(parsed).toEqual({
@@ -312,7 +312,7 @@ describe("getNanobotConfigSnippet", () => {
       },
       providers: {
         custom: {
-          apiKey: "mnfst_key",
+          apiKey: "tuple_key",
           apiBase: "http://localhost:38240/v1",
         },
       },
@@ -326,16 +326,16 @@ describe("getNanobotConfigSnippet", () => {
 
 describe("getOpenClawSnippet", () => {
   it("includes openclaw config set commands", () => {
-    const snippet = getOpenClawSnippet("http://localhost/v1", "mnfst_key");
-    expect(snippet).toContain("openclaw config set models.providers.manifest");
-    expect(snippet).toContain("openclaw config set agents.defaults.model.primary manifest/auto");
+    const snippet = getOpenClawSnippet("http://localhost/v1", "tuple_key");
+    expect(snippet).toContain("openclaw config set models.providers.tuple");
+    expect(snippet).toContain("openclaw config set agents.defaults.model.primary tuple/auto");
     expect(snippet).toContain("openclaw gateway restart");
   });
 
   it("includes baseUrl and apiKey in JSON", () => {
-    const snippet = getOpenClawSnippet("https://app.manifest.build/v1", "mnfst_test");
-    expect(snippet).toContain("app.manifest.build/v1");
-    expect(snippet).toContain("mnfst_test");
+    const snippet = getOpenClawSnippet("https://app.tuple.ai/v1", "tuple_test");
+    expect(snippet).toContain("app.tuple.ai/v1");
+    expect(snippet).toContain("tuple_test");
     expect(snippet).toContain("openai-completions");
     expect(snippet).not.toContain("openai-responses");
   });
@@ -344,7 +344,7 @@ describe("getOpenClawSnippet", () => {
 describe("getOpenClawDisableSnippet", () => {
   it("includes unset commands and selected model", () => {
     const snippet = getOpenClawDisableSnippet("openai/gpt-4o");
-    expect(snippet).toContain("openclaw config unset models.providers.manifest");
+    expect(snippet).toContain("openclaw config unset models.providers.tuple");
     expect(snippet).toContain("openclaw config set agents.defaults.model.primary openai/gpt-4o");
     expect(snippet).toContain("openclaw gateway restart");
   });
@@ -357,15 +357,15 @@ describe("getOpenClawDisableSnippet", () => {
 
 describe("getCurlSnippet", () => {
   it("returns one snippet", () => {
-    const snippets = getCurlSnippet("http://localhost/v1", "mnfst_key");
+    const snippets = getCurlSnippet("http://localhost/v1", "tuple_key");
     expect(snippets).toHaveLength(1);
   });
 
   it("includes curl command with Bearer token", () => {
-    const snippets = getCurlSnippet("http://example.com/v1", "mnfst_abc");
+    const snippets = getCurlSnippet("http://example.com/v1", "tuple_abc");
     expect(snippets[0].title).toBe("cURL");
     expect(snippets[0].code).toContain("curl -X POST");
-    expect(snippets[0].code).toContain("Bearer mnfst_abc");
+    expect(snippets[0].code).toContain("Bearer tuple_abc");
     expect(snippets[0].code).toContain("http://example.com/v1/responses");
     expect(snippets[0].code).toContain('"input": "Hello"');
     expect(snippets[0].code).not.toContain("chat/completions");
@@ -502,9 +502,9 @@ describe("getSnippetForToolkit", () => {
   });
 
   it("includes baseUrl and apiKey in snippet", () => {
-    const result = getSnippetForToolkit("openai-sdk", "http://example.com/v1", "mnfst_abc");
+    const result = getSnippetForToolkit("openai-sdk", "http://example.com/v1", "tuple_abc");
     expect(result.code).toContain("http://example.com/v1");
-    expect(result.code).toContain("mnfst_abc");
+    expect(result.code).toContain("tuple_abc");
   });
 });
 
@@ -550,12 +550,12 @@ describe("getOpenClawWizardSnippet", () => {
 });
 
 describe("customHeaders weaving", () => {
-  const headers = { "x-manifest-tier": "premium" };
+  const headers = { "x-tuple-tier": "premium" };
 
   it("python: getPythonSnippets adds default_headers to LangChain and OpenAI", () => {
     const [lc, openai] = getPythonSnippets("https://api.local/v1", "k", headers);
-    expect(lc!.code).toContain('default_headers={"x-manifest-tier": "premium"}');
-    expect(openai!.code).toContain('default_headers={"x-manifest-tier": "premium"}');
+    expect(lc!.code).toContain('default_headers={"x-tuple-tier": "premium"}');
+    expect(openai!.code).toContain('default_headers={"x-tuple-tier": "premium"}');
   });
 
   it("python: omitting customHeaders leaves the snippet unchanged", () => {
@@ -566,8 +566,8 @@ describe("customHeaders weaving", () => {
 
   it("typescript: getTypeScriptSnippets uses headers for Vercel and defaultHeaders for OpenAI", () => {
     const [vercel, openai] = getTypeScriptSnippets("https://api.local/v1", "k", headers);
-    expect(vercel!.code).toContain('headers: { "x-manifest-tier": "premium" }');
-    expect(openai!.code).toContain('defaultHeaders: { "x-manifest-tier": "premium" }');
+    expect(vercel!.code).toContain('headers: { "x-tuple-tier": "premium" }');
+    expect(openai!.code).toContain('defaultHeaders: { "x-tuple-tier": "premium" }');
   });
 
   it("typescript: omitting customHeaders leaves the snippet unchanged", () => {
@@ -578,7 +578,7 @@ describe("customHeaders weaving", () => {
 
   it("vercel python: getVercelPythonSnippet adds default_headers", () => {
     const s = getVercelPythonSnippet("https://api.local/v1", "k", headers);
-    expect(s.code).toContain('default_headers={"x-manifest-tier": "premium"}');
+    expect(s.code).toContain('default_headers={"x-tuple-tier": "premium"}');
   });
 
   it("vercel python: omitting customHeaders leaves the snippet unchanged", () => {
@@ -588,10 +588,10 @@ describe("customHeaders weaving", () => {
 
   it("curl: getCurlSnippet adds -H flags for each header in declared order", () => {
     const s = getCurlSnippet("https://api.local/v1", "k", {
-      "x-manifest-tier": "premium",
+      "x-tuple-tier": "premium",
       "x-app-name": "billing",
     })[0];
-    expect(s!.code).toContain("-H 'x-manifest-tier: premium'");
+    expect(s!.code).toContain("-H 'x-tuple-tier: premium'");
     expect(s!.code).toContain("-H 'x-app-name: billing'");
   });
 
@@ -621,51 +621,51 @@ describe("customHeaders weaving", () => {
 
   it("getSnippetsForFramework forwards customHeaders to python", () => {
     const [lc] = getSnippetsForFramework("python", "https://api.local/v1", "k", headers);
-    expect(lc!.code).toContain('default_headers={"x-manifest-tier": "premium"}');
+    expect(lc!.code).toContain('default_headers={"x-tuple-tier": "premium"}');
   });
 
   it("getSnippetsForFramework forwards customHeaders to typescript", () => {
     const [vercel] = getSnippetsForFramework("typescript", "https://api.local/v1", "k", headers);
-    expect(vercel!.code).toContain('headers: { "x-manifest-tier": "premium" }');
+    expect(vercel!.code).toContain('headers: { "x-tuple-tier": "premium" }');
   });
 
   it("getSnippetsForFramework forwards customHeaders to curl", () => {
     const [c] = getSnippetsForFramework("curl", "https://api.local/v1", "k", headers);
-    expect(c!.code).toContain("-H 'x-manifest-tier: premium'");
+    expect(c!.code).toContain("-H 'x-tuple-tier: premium'");
   });
 
   it("getSnippetsForFramework openclaw ignores customHeaders (CLI does not need them)", () => {
     const [s] = getSnippetsForFramework("openclaw", "https://api.local/v1", "k", headers);
-    expect(s!.code).not.toContain("x-manifest-tier");
+    expect(s!.code).not.toContain("x-tuple-tier");
   });
 
   it("getSnippetForToolkit forwards customHeaders for openai-sdk python", () => {
     const s = getSnippetForToolkit("openai-sdk", "https://api.local/v1", "k", "python", headers);
-    expect(s.code).toContain('default_headers={"x-manifest-tier": "premium"}');
+    expect(s.code).toContain('default_headers={"x-tuple-tier": "premium"}');
   });
 
   it("getSnippetForToolkit forwards customHeaders for openai-sdk typescript", () => {
     const s = getSnippetForToolkit("openai-sdk", "https://api.local/v1", "k", "typescript", headers);
-    expect(s.code).toContain('defaultHeaders: { "x-manifest-tier": "premium" }');
+    expect(s.code).toContain('defaultHeaders: { "x-tuple-tier": "premium" }');
   });
 
   it("getSnippetForToolkit forwards customHeaders for vercel-ai-sdk python", () => {
     const s = getSnippetForToolkit("vercel-ai-sdk", "https://api.local/v1", "k", "python", headers);
-    expect(s.code).toContain('default_headers={"x-manifest-tier": "premium"}');
+    expect(s.code).toContain('default_headers={"x-tuple-tier": "premium"}');
   });
 
   it("getSnippetForToolkit forwards customHeaders for vercel-ai-sdk typescript", () => {
     const s = getSnippetForToolkit("vercel-ai-sdk", "https://api.local/v1", "k", "typescript", headers);
-    expect(s.code).toContain('headers: { "x-manifest-tier": "premium" }');
+    expect(s.code).toContain('headers: { "x-tuple-tier": "premium" }');
   });
 
   it("getSnippetForToolkit forwards customHeaders for langchain", () => {
     const s = getSnippetForToolkit("langchain", "https://api.local/v1", "k", "python", headers);
-    expect(s.code).toContain('default_headers={"x-manifest-tier": "premium"}');
+    expect(s.code).toContain('default_headers={"x-tuple-tier": "premium"}');
   });
 
   it("getSnippetForToolkit forwards customHeaders for curl", () => {
     const s = getSnippetForToolkit("curl", "https://api.local/v1", "k", "python", headers);
-    expect(s.code).toContain("-H 'x-manifest-tier: premium'");
+    expect(s.code).toContain("-H 'x-tuple-tier: premium'");
   });
 });

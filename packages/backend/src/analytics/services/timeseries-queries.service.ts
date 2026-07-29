@@ -18,7 +18,7 @@ import {
   sqlIsCompletedStatus,
 } from './query-helpers';
 import { CustomProvider } from '../../entities/custom-provider.entity';
-import { ManifestRequest } from '../../entities/request.entity';
+import { TupleRequest } from '../../entities/request.entity';
 import {
   computeCutoff,
   sqlHourBucket,
@@ -55,8 +55,8 @@ export class TimeseriesQueriesService {
     @InjectRepository(Agent)
     private readonly agentRepo: Repository<Agent>,
     @Optional()
-    @InjectRepository(ManifestRequest)
-    private readonly requestRepo?: Repository<ManifestRequest>,
+    @InjectRepository(TupleRequest)
+    private readonly requestRepo?: Repository<TupleRequest>,
     @Optional()
     private readonly requestVolume?: RequestVolumeService,
     @Optional()
@@ -100,7 +100,7 @@ export class TimeseriesQueriesService {
     const attemptsQb = qb.groupBy(bucketAlias).orderBy(bucketAlias, 'ASC');
     const useRequestCounts =
       this.requestRepo && !authType && !provider && !label && !tenantProviderId;
-    let requestRowsQb: SelectQueryBuilder<ManifestRequest> | undefined;
+    let requestRowsQb: SelectQueryBuilder<TupleRequest> | undefined;
     let unlinkedRowsQb: SelectQueryBuilder<AgentMessage> | undefined;
     if (useRequestCounts) {
       const requestQb = this.requestRepo!.createQueryBuilder('r')
@@ -329,7 +329,7 @@ export class TimeseriesQueriesService {
       .setParameter('sparkCutoff', sparkCutoff);
     addTenantFilter(bucketsQb, tenantId);
 
-    let requestCountsQb: SelectQueryBuilder<ManifestRequest> | undefined;
+    let requestCountsQb: SelectQueryBuilder<TupleRequest> | undefined;
     let unlinkedCountsQb: SelectQueryBuilder<AgentMessage> | undefined;
     if (this.requestRepo) {
       requestCountsQb = this.requestRepo

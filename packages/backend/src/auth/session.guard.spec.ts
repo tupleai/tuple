@@ -171,15 +171,15 @@ describe('SessionGuard', () => {
   });
 
   describe('cloud mode (default) — no loopback fallback', () => {
-    const originalEnv = process.env['MANIFEST_MODE'];
+    const originalEnv = process.env['TUPLE_MODE'];
 
     beforeEach(() => {
-      delete process.env['MANIFEST_MODE'];
+      delete process.env['TUPLE_MODE'];
     });
 
     afterEach(() => {
-      if (originalEnv === undefined) delete process.env['MANIFEST_MODE'];
-      else process.env['MANIFEST_MODE'] = originalEnv;
+      if (originalEnv === undefined) delete process.env['TUPLE_MODE'];
+      else process.env['TUPLE_MODE'] = originalEnv;
     });
 
     it('does NOT inject synthetic user for loopback IP without session', async () => {
@@ -219,8 +219,8 @@ describe('SessionGuard', () => {
       expect(request['authMethod']).toBe('session');
     });
 
-    it('does NOT inject synthetic user when MANIFEST_MODE is "cloud"', async () => {
-      process.env['MANIFEST_MODE'] = 'cloud';
+    it('does NOT inject synthetic user when TUPLE_MODE is "cloud"', async () => {
+      process.env['TUPLE_MODE'] = 'cloud';
       jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(false);
       (auth.api.getSession as jest.Mock).mockResolvedValue(null);
       const { context, request } = createMockContext({ ip: '127.0.0.1' });
@@ -233,15 +233,15 @@ describe('SessionGuard', () => {
   });
 
   describe('self-hosted loopback fallback', () => {
-    const originalEnv = process.env['MANIFEST_MODE'];
+    const originalEnv = process.env['TUPLE_MODE'];
 
     beforeEach(() => {
-      process.env['MANIFEST_MODE'] = 'selfhosted';
+      process.env['TUPLE_MODE'] = 'selfhosted';
     });
 
     afterEach(() => {
-      if (originalEnv === undefined) delete process.env['MANIFEST_MODE'];
-      else process.env['MANIFEST_MODE'] = originalEnv;
+      if (originalEnv === undefined) delete process.env['TUPLE_MODE'];
+      else process.env['TUPLE_MODE'] = originalEnv;
     });
 
     it('uses real session when Better Auth session exists (preserves per-user isolation)', async () => {

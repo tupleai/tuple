@@ -48,7 +48,7 @@ import Sparkline from '../components/Sparkline.jsx';
 import FilterSelect from '../components/FilterSelect.jsx';
 import Select from '../components/Select.jsx';
 import { authLabel, authBadgeFor } from '../components/AuthBadge.jsx';
-import { platformIcon } from 'manifest-shared';
+import { platformIcon } from 'tuple-shared';
 import GlobalOverviewSkeleton from '../components/GlobalOverviewSkeleton.jsx';
 import MessageTable from '../components/MessageTable.jsx';
 import {
@@ -116,7 +116,7 @@ interface OverviewResponse {
     successful: number;
     success_rate: number;
     attempt_success_rate: number;
-    manifest_lift_pct: number;
+    tuple_lift_pct: number;
     recovered: number;
   };
   token_usage: Array<{ hour?: string; date?: string; input_tokens: number; output_tokens: number }>;
@@ -146,8 +146,8 @@ const RANGE_OPTIONS = [
 ];
 const PRO_DASHBOARD_RANGES = new Set(['30d', '90d', '365d']);
 
-const RANGE_STORAGE_KEY = 'manifest_global_range';
-const GROUP_STORAGE_KEY = 'manifest_global_group';
+const RANGE_STORAGE_KEY = 'tuple_global_range';
+const GROUP_STORAGE_KEY = 'tuple_global_group';
 
 function loadRange(): string {
   try {
@@ -612,7 +612,7 @@ const GlobalOverview: Component = () => {
 
   return (
     <div class="container--lg">
-      <Title>Overview | Manifest</Title>
+      <Title>Overview | Tuple</Title>
 
       {/* Add Harness Modal */}
       <AddAgentModal open={addAgentOpen()} onClose={dismissAddAgent} />

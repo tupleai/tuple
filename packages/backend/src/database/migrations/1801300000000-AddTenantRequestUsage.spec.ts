@@ -2,7 +2,7 @@ import { AddTenantRequestUsage1801300000000 } from './1801300000000-AddTenantReq
 
 describe('AddTenantRequestUsage1801300000000', () => {
   let statements: Array<{ sql: string; params?: unknown[] }>;
-  const originalManifestMode = process.env['MANIFEST_MODE'];
+  const originalTupleMode = process.env['TUPLE_MODE'];
   const queryRunner = {
     query: jest.fn(async (sql: string, params?: unknown[]) => {
       statements.push({ sql, params });
@@ -13,7 +13,7 @@ describe('AddTenantRequestUsage1801300000000', () => {
   };
 
   beforeEach(() => {
-    process.env['MANIFEST_MODE'] = 'cloud';
+    process.env['TUPLE_MODE'] = 'cloud';
     statements = [];
     jest.clearAllMocks();
     queryRunner.query.mockImplementation(async (sql: string, params?: unknown[]) => {
@@ -22,15 +22,15 @@ describe('AddTenantRequestUsage1801300000000', () => {
   });
 
   afterAll(() => {
-    if (originalManifestMode === undefined) {
-      delete process.env['MANIFEST_MODE'];
+    if (originalTupleMode === undefined) {
+      delete process.env['TUPLE_MODE'];
     } else {
-      process.env['MANIFEST_MODE'] = originalManifestMode;
+      process.env['TUPLE_MODE'] = originalTupleMode;
     }
   });
 
   it('does not add quota counter artifacts to self-hosted installations', async () => {
-    process.env['MANIFEST_MODE'] = 'selfhosted';
+    process.env['TUPLE_MODE'] = 'selfhosted';
 
     await new AddTenantRequestUsage1801300000000().up(queryRunner as never);
 

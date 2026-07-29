@@ -9,7 +9,7 @@ import { Tenant } from '../entities/tenant.entity';
 import { Agent } from '../entities/agent.entity';
 import { AgentApiKey } from '../entities/agent-api-key.entity';
 import { AgentMessage } from '../entities/agent-message.entity';
-import { ManifestRequest } from '../entities/request.entity';
+import { TupleRequest } from '../entities/request.entity';
 import { ApiKey } from '../entities/api-key.entity';
 import { TenantProvider } from '../entities/tenant-provider.entity';
 import { TierAssignment } from '../entities/tier-assignment.entity';
@@ -77,7 +77,7 @@ import { RequestRecordingRetentionService } from './request-recording-retention.
       Agent,
       AgentApiKey,
       AgentMessage,
-      ManifestRequest,
+      TupleRequest,
       ApiKey,
       TenantProvider,
       TierAssignment,

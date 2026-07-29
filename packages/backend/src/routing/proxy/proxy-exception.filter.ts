@@ -1,15 +1,15 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Request, Response as ExpressResponse } from 'express';
-import { formatManifestError, ManifestErrorCode } from '../../common/errors/error-codes';
-import { MANIFEST_CODE_TO_REASON } from '../../common/errors/manifest-error';
-import type { RequestWithManifestErrorContext } from '../../otlp/interfaces/ingestion-context.interface';
+import { formatTupleError, TupleErrorCode } from '../../common/errors/error-codes';
+import { TUPLE_CODE_TO_REASON } from '../../common/errors/tuple-error';
+import type { RequestWithTupleErrorContext } from '../../otlp/interfaces/ingestion-context.interface';
 import { ProxyMessageRecorder } from './proxy-message-recorder';
 import { sanitizeRequestHeaders } from './request-headers';
 import { getDashboardUrl, sendFriendlyResponse } from './proxy-friendly-response';
 
 /** Guard-thrown messages that should become friendly chat responses. */
-const AUTH_ERROR_CODES: Record<string, ManifestErrorCode> = {
+const AUTH_ERROR_CODES: Record<string, TupleErrorCode> = {
   'Authorization header required': 'M001',
   'Empty token': 'M002',
   'Invalid API key format': 'M003',
@@ -54,23 +54,23 @@ export class ProxyExceptionFilter implements ExceptionFilter {
   /**
    * Record an expired-key rejection (M004) against the agent the key belongs to.
    * The guard resolved that agent before noticing the expiry and left it on
-   * `manifestErrorContext`; without a context there is nobody to attribute the
+   * `tupleErrorContext`; without a context there is nobody to attribute the
    * row to, so nothing is written.
    *
    * `content` is the exact text the caller received, dashboard link included —
    * the row is only useful if it says where to generate a new key.
    */
   private recordExpiredKey(req: Request, content: string): void {
-    const ctx = (req as Request & RequestWithManifestErrorContext).manifestErrorContext;
+    const ctx = (req as Request & RequestWithTupleErrorContext).tupleErrorContext;
     if (!ctx) return;
     const body = req.body as Record<string, unknown> | undefined;
     const model = typeof body?.model === 'string' ? body.model : undefined;
     this.recorder
-      .recordManifestBlockedRequest(ctx, {
+      .recordTupleBlockedRequest(ctx, {
         httpStatus: 401,
         errorMessage: content,
         errorCode: 'M004',
-        reason: MANIFEST_CODE_TO_REASON.M004,
+        reason: TUPLE_CODE_TO_REASON.M004,
         model,
         requestHeaders: sanitizeRequestHeaders(req.headers),
       })
@@ -111,7 +111,7 @@ export class ProxyExceptionFilter implements ExceptionFilter {
     ) {
       const { limit, used } = billingResponse as { limit?: number; used?: number };
       const upgradeUrl = `${getDashboardUrl(this.config)}/upgrade?reason=requests`;
-      const content = formatManifestError('M204', { threshold: limit ?? 0, upgradeUrl });
+      const content = formatTupleError('M204', { threshold: limit ?? 0, upgradeUrl });
       const isStream = (req.body as Record<string, unknown>)?.stream === true;
       if (isChatRenderingClient(req)) {
         sendFriendlyResponse(res, content, isStream);
@@ -130,7 +130,7 @@ export class ProxyExceptionFilter implements ExceptionFilter {
 
     const errorCode = AUTH_ERROR_CODES[message];
     if (errorCode) {
-      const friendly = formatManifestError(errorCode);
+      const friendly = formatTupleError(errorCode);
       const dashboardUrl = getDashboardUrl(this.config);
       const content =
         errorCode === 'M004'
@@ -143,21 +143,21 @@ export class ProxyExceptionFilter implements ExceptionFilter {
         // Real status — auth errors get 401, validation errors keep their status.
         const realStatus = status === 400 ? 400 : 401;
         res.status(realStatus).json({
-          error: { message: content, type: 'auth_error', code: 'manifest_auth' },
+          error: { message: content, type: 'auth_error', code: 'tuple_auth' },
         });
       }
       return;
     }
 
     if (isChatClient) {
-      const content = status >= 500 ? formatManifestError('M500') : message;
+      const content = status >= 500 ? formatTupleError('M500') : message;
       sendFriendlyResponse(res, content, isStream);
       return;
     }
 
     // Tools and monitors: pass the real HTTP status with a structured envelope.
     const errorMessage =
-      status >= 500 ? 'Manifest encountered an internal error. Try again shortly.' : message;
+      status >= 500 ? 'Tuple encountered an internal error. Try again shortly.' : message;
     res.status(status).json({
       error: {
         message: errorMessage,

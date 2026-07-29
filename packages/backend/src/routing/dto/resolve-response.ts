@@ -5,9 +5,9 @@ import type {
   OutputModality,
   SpecificityCategory,
   TierSlot,
-} from 'manifest-shared';
+} from 'tuple-shared';
 
-export type { AuthType } from 'manifest-shared';
+export type { AuthType } from 'tuple-shared';
 
 export interface ResolveResponse {
   tier: TierSlot;

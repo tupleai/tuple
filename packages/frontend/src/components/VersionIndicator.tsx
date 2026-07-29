@@ -1,8 +1,8 @@
 import { Show } from 'solid-js';
 
 const VersionIndicator = () => {
-  const isSelfHosted = import.meta.env.VITE_MANIFEST_SELFHOSTED === 'true';
-  const version = __MANIFEST_VERSION__;
+  const isSelfHosted = import.meta.env.VITE_TUPLE_SELFHOSTED === 'true';
+  const version = __TUPLE_VERSION__;
 
   return (
     <Show when={isSelfHosted && version}>

@@ -1,5 +1,5 @@
 [build]
-buildCommand = "npx turbo build --filter=manifest-backend --filter=manifest-frontend --filter=manifest-shared"
+buildCommand = "npx turbo build --filter=tuple-backend --filter=tuple-frontend --filter=tuple-shared"
 
 [deploy]
 startCommand = "npm start"

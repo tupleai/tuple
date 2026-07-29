@@ -31,12 +31,12 @@ describe('MailgunProvider', () => {
 
     const body = (global.fetch as jest.Mock).mock.calls[0][1].body;
     expect(body).toBeInstanceOf(URLSearchParams);
-    expect(body.get('from')).toBe('Manifest <noreply@test.com>');
+    expect(body.get('from')).toBe('Tuple <noreply@test.com>');
     expect(body.get('to')).toBe('user@test.com');
     expect(body.get('subject')).toBe('Test');
     expect(body.get('html')).toBe('<p>Hi</p>');
     expect(body.get('h:Reply-To')).toBe('noreply@test.com');
-    expect(body.get('o:tag')).toBe('manifest');
+    expect(body.get('o:tag')).toBe('tuple');
     expect(body.has('text')).toBe(false);
   });
 
@@ -130,7 +130,7 @@ describe('MailgunProvider', () => {
     expect(body.get('subject')).toBe('Test');
     expect(body.get('html')).toBe('<p>Hi</p>');
     expect(body.get('h:Reply-To')).toBe('noreply@test.com');
-    expect(body.get('o:tag')).toBe('manifest');
+    expect(body.get('o:tag')).toBe('tuple');
   });
 
   it('uses default from when fromEmail not configured', async () => {
@@ -140,8 +140,8 @@ describe('MailgunProvider', () => {
     await provider.send({ to: 'user@test.com', subject: 'Test', html: '<p>Hi</p>' });
 
     const body = (global.fetch as jest.Mock).mock.calls[0][1].body as URLSearchParams;
-    expect(body.get('from')).toBe('Manifest <noreply@manifest.build>');
-    expect(body.get('h:Reply-To')).toBe('noreply@manifest.build');
+    expect(body.get('from')).toBe('Tuple <noreply@tuple.ai>');
+    expect(body.get('h:Reply-To')).toBe('noreply@tuple.ai');
   });
 
   it('includes text param when provided alongside all required fields', async () => {
@@ -157,12 +157,12 @@ describe('MailgunProvider', () => {
 
     const body = (global.fetch as jest.Mock).mock.calls[0][1].body as URLSearchParams;
     expect(body.get('text')).toBe('Hi plain');
-    expect(body.get('from')).toBe('Manifest <noreply@test.com>');
+    expect(body.get('from')).toBe('Tuple <noreply@test.com>');
     expect(body.get('to')).toBe('user@test.com');
     expect(body.get('subject')).toBe('Test');
     expect(body.get('html')).toBe('<p>Hi</p>');
     expect(body.get('h:Reply-To')).toBe('noreply@test.com');
-    expect(body.get('o:tag')).toBe('manifest');
+    expect(body.get('o:tag')).toBe('tuple');
   });
 
   it('omits text param when not provided', async () => {
@@ -194,7 +194,7 @@ describe('MailgunProvider', () => {
 
     const body = (global.fetch as jest.Mock).mock.calls[0][1].body as URLSearchParams;
     expect(body.get('h:Reply-To')).toBe('noreply@test.com');
-    expect(body.get('o:tag')).toBe('manifest');
+    expect(body.get('o:tag')).toBe('tuple');
   });
 
   it('preserves unicode characters in subject and html', async () => {

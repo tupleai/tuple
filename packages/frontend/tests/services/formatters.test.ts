@@ -101,13 +101,13 @@ describe('formatStatus', () => {
 });
 
 describe('formatErrorOrigin', () => {
-  it('labels Manifest-side origins distinctly from provider/transport', () => {
+  it('labels Tuple-side origins distinctly from provider/transport', () => {
     expect(formatErrorOrigin('provider')).toBe('Provider');
     expect(formatErrorOrigin('transport')).toBe('Transport');
-    expect(formatErrorOrigin('config')).toBe('Manifest · Setup');
-    expect(formatErrorOrigin('policy')).toBe('Manifest · Limit');
-    expect(formatErrorOrigin('internal')).toBe('Manifest · Internal');
-    expect(formatErrorOrigin('request')).toBe('Manifest · Bad request');
+    expect(formatErrorOrigin('config')).toBe('Tuple · Setup');
+    expect(formatErrorOrigin('policy')).toBe('Tuple · Limit');
+    expect(formatErrorOrigin('internal')).toBe('Tuple · Internal');
+    expect(formatErrorOrigin('request')).toBe('Tuple · Bad request');
   });
   it('returns null for a missing origin', () => {
     expect(formatErrorOrigin(null)).toBeNull();

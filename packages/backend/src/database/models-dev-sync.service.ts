@@ -1,6 +1,6 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { normalizeProviderName, type ModelCapability, type ModelModality } from 'manifest-shared';
+import { normalizeProviderName, type ModelCapability, type ModelModality } from 'tuple-shared';
 import { PROVIDER_BY_ID_OR_ALIAS } from '../common/constants/providers';
 import {
   capabilitiesFromModelsDev,
@@ -114,7 +114,7 @@ export class ModelsDevSyncService implements OnModuleInit {
   private readonly logger = new Logger(ModelsDevSyncService.name);
   /** Map: our provider ID → Map<model ID (native), entry> */
   private cache = new Map<string, Map<string, ModelsDevModelEntry>>();
-  /** Map: models.dev provider ID → Map<model ID, entry>. Includes providers Manifest does not natively know. */
+  /** Map: models.dev provider ID → Map<model ID, entry>. Includes providers Tuple does not natively know. */
   private customProviderCache = new Map<string, Map<string, ModelsDevModelEntry>>();
   /** Map: provider id/display-name aliases → models.dev provider ID. */
   private customProviderIndex = new Map<string, string>();

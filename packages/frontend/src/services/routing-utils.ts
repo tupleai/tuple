@@ -1,5 +1,5 @@
 import { PROVIDERS } from './providers.js';
-import { inferProviderFromModel, SHARED_PROVIDERS } from 'manifest-shared';
+import { inferProviderFromModel, SHARED_PROVIDERS } from 'tuple-shared';
 import type { AuthType, ModelRoute, RoutingProvider } from './api.js';
 
 export interface RouteSlots {

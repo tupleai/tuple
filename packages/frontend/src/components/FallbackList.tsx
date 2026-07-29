@@ -24,7 +24,7 @@ import { authBadgeFor } from './AuthBadge.js';
 import { providerIcon, customProviderLogo } from './ProviderIcon.js';
 import ModelParamsAffordance from './ModelParamsAffordance.jsx';
 import RouteKeyChip from './RouteKeyChip.js';
-import { modelParamsScopeForTier } from 'manifest-shared';
+import { modelParamsScopeForTier } from 'tuple-shared';
 
 interface FallbackListProps {
   agentName: string;

@@ -45,7 +45,7 @@ describe('ProviderSubscriptionTab', () => {
       'subscription',
     );
     const link = container.querySelector('.provider-modal__add-custom-chip') as HTMLAnchorElement;
-    expect(link.getAttribute('href')).toBe('https://github.com/mnfst/manifest/discussions/973');
+    expect(link.getAttribute('href')).toBe('https://github.com/tupleai/tuple/discussions/973');
     expect(link.getAttribute('rel')).toContain('noopener');
     expect(link.getAttribute('target')).toBe('_blank');
     expect(container.querySelector('.provider-toggle__name')?.textContent).toBe('Provider One');
@@ -72,7 +72,7 @@ describe('ProviderSubscriptionTab', () => {
 
   it.each([
     ['subscriptionKeyPlaceholder', { subscriptionKeyPlaceholder: 'sk-...' }],
-    ['subscriptionCommand', { subscriptionCommand: 'manifest auth login cmd' }],
+    ['subscriptionCommand', { subscriptionCommand: 'tuple auth login cmd' }],
     ['subscriptionAuthMode=popup_oauth', { subscriptionAuthMode: 'popup_oauth' as const }],
     ['subscriptionAuthMode=device_code', { subscriptionAuthMode: 'device_code' as const }],
     ['subscriptionAuthMode=popup_paste', { subscriptionAuthMode: 'popup_paste' as const }],

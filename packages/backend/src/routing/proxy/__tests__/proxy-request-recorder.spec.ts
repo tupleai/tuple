@@ -169,9 +169,9 @@ describe('ProxyMessageRecorder request parents', () => {
     recorder.onModuleDestroy();
   });
 
-  it('records a Manifest rejection with zero provider attempts', async () => {
+  it('records a Tuple rejection with zero provider attempts', async () => {
     const { recorder, insert, requestValues } = setup();
-    await recorder.recordManifestBlockedRequest(ctx, {
+    await recorder.recordTupleBlockedRequest(ctx, {
       requestId: 'request-2',
       reason: 'no_provider_key',
       errorMessage: 'No provider key',
@@ -193,7 +193,7 @@ describe('ProxyMessageRecorder request parents', () => {
 
   it('stores a failed M302 heal outcome on its zero-attempt Request', async () => {
     const { recorder, insert, requestValues } = setup();
-    await recorder.recordManifestBlockedRequest(ctx, {
+    await recorder.recordTupleBlockedRequest(ctx, {
       requestId: 'request-m302-no-patch',
       reason: 'model_not_available',
       errorMessage: 'Model unavailable',
@@ -255,9 +255,9 @@ describe('ProxyMessageRecorder request parents', () => {
           http_status: 200,
         },
       ],
-      manifestOrigin: {
+      tupleOrigin: {
         code: 'M302',
-        message: '[🦚 Manifest M302] Model "ghost-model" is not available.',
+        message: '[↗ Tuple M302] Model "ghost-model" is not available.',
         model: 'ghost-model',
       },
     };

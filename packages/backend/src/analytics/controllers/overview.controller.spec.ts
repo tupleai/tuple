@@ -18,7 +18,7 @@ function mockAggregation(): Record<string, jest.Mock> {
       successful: 48,
       success_rate: 96,
       attempt_success_rate: 90,
-      manifest_lift_pct: 6,
+      tuple_lift_pct: 6,
       recovered: 3,
       previous_total: 45,
     }),
@@ -130,7 +130,7 @@ describe('OverviewController', () => {
       successful: 48,
       success_rate: 96,
       attempt_success_rate: 90,
-      manifest_lift_pct: 6,
+      tuple_lift_pct: 6,
       recovered: 3,
       previous_total: 45,
     });

@@ -33,7 +33,7 @@ export interface SharedProviderEntry {
   minKeyLength: number;
   /** Placeholder shown in the UI's API-key input. */
   keyPlaceholder: string;
-  /** Whether Manifest provisions this provider through its managed free-provider flow. */
+  /** Whether Tuple provisions this provider through its managed free-provider flow. */
   managedFree?: boolean;
   /**
    * Tiles that deep-link users into the local-server detail view (LM
@@ -507,7 +507,7 @@ export interface LocalServerHint {
   installUrl: string;
   /**
    * Short human-readable note shown at the top of the detail view when
-   * the user is running Manifest inside Docker and the server needs to
+   * the user is running Tuple inside Docker and the server needs to
    * bind `0.0.0.0` (otherwise host.docker.internal can't reach it).
    */
   dockerBindNote?: string;

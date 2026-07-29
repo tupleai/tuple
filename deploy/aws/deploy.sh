@@ -3,13 +3,13 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-STACK_NAME="${STACK_NAME:-manifest}"
-SERVICE_NAME="${SERVICE_NAME:-manifest}"
-IMAGE_URL="${IMAGE_URL:-docker.io/manifestdotbuild/manifest:6}"
+STACK_NAME="${STACK_NAME:-tuple}"
+SERVICE_NAME="${SERVICE_NAME:-tuple}"
+IMAGE_URL="${IMAGE_URL:-docker.io/tupleai/tuple:6}"
 DESIRED_COUNT="${DESIRED_COUNT:-1}"
 DATABASE_INSTANCE_CLASS="${DATABASE_INSTANCE_CLASS:-db.t4g.micro}"
 DATABASE_DELETION_PROTECTION="${DATABASE_DELETION_PROTECTION:-false}"
-TEMPLATE_FILE="${TEMPLATE_FILE:-$SCRIPT_DIR/manifest.yaml}"
+TEMPLATE_FILE="${TEMPLATE_FILE:-$SCRIPT_DIR/tuple.yaml}"
 REGION="${AWS_REGION:-${AWS_DEFAULT_REGION:-}}"
 
 if [[ -z "$REGION" ]]; then

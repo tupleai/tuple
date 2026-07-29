@@ -28,10 +28,10 @@ describe('sanitizeRequestHeaders', () => {
     expect(out).toEqual({ 'HTTP-Referer': 'https://kept.example' });
   });
 
-  it('drops x-manifest-* headers from the client regardless of casing', () => {
+  it('drops x-tuple-* headers from the client regardless of casing', () => {
     const out = sanitizeRequestHeaders({
-      'X-Manifest-Specificity': 'trading',
-      'x-manifest-tier': 'reasoning',
+      'X-Tuple-Specificity': 'trading',
+      'x-tuple-tier': 'reasoning',
       'X-Title': 'ok',
     });
     expect(out).toEqual({ 'X-Title': 'ok' });
@@ -65,7 +65,7 @@ describe('sanitizeRequestHeaders', () => {
 
   it('isBlockedHeaderName is case-insensitive and covers prefixes', () => {
     expect(isBlockedHeaderName('AUTHORIZATION')).toBe(true);
-    expect(isBlockedHeaderName('X-Manifest-Anything')).toBe(true);
+    expect(isBlockedHeaderName('X-Tuple-Anything')).toBe(true);
     expect(isBlockedHeaderName('X-Title')).toBe(false);
   });
 

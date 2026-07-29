@@ -18,56 +18,56 @@ describe("CraftAgentSetup", () => {
     vi.clearAllMocks();
   });
 
-  it("renders the Manifest preset instruction", () => {
+  it("renders the Tuple preset instruction", () => {
     const { container } = render(() => <CraftAgentSetup {...baseProps} />);
-    expect(container.textContent).toContain("Manifest");
+    expect(container.textContent).toContain("Tuple");
     expect(container.textContent).toContain("provider preset");
     expect(container.textContent).toContain("auto");
   });
 
   it("renders the API key", () => {
     const { container } = render(() => <CraftAgentSetup {...baseProps} />);
-    expect(container.textContent).toContain("mnfst_YOUR_KEY");
+    expect(container.textContent).toContain("tuple_YOUR_KEY");
   });
 
   it("masks the API key when only a prefix is available", () => {
     const { container } = render(() => (
-      <CraftAgentSetup {...baseProps} keyPrefix="mnfst_abc" />
+      <CraftAgentSetup {...baseProps} keyPrefix="tuple_abc" />
     ));
-    expect(container.textContent).toContain("mnfst_abc...");
+    expect(container.textContent).toContain("tuple_abc...");
     expect(container.querySelector('[aria-label="Reveal API key"]')).toBeNull();
     expect(container.querySelector('[aria-label="Hide API key"]')).toBeNull();
   });
 
   it("toggles the API key reveal when the eye button is clicked", () => {
     const { container } = render(() => (
-      <CraftAgentSetup {...baseProps} apiKey="mnfst_full_secret_value" keyPrefix="mnfst_full" />
+      <CraftAgentSetup {...baseProps} apiKey="tuple_full_secret_value" keyPrefix="tuple_full" />
     ));
-    expect(container.textContent).toContain("mnfst_full...");
-    expect(container.textContent).not.toContain("mnfst_full_secret_value");
+    expect(container.textContent).toContain("tuple_full...");
+    expect(container.textContent).not.toContain("tuple_full_secret_value");
 
     const reveal = container.querySelector('[aria-label="Reveal API key"]') as HTMLButtonElement;
     expect(reveal).not.toBeNull();
     fireEvent.click(reveal);
-    expect(container.textContent).toContain("mnfst_full_secret_value");
+    expect(container.textContent).toContain("tuple_full_secret_value");
 
     const hide = container.querySelector('[aria-label="Hide API key"]') as HTMLButtonElement;
     expect(hide).not.toBeNull();
     fireEvent.click(hide);
-    expect(container.textContent).not.toContain("mnfst_full_secret_value");
+    expect(container.textContent).not.toContain("tuple_full_secret_value");
   });
 
   it("copy button always uses the real key", () => {
     const writeText = vi.mocked(navigator.clipboard.writeText);
     const { container } = render(() => (
-      <CraftAgentSetup {...baseProps} apiKey="mnfst_full_secret_value" keyPrefix="mnfst_full" />
+      <CraftAgentSetup {...baseProps} apiKey="tuple_full_secret_value" keyPrefix="tuple_full" />
     ));
     const copyButton = container.querySelector('button[aria-label*="Copy" i]') as HTMLButtonElement
       | null;
     expect(copyButton).not.toBeNull();
     fireEvent.click(copyButton!);
     expect(writeText).toHaveBeenCalledTimes(1);
-    expect(writeText.mock.calls[0][0]).toContain("mnfst_full_secret_value");
+    expect(writeText.mock.calls[0][0]).toContain("tuple_full_secret_value");
   });
 
   it("renders inside a setup-agents-card", () => {

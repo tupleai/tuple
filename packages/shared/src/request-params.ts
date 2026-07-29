@@ -14,7 +14,7 @@ export type JsonValue = JsonPrimitive | JsonValue[] | { [key: string]: JsonValue
 export type RequestParamDefaults = Record<string, JsonValue>;
 
 /**
- * Merge configured Manifest params into a request body using the route's
+ * Merge configured Tuple params into a request body using the route's
  * param specs. Storage stays as UI values. The provider wire shape is the
  * same path shape unless a future provider needs a dedicated transformer.
  */

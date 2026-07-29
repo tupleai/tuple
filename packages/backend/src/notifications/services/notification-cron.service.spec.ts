@@ -4,7 +4,7 @@ import { NotificationRulesService } from './notification-rules.service';
 import { NotificationEmailService } from './notification-email.service';
 import { EmailProviderConfigService } from './email-provider-config.service';
 import { NotificationLogService } from './notification-log.service';
-import { ManifestRuntimeService } from '../../common/services/manifest-runtime.service';
+import { TupleRuntimeService } from '../../common/services/tuple-runtime.service';
 
 const activeRule = {
   id: 'rule-1',
@@ -65,7 +65,7 @@ describe('NotificationCronService', () => {
             resolveRecipientEmail: mockResolveRecipientEmail,
           },
         },
-        { provide: ManifestRuntimeService, useValue: mockRuntime },
+        { provide: TupleRuntimeService, useValue: mockRuntime },
       ],
     }).compile();
 

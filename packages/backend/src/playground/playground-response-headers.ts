@@ -15,7 +15,7 @@ const ALLOWED_EXACT = new Set<string>([
   'anthropic-ratelimit-tokens-reset',
 ]);
 
-const ALLOWED_PREFIXES = ['x-ratelimit-', 'x-manifest-', 'ratelimit-'];
+const ALLOWED_PREFIXES = ['x-ratelimit-', 'x-tuple-', 'ratelimit-'];
 
 /**
  * Whitelist outbound response headers before returning them to the browser.

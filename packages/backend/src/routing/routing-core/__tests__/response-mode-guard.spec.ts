@@ -1,5 +1,5 @@
 import { BadRequestException } from '@nestjs/common';
-import type { ModelRoute } from 'manifest-shared';
+import type { ModelRoute } from 'tuple-shared';
 import {
   assertStreamableResponseMode,
   effectiveRoutesForResponseMode,

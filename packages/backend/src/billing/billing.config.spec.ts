@@ -8,7 +8,7 @@ describe('isBillingEnabled', () => {
   });
 
   function setCloudWithKeys() {
-    process.env['MANIFEST_MODE'] = 'cloud';
+    process.env['TUPLE_MODE'] = 'cloud';
     process.env['STRIPE_SECRET_KEY'] = 'sk_test_x';
     process.env['STRIPE_WEBHOOK_SECRET'] = 'whsec_x';
     process.env['STRIPE_PRO_PRICE_ID'] = 'price_x';
@@ -21,7 +21,7 @@ describe('isBillingEnabled', () => {
 
   it('is disabled when self-hosted even with keys', () => {
     setCloudWithKeys();
-    process.env['MANIFEST_MODE'] = 'selfhosted';
+    process.env['TUPLE_MODE'] = 'selfhosted';
     expect(isBillingEnabled()).toBe(false);
   });
 

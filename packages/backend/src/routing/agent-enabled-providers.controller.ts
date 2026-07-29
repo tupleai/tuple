@@ -18,7 +18,7 @@ import { TierAssignment } from '../entities/tier-assignment.entity';
 import { SpecificityAssignment } from '../entities/specificity-assignment.entity';
 import { HeaderTier } from '../entities/header-tier.entity';
 import { ProviderService } from './routing-core/provider.service';
-import type { ModelRoute } from 'manifest-shared';
+import type { ModelRoute } from 'tuple-shared';
 
 @Controller('api/v1/agents/:agentName/enabled-providers')
 export class AgentEnabledProvidersController {

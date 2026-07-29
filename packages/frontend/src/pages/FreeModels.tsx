@@ -141,10 +141,10 @@ const FreeModels: Component = () => {
 
   return (
     <div class="container--lg">
-      <Title>Free Models - Manifest</Title>
+      <Title>Free Models - Tuple</Title>
       <Meta
         name="description"
-        content="Free LLM models you can use with Manifest. No credit card required."
+        content="Free LLM models you can use with Tuple. No credit card required."
       />
       <div class="page-header">
         <div>

@@ -8,7 +8,7 @@ describe('sanitizeRequestHeaders', () => {
   it('returns null when every header is empty or sensitive', () => {
     expect(
       sanitizeRequestHeaders({
-        authorization: 'Bearer mnfst_secret',
+        authorization: 'Bearer tuple_secret',
         cookie: 'session=abc',
         'x-blank': '   ',
       }),
@@ -31,7 +31,7 @@ describe('sanitizeRequestHeaders', () => {
 
   it('drops sensitive headers regardless of casing', () => {
     const result = sanitizeRequestHeaders({
-      Authorization: 'Bearer mnfst_secret',
+      Authorization: 'Bearer tuple_secret',
       Cookie: 'session=abc',
       'Set-Cookie': 'x=y',
       'Proxy-Authorization': 'Basic xxx',
@@ -46,13 +46,13 @@ describe('sanitizeRequestHeaders', () => {
       'X-Railway-Edge': 'railway/europe-west4-drams3a',
       'X-Railway-Request-Id': 'm5e5d2NRQLKtNMov2JZdWA',
       'X-Forwarded-For': '193.33.57.199',
-      'X-Forwarded-Host': 'app.manifest.build',
+      'X-Forwarded-Host': 'app.tuple.ai',
       'X-Forwarded-Proto': 'https',
       'X-Forwarded-Port': '443',
       'X-Real-Ip': '193.33.57.199',
       'X-Request-Start': '1779377596677',
       'X-Envoy-External-Address': '193.33.57.199',
-      Host: 'app.manifest.build',
+      Host: 'app.tuple.ai',
       Connection: 'keep-alive',
       'Accept-Encoding': 'gzip',
       'Content-Length': '143',

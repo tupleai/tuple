@@ -23,12 +23,12 @@ function makeService(overrides?: { enabled?: boolean; endpoint?: string }): {
   // Override the frozen config captured at construction time
   (
     service as unknown as {
-      config: { enabled: boolean; endpoint: string; manifestVersion: string };
+      config: { enabled: boolean; endpoint: string; tupleVersion: string };
     }
   ).config = {
     enabled: overrides?.enabled ?? true,
     endpoint: overrides?.endpoint ?? 'http://ingest.test/v1/report',
-    manifestVersion: '9.9.9',
+    tupleVersion: '9.9.9',
   };
   return { service, install, payloadBuilder };
 }
@@ -45,7 +45,7 @@ function payloadStub(overrides: Partial<TelemetryPayloadV1> = {}): TelemetryPayl
   return {
     schema_version: 1,
     install_id: 'inst-1',
-    manifest_version: '9.9.9',
+    tuple_version: '9.9.9',
     messages_total: 0,
     messages_by_provider: {},
     messages_by_tier: {},

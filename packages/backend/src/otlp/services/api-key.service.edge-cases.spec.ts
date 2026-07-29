@@ -192,7 +192,7 @@ describe('ApiKeyGeneratorService — edge cases', () => {
 
   describe('getKeyForAgent isolation and soft-delete', () => {
     it('should apply deleted_at IS NULL filter (soft-delete)', async () => {
-      mockKeyGetOne.mockResolvedValue({ key_prefix: 'mnfst_xxx' });
+      mockKeyGetOne.mockResolvedValue({ key_prefix: 'tuple_xxx' });
 
       await service.getKeyForAgent('tenant-99', 'bot-x');
 

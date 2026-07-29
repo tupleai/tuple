@@ -4,8 +4,8 @@ import { Repository } from 'typeorm';
 import { AgentMessage } from '../../entities/agent-message.entity';
 import type { CallerAttribution } from '../../routing/proxy/caller-classifier';
 import type { PhoenixExplanation, PhoenixOperation } from '../../routing/autofix/phoenix.types';
-import { isSuccessStatus, type AutofixStatus, type RequestParamDefaults } from 'manifest-shared';
-import { ManifestRequest } from '../../entities/request.entity';
+import { isSuccessStatus, type AutofixStatus, type RequestParamDefaults } from 'tuple-shared';
+import { TupleRequest } from '../../entities/request.entity';
 import type { RecordingResponseBody } from '../../routing/proxy/attempt-recording.types';
 import { RequestRecordingStorageService } from '../../common/services/request-recording-storage.service';
 import { decodeRequestRecording } from '../../common/utils/request-recording-codec';
@@ -106,8 +106,8 @@ export class MessageDetailsService {
     @InjectRepository(AgentMessage)
     private readonly messageRepo: Repository<AgentMessage>,
     @Optional()
-    @InjectRepository(ManifestRequest)
-    private readonly requestRepo?: Repository<ManifestRequest>,
+    @InjectRepository(TupleRequest)
+    private readonly requestRepo?: Repository<TupleRequest>,
     @Optional()
     private readonly recordingStorage?: RequestRecordingStorageService,
   ) {}

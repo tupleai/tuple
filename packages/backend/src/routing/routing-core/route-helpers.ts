@@ -1,5 +1,5 @@
-import type { ModelRoute, AuthType } from 'manifest-shared';
-import { isModelRoute, isModelRouteArray } from 'manifest-shared';
+import type { ModelRoute, AuthType } from 'tuple-shared';
+import { isModelRoute, isModelRouteArray } from 'tuple-shared';
 import type { TierAssignment } from '../../entities/tier-assignment.entity';
 import type { SpecificityAssignment } from '../../entities/specificity-assignment.entity';
 import type { HeaderTier } from '../../entities/header-tier.entity';

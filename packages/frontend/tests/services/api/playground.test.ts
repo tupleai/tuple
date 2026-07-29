@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import * as playground from '../../../src/services/api/playground';
-import type { PlaygroundStreamEvent } from 'manifest-shared';
+import type { PlaygroundStreamEvent } from 'tuple-shared';
 
 vi.mock('../../../src/services/toast-store.js', () => ({
   toast: { error: vi.fn(), success: vi.fn(), warning: vi.fn() },

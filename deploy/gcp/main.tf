@@ -1,19 +1,19 @@
 locals {
   suffix          = random_id.suffix.hex
   name_prefix     = "${var.service_name}-${local.suffix}"
-  database_name   = "manifest"
-  database_user   = "manifest"
+  database_name   = "tuple"
+  database_user   = "tuple"
   service_account = "${substr(var.service_name, 0, 23)}-${local.suffix}"
-  database_url    = "postgresql://${local.database_user}:${urlencode(random_password.database.result)}@/${local.database_name}?host=${urlencode("/cloudsql/${google_sql_database_instance.manifest.connection_name}")}"
+  database_url    = "postgresql://${local.database_user}:${urlencode(random_password.database.result)}@/${local.database_name}?host=${urlencode("/cloudsql/${google_sql_database_instance.tuple.connection_name}")}"
   managed_secret_ids = {
     database_url            = "${local.name_prefix}-database-url"
     better_auth_secret      = "${local.name_prefix}-better-auth-secret"
-    manifest_encryption_key = "${local.name_prefix}-encryption-key"
+    tuple_encryption_key = "${local.name_prefix}-encryption-key"
   }
   managed_secret_values = {
     database_url            = local.database_url
     better_auth_secret      = random_id.better_auth_secret.hex
-    manifest_encryption_key = random_id.manifest_encryption_key.hex
+    tuple_encryption_key = random_id.tuple_encryption_key.hex
   }
 }
 
@@ -38,7 +38,7 @@ resource "random_id" "better_auth_secret" {
   byte_length = 32
 }
 
-resource "random_id" "manifest_encryption_key" {
+resource "random_id" "tuple_encryption_key" {
   byte_length = 32
 }
 
@@ -47,14 +47,14 @@ resource "random_password" "database" {
   special = false
 }
 
-resource "google_service_account" "manifest" {
+resource "google_service_account" "tuple" {
   account_id   = local.service_account
-  display_name = "Manifest Cloud Run"
+  display_name = "Tuple Cloud Run"
 
   depends_on = [google_project_service.required]
 }
 
-resource "google_sql_database_instance" "manifest" {
+resource "google_sql_database_instance" "tuple" {
   name                = "${var.service_name}-postgres-${local.suffix}"
   region              = var.region
   database_version    = "POSTGRES_16"
@@ -75,14 +75,14 @@ resource "google_sql_database_instance" "manifest" {
   depends_on = [google_project_service.required["sqladmin.googleapis.com"]]
 }
 
-resource "google_sql_database" "manifest" {
+resource "google_sql_database" "tuple" {
   name     = local.database_name
-  instance = google_sql_database_instance.manifest.name
+  instance = google_sql_database_instance.tuple.name
 }
 
-resource "google_sql_user" "manifest" {
+resource "google_sql_user" "tuple" {
   name     = local.database_user
-  instance = google_sql_database_instance.manifest.name
+  instance = google_sql_database_instance.tuple.name
   password = random_password.database.result
 }
 
@@ -110,23 +110,23 @@ resource "google_secret_manager_secret_iam_member" "managed" {
 
   secret_id = each.value.id
   role      = "roles/secretmanager.secretAccessor"
-  member    = "serviceAccount:${google_service_account.manifest.email}"
+  member    = "serviceAccount:${google_service_account.tuple.email}"
 }
 
 resource "google_project_iam_member" "cloudsql_client" {
   project = var.project_id
   role    = "roles/cloudsql.client"
-  member  = "serviceAccount:${google_service_account.manifest.email}"
+  member  = "serviceAccount:${google_service_account.tuple.email}"
 }
 
-resource "google_cloud_run_v2_service" "manifest" {
+resource "google_cloud_run_v2_service" "tuple" {
   name                = var.service_name
   location            = var.region
   ingress             = "INGRESS_TRAFFIC_ALL"
   deletion_protection = false
 
   template {
-    service_account                  = google_service_account.manifest.email
+    service_account                  = google_service_account.tuple.email
     max_instance_request_concurrency = 20
 
     scaling {
@@ -137,7 +137,7 @@ resource "google_cloud_run_v2_service" "manifest" {
     volumes {
       name = "cloudsql"
       cloud_sql_instance {
-        instances = [google_sql_database_instance.manifest.connection_name]
+        instances = [google_sql_database_instance.tuple.connection_name]
       }
     }
 
@@ -161,7 +161,7 @@ resource "google_cloud_run_v2_service" "manifest" {
       }
 
       env {
-        name  = "MANIFEST_MODE"
+        name  = "TUPLE_MODE"
         value = "selfhosted"
       }
 
@@ -196,10 +196,10 @@ resource "google_cloud_run_v2_service" "manifest" {
       }
 
       env {
-        name = "MANIFEST_ENCRYPTION_KEY"
+        name = "TUPLE_ENCRYPTION_KEY"
         value_source {
           secret_key_ref {
-            secret  = google_secret_manager_secret.managed["manifest_encryption_key"].secret_id
+            secret  = google_secret_manager_secret.managed["tuple_encryption_key"].secret_id
             version = "latest"
           }
         }
@@ -240,8 +240,8 @@ resource "google_cloud_run_v2_service" "manifest" {
   }
 
   depends_on = [
-    google_sql_database.manifest,
-    google_sql_user.manifest,
+    google_sql_database.tuple,
+    google_sql_user.tuple,
     google_project_iam_member.cloudsql_client,
     google_secret_manager_secret_iam_member.managed,
     google_secret_manager_secret_version.managed,
@@ -251,21 +251,21 @@ resource "google_cloud_run_v2_service" "manifest" {
 
 resource "google_cloud_run_v2_service_iam_member" "public" {
   project  = var.project_id
-  location = google_cloud_run_v2_service.manifest.location
-  name     = google_cloud_run_v2_service.manifest.name
+  location = google_cloud_run_v2_service.tuple.location
+  name     = google_cloud_run_v2_service.tuple.name
   role     = "roles/run.invoker"
   member   = "allUsers"
 }
 
 resource "terraform_data" "set_better_auth_url" {
-  triggers_replace = [google_cloud_run_v2_service.manifest.uri]
+  triggers_replace = [google_cloud_run_v2_service.tuple.uri]
 
   provisioner "local-exec" {
-    command = "gcloud run services update ${google_cloud_run_v2_service.manifest.name} --project ${var.project_id} --region ${var.region} --update-env-vars 'BETTER_AUTH_URL=${google_cloud_run_v2_service.manifest.uri}' --quiet"
+    command = "gcloud run services update ${google_cloud_run_v2_service.tuple.name} --project ${var.project_id} --region ${var.region} --update-env-vars 'BETTER_AUTH_URL=${google_cloud_run_v2_service.tuple.uri}' --quiet"
   }
 
   depends_on = [
-    google_cloud_run_v2_service.manifest,
+    google_cloud_run_v2_service.tuple,
     google_cloud_run_v2_service_iam_member.public,
   ]
 }

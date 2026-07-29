@@ -13,7 +13,7 @@ describe('ErrorsController', () => {
     total_errors: 20,
     provider_errors: 15,
     transport_errors: 2,
-    manifest_errors: 3,
+    tuple_errors: 3,
     by_origin: { provider: 15, transport: 2, config: 3, policy: 0, internal: 0 },
     by_class: { rate_limit: 10, server_error: 5 },
     provider_error_rate: 0.1578,

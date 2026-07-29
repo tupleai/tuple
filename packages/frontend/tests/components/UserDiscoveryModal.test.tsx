@@ -34,7 +34,7 @@ describe('UserDiscoveryModal', () => {
     expect(screen.getByText(/around agent reliability/)).toBeDefined();
     expect(screen.getByText('30 minutes through a video call.')).toBeDefined();
     expect(
-      screen.getByText('Quick access to $10 of Gemini tokens through Manifest.'),
+      screen.getByText('Quick access to $10 of Gemini tokens through Tuple.'),
     ).toBeDefined();
     expect(
       screen.getByText(
@@ -69,7 +69,7 @@ describe('UserDiscoveryModal', () => {
     expect(onClose).toHaveBeenCalledTimes(4);
   });
 
-  it('opens Calendly in a new tab and closes when "Book my slot" is clicked', () => {
+  it('opens the support request in a new tab and closes when "Book my slot" is clicked', () => {
     const onClose = vi.fn();
     const openSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
 

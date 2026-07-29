@@ -4,7 +4,7 @@ import { NotificationRulesService } from './notification-rules.service';
 import { NotificationEmailService } from './notification-email.service';
 import { EmailProviderConfigService } from './email-provider-config.service';
 import { NotificationLogService, formatNotificationTimestamp } from './notification-log.service';
-import { ManifestRuntimeService } from '../../common/services/manifest-runtime.service';
+import { TupleRuntimeService } from '../../common/services/tuple-runtime.service';
 import { computePeriodBoundaries } from '../../common/utils/period.util';
 
 interface ActiveRule {
@@ -24,7 +24,7 @@ export class NotificationCronService implements OnModuleInit {
     private readonly rulesService: NotificationRulesService,
     private readonly emailService: NotificationEmailService,
     private readonly emailProviderConfigService: EmailProviderConfigService,
-    private readonly runtime: ManifestRuntimeService,
+    private readonly runtime: TupleRuntimeService,
     private readonly notificationLog: NotificationLogService,
   ) {}
 

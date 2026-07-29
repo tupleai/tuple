@@ -8,7 +8,7 @@ beforeAll(() => process.on("unhandledRejection", noop));
 afterAll(() => process.off("unhandledRejection", noop));
 
 vi.mock("../../src/services/api.js", () => ({
-  getAgentKey: vi.fn().mockResolvedValue({ keyPrefix: "mnfst_abc" }),
+  getAgentKey: vi.fn().mockResolvedValue({ keyPrefix: "tuple_abc" }),
 }));
 
 vi.mock("../../src/components/SetupStepAddProvider.jsx", () => ({
@@ -105,7 +105,7 @@ describe("SetupModal", () => {
     const { container } = render(() => (
       <SetupModal open={true} agentName="test-agent" onClose={onClose} />
     ));
-    expect(container.textContent).toContain("Connect your harness to Manifest");
+    expect(container.textContent).toContain("Connect your harness to Tuple");
   });
 
   it("closes on overlay click", () => {
@@ -126,17 +126,17 @@ describe("SetupModal", () => {
 
   it("passes apiKey prop to Add Provider step", () => {
     const { container } = render(() => (
-      <SetupModal open={true} agentName="test-agent" apiKey="mnfst_full_key" onClose={onClose} />
+      <SetupModal open={true} agentName="test-agent" apiKey="tuple_full_key" onClose={onClose} />
     ));
     const step = container.querySelector('[data-testid="step-add-provider"]');
     expect(step).not.toBeNull();
-    expect(step!.getAttribute("data-key")).toBe("mnfst_full_key");
+    expect(step!.getAttribute("data-key")).toBe("tuple_full_key");
   });
 
-  it("computes production baseUrl on app.manifest.build hostname", () => {
+  it("computes production baseUrl on app.tuple.ai hostname", () => {
     const origLocation = window.location;
     Object.defineProperty(window, "location", {
-      value: { ...origLocation, hostname: "app.manifest.build", origin: "https://app.manifest.build" },
+      value: { ...origLocation, hostname: "app.tuple.ai", origin: "https://app.tuple.ai" },
       writable: true,
       configurable: true,
     });
@@ -144,7 +144,7 @@ describe("SetupModal", () => {
       <SetupModal open={true} agentName="test-agent" onClose={onClose} />
     ));
     const step = container.querySelector('[data-testid="step-add-provider"]');
-    expect(step?.getAttribute("data-base-url")).toBe("https://app.manifest.build/v1");
+    expect(step?.getAttribute("data-base-url")).toBe("https://app.tuple.ai/v1");
     Object.defineProperty(window, "location", { value: origLocation, writable: true, configurable: true });
   });
 
@@ -183,20 +183,20 @@ describe("SetupModal", () => {
     const { getAgentKey } = await import("../../src/services/api.js");
     (getAgentKey as ReturnType<typeof vi.fn>).mockResolvedValueOnce(null);
     const { container } = render(() => (
-      <SetupModal open={true} agentName="fail-agent" apiKey="mnfst_provided" onClose={onClose} />
+      <SetupModal open={true} agentName="fail-agent" apiKey="tuple_provided" onClose={onClose} />
     ));
     await vi.waitFor(() => {
       const step = container.querySelector('[data-testid="step-add-provider"]');
       expect(step).not.toBeNull();
-      expect(step!.getAttribute("data-key")).toBe("mnfst_provided");
+      expect(step!.getAttribute("data-key")).toBe("tuple_provided");
     });
   });
 
   it("falls back to apiKeyData apiKey when props.apiKey is not provided", async () => {
     const { getAgentKey } = await import("../../src/services/api.js");
     (getAgentKey as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
-      keyPrefix: "mnfst_abc",
-      apiKey: "mnfst_fetched_key",
+      keyPrefix: "tuple_abc",
+      apiKey: "tuple_fetched_key",
     });
     const { container } = render(() => (
       <SetupModal open={true} agentName="test-agent" onClose={onClose} />
@@ -204,7 +204,7 @@ describe("SetupModal", () => {
     await vi.waitFor(() => {
       const step = container.querySelector('[data-testid="step-add-provider"]');
       expect(step).not.toBeNull();
-      expect(step!.getAttribute("data-key")).toBe("mnfst_fetched_key");
+      expect(step!.getAttribute("data-key")).toBe("tuple_fetched_key");
     });
   });
 });

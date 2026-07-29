@@ -1,6 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
 import type { Repository } from 'typeorm';
-import type { ModelRoute } from 'manifest-shared';
+import type { ModelRoute } from 'tuple-shared';
 import { SpecificityService } from '../specificity.service';
 import { SpecificityAssignment } from '../../../entities/specificity-assignment.entity';
 import type { DiscoveredModel } from '../../../model-discovery/model-fetcher';

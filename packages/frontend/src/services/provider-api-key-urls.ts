@@ -1,6 +1,7 @@
-import { SHARED_PROVIDER_BY_ID } from 'manifest-shared';
+import { SHARED_PROVIDER_BY_ID } from 'tuple-shared';
 
-const MANAGED_FREE_PROVIDER_API_KEY_URL = 'https://calendly.com/sebastien-manifest/30min';
+const MANAGED_FREE_PROVIDER_API_KEY_URL =
+  'mailto:support@tuple.ai?subject=Tuple%20managed%20provider%20access';
 
 export const ROUTING_PROVIDER_API_KEY_URLS: Record<string, string> = {
   anthropic: 'https://console.anthropic.com/settings/keys',

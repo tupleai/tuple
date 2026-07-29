@@ -1,11 +1,11 @@
-import { ManifestError } from '../../../common/errors/manifest-error';
+import { TupleError } from '../../../common/errors/tuple-error';
 import { ConfigService } from '@nestjs/config';
 import {
   getProviderParamSpecs,
   type AuthType,
   type ModelRoute,
   type ProviderParamSpecCatalog,
-} from 'manifest-shared';
+} from 'tuple-shared';
 import { ProxyService } from '../proxy.service';
 import type { ResolveService } from '../../resolve/resolve.service';
 import type { ProviderKeyService } from '../../routing-core/provider-key.service';
@@ -232,20 +232,20 @@ describe('ProxyService — orchestration', () => {
   });
 
   describe('payload validation', () => {
-    // A ManifestError, not a BadRequestException: the controller uses the type to
+    // A TupleError, not a BadRequestException: the controller uses the type to
     // record the row as `request` origin instead of blaming the provider.
-    it('throws a ManifestError M300 when messages is missing', async () => {
+    it('throws a TupleError M300 when messages is missing', async () => {
       await expect(svc.proxyRequest(baseOpts({ body: {} as never }))).rejects.toThrow(
-        ManifestError,
+        TupleError,
       );
       await expect(svc.proxyRequest(baseOpts({ body: {} as never }))).rejects.toMatchObject({
         code: 'M300',
       });
     });
 
-    it('throws a ManifestError M300 when messages is empty', async () => {
+    it('throws a TupleError M300 when messages is empty', async () => {
       await expect(svc.proxyRequest(baseOpts({ body: { messages: [] } as never }))).rejects.toThrow(
-        ManifestError,
+        TupleError,
       );
     });
 
@@ -787,7 +787,7 @@ describe('ProxyService — orchestration', () => {
 
     it('does NOT start a provider attempt when credentials fail with no fallback routes (no orphan row)', async () => {
       // With no chain to record it, a synthetic attempt would INSERT a pending
-      // agent_messages row that nothing ever completes. The Manifest stub is the
+      // agent_messages row that nothing ever completes. The Tuple stub is the
       // sole record, so no provider attempt must be started.
       resolveService.resolve.mockResolvedValue({
         tier: 'standard',
@@ -1178,7 +1178,7 @@ describe('ProxyService — orchestration', () => {
       expect(body).not.toContain('M101');
       expect(result.meta).toMatchObject({
         reason: 'model_not_available',
-        manifest_error_code: 'M302',
+        tuple_error_code: 'M302',
       });
     });
 
@@ -1212,8 +1212,8 @@ describe('ProxyService — orchestration', () => {
 
       expect(autofixService.maybeHeal).toHaveBeenCalledTimes(1);
       const params = autofixService.maybeHeal.mock.calls[0][0];
-      // A bare name implies no vendor — the fingerprint falls back to `manifest`.
-      expect(params.provider).toBe('manifest');
+      // A bare name implies no vendor — the fingerprint falls back to `tuple`.
+      expect(params.provider).toBe('tuple');
       expect(params.requestBody).toEqual({
         model: 'some-retired-model',
         messages: [{ role: 'user', content: 'hi' }],
@@ -1227,7 +1227,7 @@ describe('ProxyService — orchestration', () => {
         code: 'model_not_found',
       });
       // maybeHeal resolved null (gates closed) → the friendly M302, no audit.
-      expect(result.meta.manifest_error_code).toBe('M302');
+      expect(result.meta.tuple_error_code).toBe('M302');
       expect(result.autofix).toBeUndefined();
     });
 
@@ -1276,7 +1276,7 @@ describe('ProxyService — orchestration', () => {
       );
 
       expect(result.forward).toBe(healed);
-      // Meta reflects the re-resolved route, not the friendly manifest stub.
+      // Meta reflects the re-resolved route, not the friendly tuple stub.
       expect(result.meta).toMatchObject({
         tier: 'direct',
         reason: 'direct',
@@ -1285,16 +1285,16 @@ describe('ProxyService — orchestration', () => {
         tenantProviderId: 'up-default',
         response_mode: 'buffered',
       });
-      expect(result.meta.manifest_error_code).toBeUndefined();
-      // The audit marks the Manifest origin so recording does not invent an
+      expect(result.meta.tuple_error_code).toBeUndefined();
+      // The audit marks the Tuple origin so recording does not invent an
       // original Provider Attempt before the real healed retry.
       expect(result.autofix).toMatchObject({
         groupId: 'g-1',
         outcome: 'healed',
-        manifestOrigin: { code: 'M302', model: 'some-retired-model' },
+        tupleOrigin: { code: 'M302', model: 'some-retired-model' },
       });
-      expect(result.autofix?.manifestOrigin?.message).toContain('M302');
-      expect(result.autofix?.manifestOrigin?.message).toContain('some-retired-model');
+      expect(result.autofix?.tupleOrigin?.message).toContain('M302');
+      expect(result.autofix?.tupleOrigin?.message).toContain('some-retired-model');
     });
 
     it('keeps the friendly M302 and preserves the failed provider retry attempt', async () => {
@@ -1343,14 +1343,14 @@ describe('ProxyService — orchestration', () => {
       expect(body).toContain('M302');
       expect(result.meta).toMatchObject({
         reason: 'model_not_available',
-        manifest_error_code: 'M302',
+        tuple_error_code: 'M302',
         attempt: retryAttempt,
         providerCallStarted: true,
       });
       expect(result.autofix).toMatchObject({
         groupId: 'g-2',
         outcome: 'exhausted',
-        manifestOrigin: { code: 'M302', model: 'some-retired-model' },
+        tupleOrigin: { code: 'M302', model: 'some-retired-model' },
       });
     });
 
@@ -1374,7 +1374,7 @@ describe('ProxyService — orchestration', () => {
       await svc.proxyRequest(
         baseOpts({
           body: { model: 'gpt-4o-mini', messages: [{ role: 'user', content: 'hi' }] },
-          headers: { 'x-manifest-tag': 'groceries' },
+          headers: { 'x-tuple-tag': 'groceries' },
         }),
       );
 
@@ -1391,7 +1391,7 @@ describe('ProxyService — orchestration', () => {
       await svc.proxyRequest(
         baseOpts({
           body: { model: 'gpt-4o-mini', messages: [{ role: 'user', content: 'hi' }] },
-          headers: { 'x-manifest-tag': 'unmatched' },
+          headers: { 'x-tuple-tag': 'unmatched' },
         }),
       );
 
@@ -1453,7 +1453,7 @@ describe('ProxyService — orchestration', () => {
       expect(body).toContain('bogus/does-not-exist');
       expect(result.meta).toMatchObject({
         reason: 'model_not_available',
-        manifest_error_code: 'M302',
+        tuple_error_code: 'M302',
       });
     });
 
@@ -1480,7 +1480,7 @@ describe('ProxyService — orchestration', () => {
       );
     });
 
-    it('does not trigger Manifest fallbacks for explicit model failures', async () => {
+    it('does not trigger Tuple fallbacks for explicit model failures', async () => {
       modelDiscovery.getModelsForAgent.mockResolvedValue([
         discoveredModel({ id: 'gpt-4o-mini', provider: 'openai', authType: 'api_key' }),
       ]);
@@ -1890,7 +1890,7 @@ describe('ProxyService — orchestration', () => {
         }),
       );
       // The body still carries the client-supplied thinking field; the
-      // fallback service applies the resolved Manifest params last.
+      // fallback service applies the resolved Tuple params last.
       expect(fallbackService.tryForwardToProvider.mock.calls[0][0].body.thinking).toEqual({
         type: 'enabled',
       });

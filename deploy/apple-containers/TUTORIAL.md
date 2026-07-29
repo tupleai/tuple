@@ -1,12 +1,12 @@
-# Run Manifest with Apple Containers
+# Run Tuple with Apple Containers
 
-This guide runs Manifest and PostgreSQL on Apple silicon using Apple's [`container`](https://github.com/apple/container) CLI. The deployment mirrors the bundled Docker Compose stack while accounting for differences in Apple Containers networking and storage.
+This guide runs Tuple and PostgreSQL on Apple silicon using Apple's [`container`](https://github.com/apple/container) CLI. The deployment mirrors the bundled Docker Compose stack while accounting for differences in Apple Containers networking and storage.
 
 ## Prerequisites
 
 - An Apple silicon Mac running a supported macOS version.
 - The Apple Containers `container` CLI installed from the [Apple Containers releases](https://github.com/apple/container/releases).
-- This Manifest repository checked out locally.
+- This Tuple repository checked out locally.
 - `curl` and OpenSSL, which are included with macOS.
 
 Confirm the CLI is available:
@@ -29,7 +29,7 @@ container system version
 
 The `container` and `container-apiserver` rows should report the same version. Startup also checks this and prints these recovery commands instead of continuing with mismatched components.
 
-## Configure Manifest
+## Configure Tuple
 
 The script reads `docker/.env`, the same configuration file used by Docker Compose.
 
@@ -52,7 +52,7 @@ BETTER_AUTH_SECRET=<paste-the-generated-value>
 For stronger separation between session signing and encrypted provider credentials, generate another value and set:
 
 ```env
-MANIFEST_ENCRYPTION_KEY=<a-different-generated-value>
+TUPLE_ENCRYPTION_KEY=<a-different-generated-value>
 ```
 
 The default dashboard URL is `http://localhost:2099`. To use another port, set `PORT` and keep `BETTER_AUTH_URL` aligned:
@@ -62,28 +62,28 @@ PORT=3001
 BETTER_AUTH_URL=http://localhost:3001
 ```
 
-You can use a different configuration file by exporting `MANIFEST_ENV_FILE`:
+You can use a different configuration file by exporting `TUPLE_ENV_FILE`:
 
 ```bash
-MANIFEST_ENV_FILE=/path/to/manifest.env ./deploy/apple-containers/start.sh up
+TUPLE_ENV_FILE=/path/to/tuple.env ./deploy/apple-containers/start.sh up
 ```
 
 Explicitly exported environment variables take precedence over values in the file.
 
 ### Custom PostgreSQL password
 
-The default bundled database password is `manifest`. To change it, set both variables as described in `docker/.env.example`:
+The default bundled database password is `tuple`. To change it, set both variables as described in `docker/.env.example`:
 
 ```env
 POSTGRES_PASSWORD=change-me
-DATABASE_URL=postgresql://manifest:change-me@postgres:5432/manifest
+DATABASE_URL=postgresql://tuple:change-me@postgres:5432/tuple
 ```
 
 The script replaces the Compose hostname `postgres` with the PostgreSQL container's current IP. Percent-encode URL-special characters in the `DATABASE_URL` password.
 
-`POSTGRES_PASSWORD` initializes a new database volume; changing it later does not rotate the password stored by PostgreSQL. If the persistent volume already exists, either keep its original password or rotate the `manifest` PostgreSQL role explicitly.
+`POSTGRES_PASSWORD` initializes a new database volume; changing it later does not rotate the password stored by PostgreSQL. If the persistent volume already exists, either keep its original password or rotate the `tuple` PostgreSQL role explicitly.
 
-## Start Manifest
+## Start Tuple
 
 From the repository root, run:
 
@@ -100,10 +100,10 @@ From the repository root, run:
 The script:
 
 1. Starts the Apple Containers service.
-2. Creates or reuses the `mnfst-postgres-data` named volume.
+2. Creates or reuses the `tuple-postgres-data` named volume.
 3. Starts PostgreSQL and verifies an authenticated connection.
 4. Discovers the PostgreSQL container address.
-5. Recreates the Manifest container so it always receives the current database address.
+5. Recreates the Tuple container so it always receives the current database address.
 6. Publishes the dashboard on host loopback and waits for `/api/v1/health`.
 
 When startup succeeds, open:
@@ -130,24 +130,24 @@ Stop and remove both containers:
 
 The PostgreSQL named volume is retained, so a later `up` restores the same database.
 
-Running `up` repeatedly is safe. A running PostgreSQL container is reused, while Manifest is recreated to pick up the current PostgreSQL IP and configuration.
+Running `up` repeatedly is safe. A running PostgreSQL container is reused, while Tuple is recreated to pick up the current PostgreSQL IP and configuration.
 
-## Upgrade Manifest
+## Upgrade Tuple
 
 First, back up the database:
 
 ```bash
-container exec mnfst-postgres pg_dump -U manifest manifest > manifest-backup-$(date +%F).sql
+container exec tuple-postgres pg_dump -U tuple tuple > tuple-backup-$(date +%F).sql
 ```
 
-The script always launches `manifestdotbuild/manifest:latest`, but `container run` uses the locally cached copy of that tag. To upgrade to a new release, pull the image explicitly and re-run `up`:
+The script always launches `tupleai/tuple:latest`, but `container run` uses the locally cached copy of that tag. To upgrade to a new release, pull the image explicitly and re-run `up`:
 
 ```bash
-container image pull manifestdotbuild/manifest:latest
+container image pull tupleai/tuple:latest
 ./deploy/apple-containers/start.sh up
 ```
 
-`up` recreates the Manifest container, so it starts from the freshly pulled image. Database migrations run automatically on boot — no manual steps. The PostgreSQL container and the `mnfst-postgres-data` named volume are not touched, so all data is preserved across upgrades.
+`up` recreates the Tuple container, so it starts from the freshly pulled image. Database migrations run automatically on boot — no manual steps. The PostgreSQL container and the `tuple-postgres-data` named volume are not touched, so all data is preserved across upgrades.
 
 ## Local LLM Servers
 
@@ -159,7 +159,7 @@ http://<gateway-ip>:11434
 
 A host LLM server must listen on an interface reachable through that gateway. A service bound only to `127.0.0.1` cannot be reached from the container.
 
-For Ollama, configure `OLLAMA_HOST` on the macOS host according to Ollama's documentation. Avoid exposing the service broadly unless your firewall and network are trusted. You can also point Manifest at another reachable endpoint through `docker/.env`:
+For Ollama, configure `OLLAMA_HOST` on the macOS host according to Ollama's documentation. Avoid exposing the service broadly unless your firewall and network are trusted. You can also point Tuple at another reachable endpoint through `docker/.env`:
 
 ```env
 OLLAMA_HOST=http://192.168.1.50:11434
@@ -169,7 +169,7 @@ OLLAMA_HOST=http://192.168.1.50:11434
 
 The dashboard is published to `127.0.0.1`, providing a stable URL that does not depend on Apple Containers' private subnet and is less likely to conflict with VPN routes.
 
-PostgreSQL-to-Manifest traffic still uses the private address assigned by Apple Containers. The script discovers that address on every `up` and recreates Manifest accordingly. If Apple Containers cannot create or inspect its network while a VPN is active:
+PostgreSQL-to-Tuple traffic still uses the private address assigned by Apple Containers. The script discovers that address on every `up` and recreates Tuple accordingly. If Apple Containers cannot create or inspect its network while a VPN is active:
 
 1. Run `./deploy/apple-containers/start.sh down`.
 2. Temporarily disconnect the VPN.
@@ -180,10 +180,10 @@ The script prints the complete `container inspect` output if it cannot identify 
 
 ## Persistence and Backups
 
-PostgreSQL data is stored in the Apple Containers named volume `mnfst-postgres-data`. Override the volume name before startup with:
+PostgreSQL data is stored in the Apple Containers named volume `tuple-postgres-data`. Override the volume name before startup with:
 
 ```bash
-MANIFEST_PG_VOLUME=my-manifest-data ./deploy/apple-containers/start.sh up
+TUPLE_PG_VOLUME=my-tuple-data ./deploy/apple-containers/start.sh up
 ```
 
 The script mounts the named volume at `/var/lib/postgresql/data` and uses `/var/lib/postgresql/data/pgdata` as `PGDATA`. The nested directory is required because a newly formatted Apple Containers volume may contain a root-level `lost+found` directory.
@@ -191,8 +191,8 @@ The script mounts the named volume at `/var/lib/postgresql/data` and uses `/var/
 `down` never deletes the named volume. Use Apple Containers volume commands to inspect or deliberately remove it:
 
 ```bash
-container volume inspect mnfst-postgres-data
-container volume delete mnfst-postgres-data
+container volume inspect tuple-postgres-data
+container volume delete tuple-postgres-data
 ```
 
 Deleting the volume permanently deletes the bundled PostgreSQL database. Back up important data before removing it.
@@ -215,8 +215,8 @@ If `container system stop` prints protocol or decoding errors, continue with `co
 ### View logs
 
 ```bash
-container logs mnfst-postgres
-container logs mnfst-manifest
+container logs tuple-postgres
+container logs tuple-app
 ```
 
 ### PostgreSQL stops during initialization
@@ -233,12 +233,12 @@ If logs mention `chmod` or `chown` being denied, do not replace the named volume
 
 The named volume was probably initialized with a different password. Restore the original `POSTGRES_PASSWORD`, or rotate the database role password inside PostgreSQL and update `DATABASE_URL` to match.
 
-### Manifest stops before becoming healthy
+### Tuple stops before becoming healthy
 
 The script prints the container logs automatically. You can inspect them again with:
 
 ```bash
-container logs mnfst-manifest
+container logs tuple-app
 ```
 
 Common causes include a mismatched database URL, a port already in use, or invalid environment values.
@@ -265,7 +265,7 @@ Stop the containers first:
 To also discard all database state, deliberately delete the named volume:
 
 ```bash
-container volume delete mnfst-postgres-data
+container volume delete tuple-postgres-data
 ```
 
-Then run `up` again. This is destructive and returns Manifest to a fresh-install state.
+Then run `up` again. This is destructive and returns Tuple to a fresh-install state.

@@ -1,6 +1,6 @@
 import { createResource, Show, type Component } from 'solid-js';
 import { getAgentKey } from '../services/api.js';
-import { platformIcon } from 'manifest-shared';
+import { platformIcon } from 'tuple-shared';
 import ErrorState from './ErrorState.jsx';
 import SetupStepAddProvider from './SetupStepAddProvider.jsx';
 
@@ -21,7 +21,7 @@ const SetupModal: Component<{
 
   const baseUrl = () => {
     const host = window.location.hostname;
-    if (host === 'app.manifest.build') return 'https://app.manifest.build/v1';
+    if (host === 'app.tuple.ai') return 'https://app.tuple.ai/v1';
     return `${window.location.origin}/v1`;
   };
 
@@ -82,7 +82,7 @@ const SetupModal: Component<{
             </button>
           </div>
           <p class="modal-card__desc">
-            Connect your harness to Manifest to start routing requests.
+            Connect your harness to Tuple to start routing requests.
           </p>
 
           <Show

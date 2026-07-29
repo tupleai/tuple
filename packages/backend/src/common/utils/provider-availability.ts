@@ -1,8 +1,8 @@
-import { normalizeProviderName, SHARED_PROVIDER_BY_ID_OR_ALIAS } from 'manifest-shared';
+import { normalizeProviderName, SHARED_PROVIDER_BY_ID_OR_ALIAS } from 'tuple-shared';
 import { isSelfHosted } from './detect-self-hosted';
 
 export const CLOUD_LOCAL_PROVIDER_MESSAGE =
-  'Built-in local providers are only available in self-hosted Manifest. On Manifest Cloud, expose the runtime through a public URL or tunnel and connect it as a custom provider.';
+  'Built-in local providers are only available in self-hosted Tuple. On Tuple Cloud, expose the runtime through a public URL or tunnel and connect it as a custom provider.';
 
 export function isLocalOnlyProvider(provider: string): boolean {
   const lower = provider.trim().toLowerCase();

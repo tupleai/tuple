@@ -7,7 +7,7 @@ import {
   type ChatMessage,
   type Role,
   type ToolCall,
-} from 'manifest-shared';
+} from 'tuple-shared';
 import type { AttemptRecording } from '../services/api/messages.js';
 
 type Recording = AttemptRecording;

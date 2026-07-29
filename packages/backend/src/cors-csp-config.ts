@@ -4,7 +4,7 @@
 // `frame-src` — which governs embedding the Wingman drawer in the dashboard —
 // stays dev-only, since that drawer is dead-code-eliminated from production.
 
-export const HOSTED_WINGMAN_ORIGIN = 'https://wingman.manifest.build';
+export const HOSTED_WINGMAN_ORIGIN = 'https://wingman.tuple.ai';
 
 export interface DevOriginBuilderOptions {
   configuredOrigin: string;
@@ -41,7 +41,7 @@ export function buildDevAllowedOrigins({
 }
 
 // Production CORS allow-list. The dashboard is same-origin, but the hosted
-// Wingman gateway tester (https://wingman.manifest.build) is a legitimate
+// Wingman gateway tester (https://wingman.tuple.ai) is a legitimate
 // cross-origin caller of the gateway routes (`/v1/chat/completions`,
 // `/v1/messages`), so production must allow its origin. Exact match only, and
 // `credentials: false` at the call site keeps this safe: an allow-listed origin

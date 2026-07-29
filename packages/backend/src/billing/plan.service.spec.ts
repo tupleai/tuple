@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { HttpException } from '@nestjs/common';
-import { FREE_PLAN_REQUESTS_PER_MONTH } from 'manifest-shared';
+import { FREE_PLAN_REQUESTS_PER_MONTH } from 'tuple-shared';
 import { PlanService } from './plan.service';
 import { Tenant } from '../entities/tenant.entity';
 import { toLocalSqlTimestamp, toSqlTimestamp } from '../common/utils/postgres-sql';
@@ -19,7 +19,7 @@ describe('PlanService', () => {
   const TENANT = { id: 't1', owner_user_id: 'u1', limit_overrides: null };
 
   function enableBilling() {
-    process.env['MANIFEST_MODE'] = 'cloud';
+    process.env['TUPLE_MODE'] = 'cloud';
     process.env['STRIPE_SECRET_KEY'] = 'sk_test_x';
     process.env['STRIPE_WEBHOOK_SECRET'] = 'whsec_x';
     process.env['STRIPE_PRO_PRICE_ID'] = 'price_x';

@@ -1,10 +1,10 @@
 import { Show, createSignal, type Component } from 'solid-js';
 
 export const USER_DISCOVERY_BANNER_DISMISSED_KEY =
-  'manifest:user-discovery-banner-dismissed:v1';
+  'tuple:user-discovery-banner-dismissed:v1';
 
 export const USER_DISCOVERY_BOOKING_URL =
-  'https://calendly.com/sebastien-manifest/30min';
+  'mailto:support@tuple.ai?subject=Tuple%20user%20research';
 
 function readDismissed(): boolean {
   try {
@@ -32,7 +32,7 @@ const UserDiscoveryBanner: Component = () => {
 
   return (
     <Show when={!dismissed()}>
-      <aside class="overview-discovery-banner" aria-label="Manifest user research">
+      <aside class="overview-discovery-banner" aria-label="Tuple user research">
         <div class="overview-discovery-banner__inner">
           <span class="overview-discovery-banner__text">
             🎁 Talk to us and get $10 of Gemini credit{' '}

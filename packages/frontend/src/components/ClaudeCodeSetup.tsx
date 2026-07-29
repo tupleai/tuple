@@ -42,7 +42,7 @@ const ClaudeCodeSetup: Component<Props> = (props) => {
   const [keyRevealed, setKeyRevealed] = createSignal(false);
 
   const hasFullKey = () => !!props.apiKey;
-  const masked = () => (props.keyPrefix ? `${props.keyPrefix}...` : 'mnfst_YOUR_KEY');
+  const masked = () => (props.keyPrefix ? `${props.keyPrefix}...` : 'tuple_YOUR_KEY');
   const copyKey = () => props.apiKey ?? masked();
   const visibleKey = () => (keyRevealed() && props.apiKey ? props.apiKey : masked());
 
@@ -53,7 +53,7 @@ const ClaudeCodeSetup: Component<Props> = (props) => {
     <div class="setup-agents-card">
       <p class="setup-method__hint">
         Add this block to <code class="setup-model-hint__code">~/.claude/settings.json</code>. Every{' '}
-        <code class="setup-model-hint__code">claude</code> run will route through Manifest with{' '}
+        <code class="setup-model-hint__code">claude</code> run will route through Tuple with{' '}
         <code class="setup-model-hint__code">auto</code>.
       </p>
 

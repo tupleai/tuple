@@ -1,0 +1,18 @@
+{
+    "node": "n8n-nodes-tuple.tuple",
+    "nodeVersion": "1.0",
+    "codexVersion": "1.0",
+    "categories": ["Development"],
+    "resources": {
+        "credentialDocumentation": [
+            {
+                "url": "https://github.com/tupleai/tuple/tree/main/integrations/n8n-nodes-tuple#credentials"
+            }
+        ],
+        "primaryDocumentation": [
+            {
+                "url": "https://github.com/tupleai/tuple/tree/main/integrations/n8n-nodes-tuple"
+            }
+        ]
+    }
+}

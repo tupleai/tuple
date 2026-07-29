@@ -1,5 +1,5 @@
 import { createEffect, createSignal, onMount, Show, type Component } from 'solid-js';
-import { normalizeProviderName } from 'manifest-shared';
+import { normalizeProviderName } from 'tuple-shared';
 import { PROVIDERS, type ProviderDef } from '../services/providers.js';
 import {
   connectProvider,

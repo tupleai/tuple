@@ -10,7 +10,7 @@ import { toast } from '../services/toast-store.js';
 import { formatNumber } from '../services/formatters.js';
 import Sparkline from '../components/Sparkline.jsx';
 import { agentPing, messagePing } from '../services/sse.js';
-import { platformIcon } from 'manifest-shared';
+import { platformIcon } from 'tuple-shared';
 
 interface Agent {
   agent_name: string;
@@ -110,7 +110,7 @@ const Workspace: Component = () => {
 
   return (
     <div class="container--lg">
-      <Title>My Harnesses - Manifest</Title>
+      <Title>My Harnesses - Tuple</Title>
       <Meta
         name="description"
         content="View and manage all your harnesses. Monitor usage, requests, and costs."

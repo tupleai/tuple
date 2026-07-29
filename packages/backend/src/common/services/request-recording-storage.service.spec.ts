@@ -100,11 +100,11 @@ describe('request recording storage selection', () => {
           'app.nodeEnv': 'development',
         }),
         false,
-        '/manifest',
+        '/tuple',
       ),
     ).toEqual({
       backend: 'filesystem',
-      path: '/manifest/.data/request-recordings',
+      path: '/tuple/.data/request-recordings',
     });
     expect(
       resolveRecordingStorage(
@@ -207,7 +207,7 @@ describe('RequestRecordingStorageService filesystem driver', () => {
   let directory: string;
 
   beforeEach(async () => {
-    directory = await mkdtemp(join(tmpdir(), 'manifest-recordings-'));
+    directory = await mkdtemp(join(tmpdir(), 'tuple-recordings-'));
   });
 
   afterEach(async () => {

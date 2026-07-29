@@ -6,7 +6,7 @@ import { ConfigService } from '@nestjs/config';
 /**
  * Applies PgBouncer-safe planner defaults as role-level settings at boot.
  *
- * Manifest's analytics queries aggregate hundreds of thousands of rows per
+ * Tuple's analytics queries aggregate hundreds of thousands of rows per
  * tenant. On a default Postgres these queries (a) trigger JIT, which adds
  * 0.5–1.3s of pure compilation overhead for queries that return tiny result
  * sets, (b) spill GROUP BY/DISTINCT sorts to disk because work_mem is 4MB, and

@@ -39,13 +39,13 @@ describe('AutofixModal', () => {
     expect(container.textContent).toContain('rolling out Auto-fix to a select few teams');
   });
 
-  it('renders the Book a demo link pointing to Calendly', async () => {
+  it('renders the Book a demo support link', async () => {
     const { container } = render(() => <AutofixModal open={true} onClose={vi.fn()} />);
     await waitFor(() => {
       expect(container.querySelector('.autofix-modal__cta-book')).not.toBeNull();
     });
     const link = container.querySelector('.autofix-modal__cta-book') as HTMLAnchorElement;
-    expect(link.href).toContain('calendly.com/sebastien-manifest/30min');
+    expect(link.href).toContain('mailto:support@tuple.ai?subject=Tuple%20Auto-fix%20demo');
     expect(link.target).toBe('_blank');
   });
 
@@ -90,7 +90,7 @@ describe('AutofixModal', () => {
     });
     const link = container.querySelector('.autofix-modal__learn-more') as HTMLAnchorElement;
     expect(link.textContent).toContain('Learn more about Auto-fix');
-    expect(link.href).toContain('manifest.build/autofix/');
+    expect(link.href).toContain('tuple.ai/autofix/');
     expect(link.target).toBe('_blank');
   });
 

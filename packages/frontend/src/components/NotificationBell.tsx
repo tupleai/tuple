@@ -15,7 +15,7 @@ import { getAutofixCohort } from '../services/api/autofix.js';
 import { getAgents } from '../services/api.js';
 import { messagePing, agentPing, routingPing } from '../services/sse.js';
 
-const READ_KEY = 'manifest_notif_read';
+const READ_KEY = 'tuple_notif_read';
 
 function getReadSet(): Set<string> {
   try {

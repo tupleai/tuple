@@ -7,7 +7,7 @@
  *
  * The flow is PKCE with a manual paste-code step: Anthropic's redirect URI
  * is a console page that displays the authorization code (formatted as
- * `<code>#<state>`) for the user to copy back into Manifest. Token exchange
+ * `<code>#<state>`) for the user to copy back into Tuple. Token exchange
  * uses the Claude Code API host, matching Claude Code-compatible routers.
  */
 export const ANTHROPIC_OAUTH = {

@@ -151,7 +151,7 @@ vi.mock('../../src/components/FallbackList.js', () => ({
 }));
 
 import RoutingTierCard from '../../src/pages/RoutingTierCard';
-import type { ProviderParamSpecCatalog } from 'manifest-shared';
+import type { ProviderParamSpecCatalog } from 'tuple-shared';
 import type { TierAssignment, AvailableModel, RoutingProvider } from '../../src/services/api';
 
 const stage = { id: 'simple', step: 1, label: 'Simple', desc: '' };

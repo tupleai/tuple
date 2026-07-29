@@ -109,7 +109,7 @@ describe('AddMessageErrorCode migration — data backfill (e2e)', () => {
     await schemaQr.release();
 
     // Back to the pre-migration schema, then seed rows exactly as the old proxy
-    // wrote them: canned stubs carrying provider='manifest' / tier='simple'.
+    // wrote them: canned stubs carrying provider='tuple' / tier='simple'.
     await runDown(ds);
 
     await ds.query(`INSERT INTO tenants (id, name, is_active) VALUES ($1,$1,true)`, [TENANT]);
@@ -129,8 +129,8 @@ describe('AddMessageErrorCode migration — data backfill (e2e)', () => {
       routing_reason,
       error_origin,
       error_http_status,
-      provider: 'manifest',
-      model: 'manifest',
+      provider: 'tuple',
+      model: 'tuple',
       routing_tier: 'simple',
     });
 
@@ -140,7 +140,7 @@ describe('AddMessageErrorCode migration — data backfill (e2e)', () => {
     await insertRow(ds, stub('m-plan-402', 'limit_exceeded', 'policy', 402));
     await insertRow(ds, stub('m-plan', 'plan_request_limit_exceeded', 'policy', 402));
     await insertRow(ds, stub('m-internal', 'friendly_error', 'internal'));
-    await insertRow(ds, stub('m-ratelimit', 'manifest_rate_limited', 'policy', 429));
+    await insertRow(ds, stub('m-ratelimit', 'tuple_rate_limited', 'policy', 429));
 
     // A failed stub written before the taxonomy backfill: still NULL origin.
     // Prod has a handful of these; keying the cleanup on error_origin missed them.
@@ -188,12 +188,12 @@ describe('AddMessageErrorCode migration — data backfill (e2e)', () => {
   });
 
   it('leaves the collapsed rate-limit reason unresolved rather than guessing', async () => {
-    // manifest_rate_limited covered M201/M202/M203 — which one fired is not
+    // tuple_rate_limited covered M201/M202/M203 — which one fired is not
     // recoverable from the row, so NULL is the honest answer.
     expect((await fetchRow(ds, 'm-ratelimit')).error_code).toBeNull();
   });
 
-  it('clears the placeholder model/provider/tier from Manifest-authored rows', async () => {
+  it('clears the placeholder model/provider/tier from Tuple-authored rows', async () => {
     const row = await fetchRow(ds, 'm-no-key');
     expect(row.provider).toBeNull();
     expect(row.model).toBeNull();
@@ -213,8 +213,8 @@ describe('AddMessageErrorCode migration — data backfill (e2e)', () => {
     // status='ok' rows still count as messages; nulling the model would move
     // them under "unknown model" in the cost breakdown.
     const row = await fetchRow(ds, 'm-legacy-ok');
-    expect(row.provider).toBe('manifest');
-    expect(row.model).toBe('manifest');
+    expect(row.provider).toBe('tuple');
+    expect(row.model).toBe('tuple');
     expect(row.routing_tier).toBe('simple');
   });
 

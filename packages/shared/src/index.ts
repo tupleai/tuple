@@ -27,7 +27,7 @@ export type { AuthType } from './auth-types';
 export {
   ERROR_ORIGINS,
   ERROR_CLASSES,
-  MANIFEST_ERROR_ORIGINS,
+  TUPLE_ERROR_ORIGINS,
   OK_STATUS,
   RATE_LIMITED_STATUS,
   SUPERSEDED_STATUS,
@@ -43,7 +43,7 @@ export {
   TRANSPORT_TIMEOUT_HTTP_STATUS,
   classifyHttpErrorClass,
   classifyMessageError,
-  isManifestErrorOrigin,
+  isTupleErrorOrigin,
   normalizeStatus,
   isSuccessStatus,
   isFailedStatus,
@@ -51,13 +51,13 @@ export {
 export type {
   ErrorOrigin,
   ErrorClass,
-  ManifestErrorOrigin,
+  TupleErrorOrigin,
   MessageErrorSignals,
   MessageErrorClassification,
   RequestStatus,
   AttemptStatus,
 } from './error-taxonomy';
-export { MANIFEST_ERRORS_DOCS_BASE, manifestErrorDocsUrl } from './manifest-error-docs';
+export { TUPLE_ERRORS_DOCS_BASE, tupleErrorDocsUrl } from './tuple-error-docs';
 export { DEFAULT_RESPONSE_MODE, RESPONSE_MODES, isResponseMode } from './response-mode';
 export type { ResponseMode } from './response-mode';
 export { DEFAULT_OUTPUT_MODALITY, OUTPUT_MODALITIES, isOutputModality } from './output-modality';

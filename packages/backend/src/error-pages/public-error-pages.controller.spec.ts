@@ -24,7 +24,7 @@ function makePage(overrides: Partial<PublicErrorPage> = {}): PublicErrorPage {
     h1: 'Gemini rate limit',
     body_what: 'what',
     body_fix: 'fix',
-    body_manifest: 'manifest',
+    body_tuple: 'tuple',
     sample_message: 'sample',
     faq: [],
     stats: {
@@ -115,7 +115,7 @@ describe('PublicErrorPagesController', () => {
       expect(page).not.toHaveProperty('cluster_key');
       expect(page).not.toHaveProperty('body_what');
       expect(page).not.toHaveProperty('body_fix');
-      expect(page).not.toHaveProperty('body_manifest');
+      expect(page).not.toHaveProperty('body_tuple');
       expect(page).not.toHaveProperty('sample_message');
       expect(page).not.toHaveProperty('faq');
       expect(page).not.toHaveProperty('related');

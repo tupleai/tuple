@@ -348,7 +348,7 @@ describe('MessagesQueryService request-first queries', () => {
       provider: 'openai',
       service_type: 'agent',
       status: 'failed',
-      origin: 'manifest',
+      origin: 'tuple',
       error_class: 'rate_limit',
       routing_tier: 'balanced',
       specificity_category: 'specific',

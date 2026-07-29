@@ -1,5 +1,5 @@
 ---
-'manifest': patch
+'tuple': patch
 ---
 
 Honor requested model routes on the Anthropic Messages endpoint.

@@ -1,5 +1,5 @@
 /**
- * Headers Manifest manages itself — providing these from the client would
+ * Headers Tuple manages itself — providing these from the client would
  * hijack auth, break routing, or mask our telemetry. Compared case-insensitively.
  */
 const BLOCKED_EXACT = new Set<string>([
@@ -17,7 +17,7 @@ const BLOCKED_EXACT = new Set<string>([
   'trailer',
 ]);
 
-const BLOCKED_PREFIXES = ['x-manifest-'];
+const BLOCKED_PREFIXES = ['x-tuple-'];
 
 const MAX_HEADERS = 20;
 const MAX_VALUE_LENGTH = 2_000;

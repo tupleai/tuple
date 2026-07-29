@@ -3,12 +3,12 @@
 MPS stands for Model Parameters Schema.
 
 This document defines the JSON language used by the model parameter schema
-catalog. The catalog is metadata: it describes which request parameters Manifest
+catalog. The catalog is metadata: it describes which request parameters Tuple
 can configure for a provider/auth/model tuple. User-selected values still live in
 `agent_model_params`.
 
 The runtime source is the versioned `modelparams` npm package, generated from
-the same modelparams.dev catalog. Manifest loads that package catalog at runtime
+the same modelparams.dev catalog. Tuple loads that package catalog at runtime
 and keeps provider/auth/model route matching inside
 `ProviderParamSpecService`.
 
@@ -54,7 +54,7 @@ Rules:
 - `type` is semantic data type, not a UI control kind.
 - `label` is user-facing copy.
 - `description` is developer-facing explanatory copy for the raw parameter.
-- `default` is the provider default Manifest should display when known.
+- `default` is the provider default Tuple should display when known.
 - `values` is allowed only for finite choices.
 - `range` describes numeric bounds and optional step.
 - `group` is a semantic grouping for ordering and display.
@@ -148,10 +148,10 @@ They do not store derived UI state or provider-specific rule state.
 The outbound proxy merge:
 
 1. expands needed nested defaults for configured nested roots
-2. merges configured Manifest values last, so Manifest values win for the same provider path
+2. merges configured Tuple values last, so Tuple values win for the same provider path
 3. omits params that are not applicable under the final effective values
 
-Client request body values that do not overlap configured Manifest model
+Client request body values that do not overlap configured Tuple model
 params stay in the outbound provider request.
 
 ## Adding A New Rule

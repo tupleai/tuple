@@ -1,8 +1,8 @@
 import { API_KEY_PREFIX } from './api-key.constants';
 
 describe('API_KEY_PREFIX', () => {
-  it('equals mnfst_', () => {
-    expect(API_KEY_PREFIX).toBe('mnfst_');
+  it('equals tuple_', () => {
+    expect(API_KEY_PREFIX).toBe('tuple_');
   });
 
   it('is a string type', () => {

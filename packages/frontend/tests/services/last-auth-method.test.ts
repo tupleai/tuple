@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { getLastAuthMethod, setLastAuthMethod } from '../../src/services/last-auth-method';
 
-const STORAGE_KEY = 'manifest:last-auth-method';
+const STORAGE_KEY = 'tuple:last-auth-method';
 
 describe('last-auth-method', () => {
   beforeEach(() => {

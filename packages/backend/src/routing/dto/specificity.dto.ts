@@ -8,7 +8,7 @@ import {
   MaxLength,
 } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
-import { AUTH_TYPES } from 'manifest-shared';
+import { AUTH_TYPES } from 'tuple-shared';
 import { ModelRouteDto, MAX_PROVIDER_KEY_LABEL_LENGTH } from './routing.dto';
 
 export class SetSpecificityOverrideDto {

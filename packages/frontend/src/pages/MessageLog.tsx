@@ -36,8 +36,8 @@ import { getBillingStatus } from '../services/api/billing.js';
 import { preloadModelDisplayNames } from '../services/model-display.js';
 import { PROVIDERS, SPECIFICITY_STAGES } from '../services/providers.js';
 import { providerIcon } from '../components/ProviderIcon.jsx';
-import { platformIcon } from 'manifest-shared';
-import { ALL_TIERS, TIER_LABELS_ALL } from 'manifest-shared';
+import { platformIcon } from 'tuple-shared';
+import { ALL_TIERS, TIER_LABELS_ALL } from 'tuple-shared';
 import { messagePing } from '../services/sse.js';
 import '../styles/overview.css';
 import '../styles/routing.css';
@@ -551,7 +551,7 @@ const MessageLog: Component = () => {
 
   /** Resolve provider ID to display name */
   const providerDisplayName = (id: string): string => {
-    if (id === 'manifest') return 'Manifest';
+    if (id === 'tuple') return 'Tuple';
     const prov = PROVIDERS.find((p) => p.id === id);
     if (prov) return prov.name;
     // Custom providers arrive as `custom:<uuid>` — the backend ships a label
@@ -661,12 +661,12 @@ const MessageLog: Component = () => {
     { label: 'With a succeeded attempt', value: 'has_succeeded' },
   ];
 
-  // Who failed. `manifest` collapses every Manifest-authored origin (setup,
+  // Who failed. `tuple` collapses every Tuple-authored origin (setup,
   // limits, bad requests, internal errors) into one choice, since from a user's
   // point of view they share a fix path that has nothing to do with a provider.
   const originOptions = [
     { label: 'All origins', value: '' },
-    { label: 'Manifest', value: 'manifest' },
+    { label: 'Tuple', value: 'tuple' },
     { label: 'Provider', value: 'provider' },
     { label: 'Transport', value: 'transport' },
   ];
@@ -710,8 +710,8 @@ const MessageLog: Component = () => {
     <div class="container--full" onClick={handlePageClick}>
       <Title>
         {params.agentName
-          ? `${agentDisplayName() ?? decodeURIComponent(params.agentName)} Requests - Manifest`
-          : 'Requests - Manifest'}
+          ? `${agentDisplayName() ?? decodeURIComponent(params.agentName)} Requests - Tuple`
+          : 'Requests - Tuple'}
       </Title>
       <Meta
         name="description"

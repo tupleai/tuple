@@ -1,20 +1,20 @@
-# Deploy Manifest on Koyeb
+# Deploy Tuple on Koyeb
 
-This guide deploys the public Manifest Docker image to a Koyeb Web Service. The deploy button pre-fills the image, HTTP port, and runtime settings, but you must create PostgreSQL separately and replace the placeholder secrets before deploying.
+This guide deploys the public Tuple Docker image to a Koyeb Web Service. The deploy button pre-fills the image, HTTP port, and runtime settings, but you must create PostgreSQL separately and replace the placeholder secrets before deploying.
 
 ## Prerequisites
 
 - A Koyeb account.
 - A Koyeb PostgreSQL Database Service.
-- Two random 32+ character secrets for Manifest.
+- Two random 32+ character secrets for Tuple.
 
 This deployment creates paid resources if your selected Koyeb service or database plan is not free.
 
 ## Create PostgreSQL
 
-In Koyeb, create a PostgreSQL Database Service in the same region you plan to use for Manifest. After it is ready, open the database connection details and copy the connection string.
+In Koyeb, create a PostgreSQL Database Service in the same region you plan to use for Tuple. After it is ready, open the database connection details and copy the connection string.
 
-Manifest uses TLS to connect to Koyeb Postgres, so include `sslmode=require` in the connection string. If the copied URL has no query string, append `?sslmode=require`. If it already has query parameters, append `&sslmode=require`.
+Tuple uses TLS to connect to Koyeb Postgres, so include `sslmode=require` in the connection string. If the copied URL has no query string, append `?sslmode=require`. If it already has query parameters, append `&sslmode=require`.
 
 ## Generate secrets
 
@@ -25,25 +25,25 @@ openssl rand -hex 32
 openssl rand -hex 32
 ```
 
-## Deploy Manifest
+## Deploy Tuple
 
 Open the Koyeb deploy link:
 
 ```text
-https://app.koyeb.com/deploy?type=docker&image=docker.io%2Fmanifestdotbuild%2Fmanifest%3A6&name=manifest&service_type=web&ports=2099%3Bhttp%3B%2F&env%5BPORT%5D=2099&env%5BDATABASE_URL%5D=postgres%3A%2F%2FUSER%3APASSWORD%40HOST%2FDB%3Fsslmode%3Drequire&env%5BBETTER_AUTH_SECRET%5D=replace-with-openssl-rand-hex-32&env%5BMANIFEST_ENCRYPTION_KEY%5D=replace-with-different-openssl-rand-hex-32&env%5BBETTER_AUTH_URL%5D=https%3A%2F%2F%7B%7B+KOYEB_PUBLIC_DOMAIN+%7D%7D&env%5BMANIFEST_MODE%5D=selfhosted&env%5BBIND_ADDRESS%5D=0.0.0.0&env%5BDB_POOL_MAX%5D=8&env%5BAUTH_DB_POOL_MAX%5D=4
+https://app.koyeb.com/deploy?type=docker&image=docker.io%2Ftupleai%2Ftuple%3A6&name=tuple&service_type=web&ports=2099%3Bhttp%3B%2F&env%5BPORT%5D=2099&env%5BDATABASE_URL%5D=postgres%3A%2F%2FUSER%3APASSWORD%40HOST%2FDB%3Fsslmode%3Drequire&env%5BBETTER_AUTH_SECRET%5D=replace-with-openssl-rand-hex-32&env%5BTUPLE_ENCRYPTION_KEY%5D=replace-with-different-openssl-rand-hex-32&env%5BBETTER_AUTH_URL%5D=https%3A%2F%2F%7B%7B+KOYEB_PUBLIC_DOMAIN+%7D%7D&env%5BTUPLE_MODE%5D=selfhosted&env%5BBIND_ADDRESS%5D=0.0.0.0&env%5BDB_POOL_MAX%5D=8&env%5BAUTH_DB_POOL_MAX%5D=4
 ```
 
 In the deploy form:
 
 - Replace `DATABASE_URL` with your Koyeb Postgres connection string.
 - Replace `BETTER_AUTH_SECRET` with the first generated secret.
-- Replace `MANIFEST_ENCRYPTION_KEY` with the second generated secret.
+- Replace `TUPLE_ENCRYPTION_KEY` with the second generated secret.
 - Leave `BETTER_AUTH_URL` as `https://{{ KOYEB_PUBLIC_DOMAIN }}`.
-- Leave `PORT`, `MANIFEST_MODE`, `BIND_ADDRESS`, `DB_POOL_MAX`, and `AUTH_DB_POOL_MAX` unchanged for a single-instance deploy.
+- Leave `PORT`, `TUPLE_MODE`, `BIND_ADDRESS`, `DB_POOL_MAX`, and `AUTH_DB_POOL_MAX` unchanged for a single-instance deploy.
 
-The button deploys `docker.io/manifestdotbuild/manifest:6` and exposes port `2099` over HTTP.
+The button deploys `docker.io/tupleai/tuple:6` and exposes port `2099` over HTTP.
 
-## Open Manifest
+## Open Tuple
 
 After the deployment is live, open the public Koyeb domain and create the first account. The first account becomes the admin.
 
@@ -57,7 +57,7 @@ curl -sSf https://<your-koyeb-domain>/api/v1/health
 
 Delete both resources when you are done:
 
-- The Manifest Koyeb Web Service.
+- The Tuple Koyeb Web Service.
 - The Koyeb PostgreSQL Database Service.
 
 Deleting only the web service leaves the database running.

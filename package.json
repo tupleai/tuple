@@ -1,16 +1,16 @@
 {
-  "name": "manifest",
+  "name": "tuple",
   "private": true,
   "description": "Open-source observability for AI agents — track costs, tokens, messages, and performance",
-  "homepage": "https://manifest.build",
+  "homepage": "https://tuple.ai",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mnfst/manifest"
+    "url": "https://github.com/tupleai/tuple"
   },
   "bugs": {
-    "url": "https://github.com/mnfst/manifest/issues"
+    "url": "https://github.com/tupleai/tuple/issues"
   },
-  "author": "MNFST Inc.",
+  "author": "Tuple.ai",
   "license": "MIT",
   "keywords": [
     "ai-observability",
@@ -30,10 +30,10 @@
     "packages/shared",
     "packages/frontend",
     "packages/backend",
-    "packages/manifest"
+    "packages/tuple"
   ],
   "scripts": {
-    "dev": "turbo dev --filter=manifest-frontend",
+    "dev": "turbo dev --filter=tuple-frontend",
     "build": "turbo build",
     "test": "turbo test",
     "start": "node packages/backend/dist/main.js",

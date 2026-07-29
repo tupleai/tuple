@@ -90,7 +90,7 @@ describe('NotificationBell', () => {
     const link = screen.getByText(/Auto-fix is inactive on/).closest('a')!;
     expect(link.getAttribute('href')).toBe('/harnesses/demo/settings?highlight=autofix');
     fireEvent.click(link);
-    expect(localStorage.getItem('manifest_notif_read')).toContain('demo');
+    expect(localStorage.getItem('tuple_notif_read')).toContain('demo');
     expect(screen.queryByText(/Auto-fix is inactive on/)).toBeNull();
 
     fireEvent.click(screen.getByLabelText('Notifications'));
@@ -101,7 +101,7 @@ describe('NotificationBell', () => {
 
   it('clears read state after an agent is enabled and accepts array agent responses', async () => {
     cohortEligible = true;
-    localStorage.setItem('manifest_notif_read', JSON.stringify(['demo']));
+    localStorage.setItem('tuple_notif_read', JSON.stringify(['demo']));
     mockGetAgents.mockResolvedValue([{ agent_name: 'demo', display_name: '' }]);
     mockGetStatus
       .mockResolvedValueOnce({ available: true, any_enabled: false, enabled_agents: [] })
@@ -111,7 +111,7 @@ describe('NotificationBell', () => {
     await waitFor(() => expect(screen.getByLabelText('Notifications')).toBeDefined());
     await vi.advanceTimersByTimeAsync(15_000);
     await waitFor(() => expect(screen.queryByLabelText('Notifications')).toBeNull());
-    expect(localStorage.getItem('manifest_notif_read')).toBe('[]');
+    expect(localStorage.getItem('tuple_notif_read')).toBe('[]');
   });
 
   it('hides itself when loading agents fails', async () => {
@@ -174,7 +174,7 @@ describe('NotificationBell', () => {
 
   it('keeps working when clearing enabled-agent read state cannot persist', async () => {
     cohortEligible = true;
-    localStorage.setItem('manifest_notif_read', JSON.stringify(['demo']));
+    localStorage.setItem('tuple_notif_read', JSON.stringify(['demo']));
     mockGetStatus
       .mockResolvedValueOnce({ available: true, any_enabled: false, enabled_agents: [] })
       .mockResolvedValue({ available: true, any_enabled: true, enabled_agents: ['demo'] });

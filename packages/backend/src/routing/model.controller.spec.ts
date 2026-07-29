@@ -31,7 +31,7 @@ function makeDiscovered(overrides: Partial<DiscoveredModel> = {}): DiscoveredMod
 }
 
 describe('ModelController', () => {
-  const previousMode = process.env['MANIFEST_MODE'];
+  const previousMode = process.env['TUPLE_MODE'];
   let controller: ModelController;
   let mockDiscoveryService: Record<string, jest.Mock>;
   let mockOllamaSync: Record<string, jest.Mock>;
@@ -44,7 +44,7 @@ describe('ModelController', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    process.env['MANIFEST_MODE'] = 'selfhosted';
+    process.env['TUPLE_MODE'] = 'selfhosted';
     mockDiscoveryService = {
       getModelsForAgent: jest.fn().mockResolvedValue([]),
       discoverAllForAgent: jest.fn().mockResolvedValue(undefined),
@@ -96,8 +96,8 @@ describe('ModelController', () => {
   });
 
   afterAll(() => {
-    if (previousMode === undefined) delete process.env['MANIFEST_MODE'];
-    else process.env['MANIFEST_MODE'] = previousMode;
+    if (previousMode === undefined) delete process.env['TUPLE_MODE'];
+    else process.env['TUPLE_MODE'] = previousMode;
   });
 
   /* ── pricingHealth ── */
@@ -167,10 +167,10 @@ describe('ModelController', () => {
     });
 
     it('rejects Ollama sync in cloud without dialing localhost', async () => {
-      process.env['MANIFEST_MODE'] = 'cloud';
+      process.env['TUPLE_MODE'] = 'cloud';
 
       await expect(controller.syncOllama()).rejects.toThrow(
-        'Built-in local providers are only available in self-hosted Manifest',
+        'Built-in local providers are only available in self-hosted Tuple',
       );
       expect(mockOllamaSync.sync).not.toHaveBeenCalled();
     });

@@ -4,10 +4,10 @@ import { Title, Meta } from '@solidjs/meta';
 const Help: Component = () => {
   return (
     <div class="container--sm">
-      <Title>Help & Support - Manifest</Title>
+      <Title>Help & Support - Tuple</Title>
       <Meta
         name="description"
-        content="Get help with Manifest. Schedule a call or contact support."
+        content="Get help with Tuple. Schedule a call or contact support."
       />
       <div class="page-header">
         <div>
@@ -28,7 +28,7 @@ const Help: Component = () => {
           </div>
           <div class="settings-card__control">
             <a
-              href="https://calendly.com/sebastien-manifest/30min?month=2026-02"
+              href="mailto:support@tuple.ai?subject=Tuple%20setup%20help"
               target="_blank"
               rel="noopener noreferrer"
               class="btn btn--outline btn--sm"
@@ -58,12 +58,12 @@ const Help: Component = () => {
           <div class="settings-card__label">
             <span class="settings-card__label-title">Email Support</span>
             <span class="settings-card__label-desc">
-              sebastien@manifest.build &mdash; we typically respond within 24 hours.
+              sebastien@tuple.ai &mdash; we typically respond within 24 hours.
             </span>
           </div>
           <div class="settings-card__control">
             <a
-              href="mailto:sebastien@manifest.build"
+              href="mailto:sebastien@tuple.ai"
               class="btn btn--outline btn--sm"
               style="text-decoration: none;"
             >

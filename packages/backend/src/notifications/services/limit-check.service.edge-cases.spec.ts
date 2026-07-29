@@ -16,7 +16,7 @@ import { NotificationEmailService } from './notification-email.service';
 import { EmailProviderConfigService } from './email-provider-config.service';
 import { NotificationLogService } from './notification-log.service';
 import { IngestEventBusService } from '../../common/services/ingest-event-bus.service';
-import { ManifestRuntimeService } from '../../common/services/manifest-runtime.service';
+import { TupleRuntimeService } from '../../common/services/tuple-runtime.service';
 
 const TENANT = 'tenant-1';
 const AGENT = 'my-agent';
@@ -62,7 +62,7 @@ describe('LimitCheckService — edge cases', () => {
 
     const runtime = {
       getAuthBaseUrl: jest.fn().mockReturnValue('http://localhost:3001'),
-    } as unknown as ManifestRuntimeService;
+    } as unknown as TupleRuntimeService;
 
     ingestSubject = new Subject<string>();
     const ingestBus = {

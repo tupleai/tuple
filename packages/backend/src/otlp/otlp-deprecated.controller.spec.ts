@@ -16,7 +16,7 @@ describe('OtlpDeprecatedController', () => {
       message:
         'OTLP telemetry endpoints have been removed. ' +
         'Use the routing proxy at /v1/chat/completions instead. ' +
-        'See https://manifest.build/docs/migration for details.',
+        'See https://tuple.ai/docs/migration for details.',
       type: 'gone',
       status: 410,
     },
@@ -35,7 +35,7 @@ describe('OtlpDeprecatedController', () => {
 
     it('includes the migration docs URL', () => {
       const result = controller.traces();
-      expect(result.error.message).toContain('https://manifest.build/docs/migration');
+      expect(result.error.message).toContain('https://tuple.ai/docs/migration');
     });
   });
 
@@ -119,7 +119,7 @@ describe('OtlpDeprecatedController', () => {
 
     it('includes the correct baseURL hint', () => {
       const result = controller.wrongChatPath();
-      expect(result.error.message).toContain('https://app.manifest.build/v1');
+      expect(result.error.message).toContain('https://app.tuple.ai/v1');
     });
   });
 });

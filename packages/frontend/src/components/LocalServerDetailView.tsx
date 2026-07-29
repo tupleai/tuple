@@ -1,5 +1,5 @@
 import { createResource, createSignal, For, Show, type Component } from 'solid-js';
-import { LOCAL_SERVER_HINTS, type LocalServerHint } from 'manifest-shared';
+import { LOCAL_SERVER_HINTS, type LocalServerHint } from 'tuple-shared';
 import type { ProviderDef } from '../services/providers.js';
 import {
   createCustomProvider,
@@ -653,9 +653,9 @@ const DockerCaveat: Component<{ hint: LocalServerHint; errorMsg: string }> = (p)
           {p.errorMsg}
         </div>
 
-        {/* Step 1: Running Manifest in Docker */}
+        {/* Step 1: Running Tuple in Docker */}
         <div style="font-size: var(--font-size-sm); font-weight: 600; color: hsl(var(--foreground)); margin-bottom: 12px;">
-          1. Running Manifest in Docker
+          1. Running Tuple in Docker
         </div>
 
         {/* Tabs: GUI / CLI */}

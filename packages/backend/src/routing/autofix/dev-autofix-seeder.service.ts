@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Like, Repository } from 'typeorm';
 import { Agent } from '../../entities/agent.entity';
 import { AgentMessage } from '../../entities/agent-message.entity';
-import { ManifestRequest } from '../../entities/request.entity';
+import { TupleRequest } from '../../entities/request.entity';
 
 const HEALED_COUNT = 8;
 const UNRESOLVED_COUNT = 3;
@@ -16,8 +16,8 @@ export class DevAutofixSeederService {
     private readonly agentRepo: Repository<Agent>,
     @InjectRepository(AgentMessage)
     private readonly messageRepo: Repository<AgentMessage>,
-    @InjectRepository(ManifestRequest)
-    private readonly requestRepo: Repository<ManifestRequest>,
+    @InjectRepository(TupleRequest)
+    private readonly requestRepo: Repository<TupleRequest>,
   ) {}
 
   async ensureSeeded(tenantId: string): Promise<number> {
@@ -33,7 +33,7 @@ export class DevAutofixSeederService {
     if (!agent) return 0;
 
     const rows: Array<Partial<AgentMessage>> = [];
-    const requests: Array<Partial<ManifestRequest>> = [];
+    const requests: Array<Partial<TupleRequest>> = [];
     const now = Date.now();
     for (let index = 0; index < HEALED_COUNT + UNRESOLVED_COUNT; index++) {
       const healed = index < HEALED_COUNT;

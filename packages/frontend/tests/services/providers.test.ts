@@ -471,10 +471,10 @@ describe('PROVIDERS', () => {
   it('exposes Gemini Free as a managed free provider', () => {
     const provider = PROVIDERS.find((entry) => entry.id === 'gemini-free')!;
     expect(provider.name).toBe('Gemini Free');
-    expect(provider.subtitle).toBe('Free Gemini models via Manifest');
+    expect(provider.subtitle).toBe('Free Gemini models via Tuple');
     expect(provider.keyPlaceholder).toBe('sk-...');
     expect(getRoutingProviderApiKeyUrl('gemini-free')).toBe(
-      'https://calendly.com/sebastien-manifest/30min',
+      'mailto:support@tuple.ai?subject=Tuple%20managed%20provider%20access',
     );
   });
 

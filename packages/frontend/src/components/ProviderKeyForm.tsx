@@ -10,7 +10,7 @@ import {
   type Accessor,
   type Setter,
 } from 'solid-js';
-import { MAX_KEYS_PER_PROVIDER as SHARED_MAX_KEYS_PER_PROVIDER } from 'manifest-shared';
+import { MAX_KEYS_PER_PROVIDER as SHARED_MAX_KEYS_PER_PROVIDER } from 'tuple-shared';
 import type { ProviderDef, SubscriptionEndpointRegion } from '../services/providers.js';
 import { validateApiKey, validateSubscriptionKey } from '../services/provider-utils.js';
 import {

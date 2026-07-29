@@ -457,7 +457,7 @@ describe('auth.instance', () => {
     });
 
     it('registers no plugins when billing is disabled', () => {
-      process.env['MANIFEST_MODE'] = 'cloud';
+      process.env['TUPLE_MODE'] = 'cloud';
       delete process.env['STRIPE_SECRET_KEY'];
       delete process.env['STRIPE_WEBHOOK_SECRET'];
       delete process.env['STRIPE_PRO_PRICE_ID'];
@@ -469,7 +469,7 @@ describe('auth.instance', () => {
     });
 
     it('registers the stripe plugin when billing is enabled', () => {
-      process.env['MANIFEST_MODE'] = 'cloud';
+      process.env['TUPLE_MODE'] = 'cloud';
       process.env['STRIPE_SECRET_KEY'] = 'sk_test_x';
       process.env['STRIPE_WEBHOOK_SECRET'] = 'whsec_x';
       process.env['STRIPE_PRO_PRICE_ID'] = 'price_x';
@@ -494,7 +494,7 @@ describe('auth.instance', () => {
     });
 
     it('onSubscriptionComplete calls sendSubscriptionConfirmedEmail', async () => {
-      process.env['MANIFEST_MODE'] = 'cloud';
+      process.env['TUPLE_MODE'] = 'cloud';
       process.env['STRIPE_SECRET_KEY'] = 'sk_test_x';
       process.env['STRIPE_WEBHOOK_SECRET'] = 'whsec_x';
       process.env['STRIPE_PRO_PRICE_ID'] = 'price_x';
@@ -531,7 +531,7 @@ describe('auth.instance', () => {
     });
 
     it('onSubscriptionCancel skips when event is undefined', async () => {
-      process.env['MANIFEST_MODE'] = 'cloud';
+      process.env['TUPLE_MODE'] = 'cloud';
       process.env['STRIPE_SECRET_KEY'] = 'sk_test_x';
       process.env['STRIPE_WEBHOOK_SECRET'] = 'whsec_x';
       process.env['STRIPE_PRO_PRICE_ID'] = 'price_x';
@@ -553,7 +553,7 @@ describe('auth.instance', () => {
     });
 
     it('onSubscriptionCancel sends when event is present', async () => {
-      process.env['MANIFEST_MODE'] = 'cloud';
+      process.env['TUPLE_MODE'] = 'cloud';
       process.env['STRIPE_SECRET_KEY'] = 'sk_test_x';
       process.env['STRIPE_WEBHOOK_SECRET'] = 'whsec_x';
       process.env['STRIPE_PRO_PRICE_ID'] = 'price_x';

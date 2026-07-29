@@ -29,7 +29,7 @@ import {
   responseModeFromDto,
 } from '../dto/routing.dto';
 import { HeaderTierService } from './header-tier.service';
-import { AUTH_TYPES, type TierColor } from 'manifest-shared';
+import { AUTH_TYPES, type TierColor } from 'tuple-shared';
 
 interface CreateHeaderTierBody {
   name: string;

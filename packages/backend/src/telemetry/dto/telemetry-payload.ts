@@ -1,17 +1,17 @@
 /**
  * Shape of the payload POSTed once per 24h from a self-hosted install to the
  * ingest endpoint. All fields are derived aggregates — no per-request events,
- * no identifiers beyond the random `install_id` and the Manifest version.
+ * no identifiers beyond the random `install_id` and the Tuple version.
  * Additive changes keep `schema_version: 1`; breaking changes bump it.
  *
- * Optional fields are flagged as such because installs running older Manifest
+ * Optional fields are flagged as such because installs running older Tuple
  * versions emit a strict subset. Receivers should feature-detect on presence,
  * not on `schema_version`.
  */
 export interface TelemetryPayloadV1 {
   schema_version: 1;
   install_id: string;
-  manifest_version: string;
+  tuple_version: string;
 
   // Activity
   messages_total: number;
@@ -25,7 +25,7 @@ export interface TelemetryPayloadV1 {
 
   /**
    * Total dollar value flowing through the install over the 24h window,
-   * summed from the same `cost_usd` Manifest computes at routing time.
+   * summed from the same `cost_usd` Tuple computes at routing time.
    * Rounded to cents to avoid leaking precision. Always present on installs
    * that ship this field — `0` when nothing chargeable was routed (e.g.
    * Ollama-only fleets). Optional in the DTO because older installs predate

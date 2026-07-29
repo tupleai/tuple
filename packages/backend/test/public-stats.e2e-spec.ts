@@ -8,7 +8,7 @@ let app: INestApplication;
 beforeAll(async () => {
   // Enable the public stats endpoints for the existing test suite.
   // A separate describe block below asserts the default (off) behavior.
-  process.env['MANIFEST_PUBLIC_STATS'] = 'true';
+  process.env['TUPLE_PUBLIC_STATS'] = 'true';
   app = await createTestApp();
 
   const ds = app.get(DataSource);
@@ -71,7 +71,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await app.close();
-  delete process.env['MANIFEST_PUBLIC_STATS'];
+  delete process.env['TUPLE_PUBLIC_STATS'];
 });
 
 describe('GET /api/v1/public/usage', () => {

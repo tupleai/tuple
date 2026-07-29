@@ -1,12 +1,12 @@
-# Dashboard Redesign Brief — Manifest Auto-fix Beta
+# Dashboard Redesign Brief — Tuple Auto-fix Beta
 
 ## Context
 
-Manifest is an LLM proxy/gateway. Developers route their AI requests through
-Manifest, which handles model routing, fallbacks, and provider key management.
+Tuple is an LLM proxy/gateway. Developers route their AI requests through
+Tuple, which handles model routing, fallbacks, and provider key management.
 
 We are launching **Auto-fix** (powered by Phoenix) to ~100 beta users. When a
-provider returns a repairable 4xx error, Manifest automatically patches the
+provider returns a repairable 4xx error, Tuple automatically patches the
 request and retries it. The developer gets a successful response without knowing
 an error occurred.
 
@@ -124,7 +124,7 @@ Request outcomes come from:
 | ---------------------------- | ------------------------------------------------------------------ |
 | `requests.status`            | Canonical caller-visible `pending`, `success`, or `failed` outcome |
 | `requests.error_http_status` | HTTP status for failed requests when one exists                    |
-| `requests.error_origin`      | Distinguishes provider, transport, and Manifest failures           |
+| `requests.error_origin`      | Distinguishes provider, transport, and Tuple failures           |
 | `requests.autofix_status`    | Request-level Auto-fix outcome                                     |
 
 Provider Attempt details come from:
@@ -133,7 +133,7 @@ Provider Attempt details come from:
 | ------------------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
 | `status`                        | `pending`, `success`, `failed` (plus legacy values during transition)           | Attempt outcome                                                                   |
 | `error_http_status`             | `400`, `401`, `404`, `422`, `429`, `500`, `503`                                 | Failed provider response code; successful rows use status rather than storing 200 |
-| `error_class`                   | `rate_limit`, `auth`, `invalid_request`, `server_error`, `timeout`, `not_found` | Manifest's error classification                                                   |
+| `error_class`                   | `rate_limit`, `auth`, `invalid_request`, `server_error`, `timeout`, `not_found` | Tuple's error classification                                                   |
 | `error_origin`                  | `provider`, `transport`, `config`, `policy`, `internal`, `request`              | Where the error came from                                                         |
 | `provider`                      | `openai`, `anthropic`, `gemini`, `custom:uuid`                                  | Which provider                                                                    |
 | `model`                         | `gpt-4o`, `claude-sonnet-4-20250514`                                            | Which model                                                                       |
@@ -160,7 +160,7 @@ The logical `requests` row is successful and records nullable `autofix_status`: 
 An HTTP-status chart derives successful requests from `requests.status =
 'success'` (displayed as 200 by convention). Failed rows use
 `error_http_status`, and provider reliability must split by `error_origin` so
-Manifest-generated failures are not blamed on an upstream provider.
+Tuple-generated failures are not blamed on an upstream provider.
 
 ---
 

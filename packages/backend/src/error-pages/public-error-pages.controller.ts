@@ -5,7 +5,7 @@ import { ErrorPagesService } from './error-pages.service';
 
 /**
  * Public, unauthenticated read API consumed by the marketing site
- * (manifest.build/errors/...). Gated by the same MANIFEST_PUBLIC_STATS flag as
+ * (tuple.ai/errors/...). Gated by the same TUPLE_PUBLIC_STATS flag as
  * the other /api/v1/public/* endpoints — 404 (not 403) when disabled so probes
  * can't distinguish "off" from "absent".
  */

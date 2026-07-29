@@ -172,10 +172,10 @@ const Register: Component = () => {
 
   return (
     <>
-      <Title>Sign Up - Manifest</Title>
+      <Title>Sign Up - Tuple</Title>
       <Meta
         name="description"
-        content="Create a Manifest account to start monitoring your AI harnesses."
+        content="Create a Tuple account to start monitoring your AI harnesses."
       />
       <Show
         when={!emailSent()}
@@ -303,7 +303,7 @@ const Register: Component = () => {
               <p class="auth-terms">
                 By signing up, you agree to our{' '}
                 <a
-                  href="https://manifest.build/terms"
+                  href="https://tuple.ai/terms"
                   class="auth-terms__link"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -312,7 +312,7 @@ const Register: Component = () => {
                 </a>{' '}
                 and{' '}
                 <a
-                  href="https://manifest.build/privacy"
+                  href="https://tuple.ai/privacy"
                   class="auth-terms__link"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -335,7 +335,7 @@ const Register: Component = () => {
             </h1>
             <p class="auth-header__subtitle">
               {searchParams.context === 'login'
-                ? 'Manifest now offers Free and Pro plans. Select the one that fits your needs.'
+                ? 'Tuple now offers Free and Pro plans. Select the one that fits your needs.'
                 : 'Monitor your AI harnesses\' costs and usage'}
             </p>
           </div>

@@ -73,7 +73,7 @@ interface OverviewData {
     successful: number;
     success_rate: number;
     attempt_success_rate: number;
-    manifest_lift_pct: number;
+    tuple_lift_pct: number;
     recovered: number;
   };
   token_usage: Array<{
@@ -382,7 +382,7 @@ const Overview: Component = () => {
   return (
     <div class="container--lg">
       <Title>
-        {agentDisplayName() ?? decodeURIComponent(params.agentName)} Overview - Manifest
+        {agentDisplayName() ?? decodeURIComponent(params.agentName)} Overview - Tuple
       </Title>
       <Meta
         name="description"

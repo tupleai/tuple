@@ -1,5 +1,5 @@
 import { fetchJson, fetchMutate, type FetchJsonOptions } from './core';
-import type { BillingEmailPreferences, BillingStatus } from 'manifest-shared';
+import type { BillingEmailPreferences, BillingStatus } from 'tuple-shared';
 
 // Re-export so UI components can import the type from the API module they
 // already use, instead of reaching across package boundaries for it.

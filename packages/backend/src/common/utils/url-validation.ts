@@ -147,7 +147,7 @@ export async function validatePublicUrl(
   if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
     throw new Error('Only http and https URLs are allowed');
   }
-  // HTTPS-only when we can't allow private destinations. Manifest forwards
+  // HTTPS-only when we can't allow private destinations. Tuple forwards
   // API keys in Authorization headers and plaintext prompts/completions to
   // this URL; any non-TLS hop would expose them to passive wire-sniffing
   // (AC-2 in the Mine paper, arXiv:2604.08407). In self-hosted mode we allow
@@ -156,7 +156,7 @@ export async function validatePublicUrl(
     throw new Error(
       'Only https URLs are allowed in cloud mode. ' +
         'Self-hosted installs allow http:// for private destinations — ' +
-        'set MANIFEST_MODE=selfhosted if you are running Manifest yourself ' +
+        'set TUPLE_MODE=selfhosted if you are running Tuple yourself ' +
         '(e.g. inside Docker, Podman, or Kubernetes).',
     );
   }

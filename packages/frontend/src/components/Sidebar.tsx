@@ -6,7 +6,7 @@ import { getBillingStatus } from '../services/api/billing.js';
 import { FREE_REQUEST_LIMIT_LABEL } from '../services/billing-display.js';
 import { checkIsSelfHosted } from '../services/setup-status.js';
 import { agentPing } from '../services/sse.js';
-import { platformIcon } from 'manifest-shared';
+import { platformIcon } from 'tuple-shared';
 import AddAgentModal from './AddAgentModal.jsx';
 import AutofixModal from './AutofixModal.jsx';
 
@@ -248,7 +248,7 @@ const Sidebar: Component<SidebarProps> = (props) => {
             </p>
             <a
               class="sidebar-autofix__btn"
-              href="https://manifest.build/autofix/"
+              href="https://tuple.ai/autofix/"
               target="_blank"
               rel="noopener noreferrer"
             >

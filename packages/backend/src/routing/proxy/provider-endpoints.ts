@@ -435,8 +435,8 @@ export const PROVIDER_ENDPOINTS: Record<string, ProviderEndpoint> = {
     buildHeaders: (apiKey: string) => ({
       Authorization: `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
-      'HTTP-Referer': 'https://manifest.build',
-      'X-Title': 'Manifest',
+      'HTTP-Referer': 'https://tuple.ai',
+      'X-Title': 'Tuple',
     }),
     buildPath: () => '/api/v1/chat/completions',
     format: 'openai',

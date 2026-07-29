@@ -4,7 +4,7 @@ import { createSignal } from 'solid-js';
 import HeaderComboBox, { type HeaderSuggestion } from '../../src/components/HeaderComboBox';
 
 const suggestions: HeaderSuggestion[] = [
-  { label: 'x-manifest-tier', value: 'x-manifest-tier', sublabel: '12× · premium · free', group: 'openai-js' },
+  { label: 'x-tuple-tier', value: 'x-tuple-tier', sublabel: '12× · premium · free', group: 'openai-js' },
   { label: 'x-custom-foo', value: 'x-custom-foo', sublabel: '5× seen' },
 ];
 
@@ -37,7 +37,7 @@ describe('HeaderComboBox', () => {
     const { container, getByPlaceholderText } = render(() => <Harness />);
     const input = getByPlaceholderText('enter header');
     fireEvent.focus(input);
-    expect(container.textContent).toContain('x-manifest-tier');
+    expect(container.textContent).toContain('x-tuple-tier');
     expect(container.textContent).toContain('12× · premium · free');
     expect(container.textContent).toContain('openai-js');
   });
@@ -47,7 +47,7 @@ describe('HeaderComboBox', () => {
     const input = getByPlaceholderText('enter header') as HTMLInputElement;
     fireEvent.input(input, { target: { value: 'CUSTOM' } });
     expect(container.textContent).toContain('x-custom-foo');
-    expect(container.textContent).not.toContain('x-manifest-tier');
+    expect(container.textContent).not.toContain('x-tuple-tier');
   });
 
   it('selects a suggestion via mousedown and fires onInput', () => {
@@ -57,7 +57,7 @@ describe('HeaderComboBox', () => {
     fireEvent.focus(input);
     const first = container.querySelector('.header-combo__option') as HTMLElement;
     fireEvent.mouseDown(first);
-    expect(onInput).toHaveBeenCalledWith('x-manifest-tier');
+    expect(onInput).toHaveBeenCalledWith('x-tuple-tier');
   });
 
   it('navigates with ArrowDown + Enter and selects the highlighted entry', () => {
@@ -67,7 +67,7 @@ describe('HeaderComboBox', () => {
     fireEvent.focus(input);
     fireEvent.keyDown(input, { key: 'ArrowDown' });
     fireEvent.keyDown(input, { key: 'Enter' });
-    expect(onInput).toHaveBeenCalledWith('x-manifest-tier');
+    expect(onInput).toHaveBeenCalledWith('x-tuple-tier');
   });
 
   it('ArrowUp clamps at -1 and Escape closes the menu', () => {

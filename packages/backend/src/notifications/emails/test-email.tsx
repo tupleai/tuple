@@ -17,7 +17,7 @@ interface TestEmailProps {
 }
 
 export function TestEmail(props: TestEmailProps = {}) {
-  const { logoUrl = 'https://app.manifest.build/manifest-logo.png' } = props;
+  const { logoUrl = 'https://app.tuple.ai/tuple-logo.png' } = props;
   return (
     <Html>
       <Head />
@@ -26,7 +26,7 @@ export function TestEmail(props: TestEmailProps = {}) {
         <Container style={container}>
           {/* Logo */}
           <Section style={logoSection}>
-            <Img src={logoUrl} alt="Manifest" height="32" style={logoImg} />
+            <Img src={logoUrl} alt="Tuple" height="32" style={logoImg} />
           </Section>
 
           {/* Main content */}
@@ -37,7 +37,7 @@ export function TestEmail(props: TestEmailProps = {}) {
 
             <Text style={heading}>Email is working</Text>
             <Text style={paragraph}>
-              This is a test email from Manifest. If you're reading this, your email provider
+              This is a test email from Tuple. If you're reading this, your email provider
               configuration is working correctly.
             </Text>
             <Text style={paragraph}>
@@ -48,11 +48,11 @@ export function TestEmail(props: TestEmailProps = {}) {
           {/* Footer */}
           <Hr style={divider} />
           <Section style={footer}>
-            <Text style={footerNote}>This is a one-time test email sent from Manifest.</Text>
+            <Text style={footerNote}>This is a one-time test email sent from Tuple.</Text>
             <Text style={footerMuted}>
-              © 2026 MNFST Inc. All rights reserved.{' '}
-              <Link href="https://manifest.build" style={footerLink}>
-                manifest.build
+              © 2026 Tuple.ai All rights reserved.{' '}
+              <Link href="https://tuple.ai" style={footerLink}>
+                tuple.ai
               </Link>
             </Text>
           </Section>

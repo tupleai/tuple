@@ -3,7 +3,7 @@ import { Portal } from 'solid-js/web';
 import { USER_DISCOVERY_BOOKING_URL } from './UserDiscoveryBanner.jsx';
 
 export const USER_DISCOVERY_MODAL_DISMISSED_KEY =
-  'manifest:user-discovery-modal-dismissed:v1';
+  'tuple:user-discovery-modal-dismissed:v1';
 
 export function readUserDiscoveryModalDismissed(): boolean {
   try {
@@ -30,7 +30,7 @@ interface UserDiscoveryModalProps {
 
 const benefits = [
   '30 minutes through a video call.',
-  'Quick access to $10 of Gemini tokens through Manifest.',
+  'Quick access to $10 of Gemini tokens through Tuple.',
   'You talk and we listen. Just questions and nothing to sell.',
 ];
 

@@ -66,7 +66,7 @@ describe("monitorOAuthPopup", () => {
 
     // Simulate postMessage arriving before the 5-minute timeout
     window.dispatchEvent(
-      new MessageEvent("message", { data: { type: "manifest-oauth-success" } }),
+      new MessageEvent("message", { data: { type: "tuple-oauth-success" } }),
     );
 
     expect(onSuccess).toHaveBeenCalledTimes(1);
@@ -187,7 +187,7 @@ describe("monitorOAuthPopup", () => {
 
     // A late OAuth message and further polling ticks must be ignored.
     window.dispatchEvent(
-      new MessageEvent("message", { data: { type: "manifest-oauth-success" } }),
+      new MessageEvent("message", { data: { type: "tuple-oauth-success" } }),
     );
     vi.advanceTimersByTime(5_000);
     expect(onSuccess).not.toHaveBeenCalled();

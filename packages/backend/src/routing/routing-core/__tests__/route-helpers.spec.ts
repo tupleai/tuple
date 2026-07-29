@@ -7,7 +7,7 @@ import {
   routeMatches,
   unambiguousRoute,
 } from '../route-helpers';
-import type { ModelRoute } from 'manifest-shared';
+import type { ModelRoute } from 'tuple-shared';
 import type { DiscoveredModel } from '../../../model-discovery/model-fetcher';
 
 const route = (provider: string, authType: ModelRoute['authType'], model: string): ModelRoute => ({

@@ -10,9 +10,9 @@ import {
   CANCELLED_STATUS,
   PENDING_STATUS,
   type RequestParamDefaults,
-} from 'manifest-shared';
+} from 'tuple-shared';
 import { AgentMessage } from '../../entities/agent-message.entity';
-import { ManifestRequest } from '../../entities/request.entity';
+import { TupleRequest } from '../../entities/request.entity';
 import { ModelPricingCacheService } from '../../model-prices/model-pricing-cache.service';
 import { IngestEventBusService } from '../../common/services/ingest-event-bus.service';
 import { IngestionContext } from '../../otlp/interfaces/ingestion-context.interface';
@@ -25,12 +25,12 @@ import type { ProviderAttemptRef, ProviderAttemptStart } from './proxy-types';
 import { CustomProviderService } from '../custom-provider/custom-provider.service';
 import { OpencodeGoCatalogService } from '../../model-discovery/opencode-go-catalog.service';
 import { PROVIDER_BY_ID_OR_ALIAS } from '../../common/constants/providers';
-import { extractManifestErrorCode, type ManifestErrorCode } from '../../common/errors/error-codes';
+import { extractTupleErrorCode, type TupleErrorCode } from '../../common/errors/error-codes';
 import {
-  MANIFEST_CODE_TO_REASON,
-  isRecordableManifestCode,
-  type ManifestBlockedRequestReason,
-} from '../../common/errors/manifest-error';
+  TUPLE_CODE_TO_REASON,
+  isRecordableTupleCode,
+  type TupleBlockedRequestReason,
+} from '../../common/errors/tuple-error';
 import {
   getAutofixRetry,
   type AutofixChainEntry,
@@ -66,7 +66,7 @@ function buildAutofixDecision(entry: AutofixChainEntry | undefined): object | nu
 
 /**
  * Auto-fix audit for every Phoenix decision, plus linked-flow columns only when
- * Manifest actually sent a patched retry.
+ * Tuple actually sent a patched retry.
  */
 function autofixColumns(
   autofix: AutofixRecord | undefined,
@@ -143,11 +143,11 @@ export interface ProviderErrorOpts extends HeaderTierRef {
   autofix?: AutofixRecord;
 }
 
-export type { ManifestBlockedRequestReason };
+export type { TupleBlockedRequestReason };
 
-export interface ManifestBlockedRequestOpts {
+export interface TupleBlockedRequestOpts {
   requestId?: string;
-  /** Real provider retry to finalize when Auto-fix did not clear a Manifest block. */
+  /** Real provider retry to finalize when Auto-fix did not clear a Tuple block. */
   attempt?: ProviderAttemptRef;
   /**
    * The status the caller saw, when there was one. Omitted for the HTTP-200
@@ -157,21 +157,21 @@ export interface ManifestBlockedRequestOpts {
   httpStatus?: number | null;
   errorMessage: string;
   /** The documented `M###` code, persisted so the UI can link to its doc page. */
-  errorCode?: ManifestErrorCode;
-  reason: ManifestBlockedRequestReason;
+  errorCode?: TupleErrorCode;
+  reason: TupleBlockedRequestReason;
   model?: string;
   traceId?: string;
   sessionKey?: string;
   callerAttribution?: CallerAttribution | null;
   requestHeaders?: Record<string, string> | null;
   /**
-   * Auto-fix audit when this Manifest-blocked failure was handed to the healing
+   * Auto-fix audit when this Tuple-blocked failure was handed to the healing
    * service (e.g. an M302 unknown model). This path is used only when the block
    * remains caller-visible; a healed request finishes through the success path
    * and records only the provider retry Attempt.
    */
   autofix?: AutofixRecord;
-  /** End-to-end time until Manifest returned the rejection. */
+  /** End-to-end time until Tuple returned the rejection. */
   durationMs?: number;
 }
 
@@ -329,7 +329,7 @@ function buildRequestRow(
   attempt: Partial<AgentMessage>,
   terminal: boolean,
   autofix?: AutofixRecord,
-): ManifestRequest {
+): TupleRequest {
   const classified = classifyRow(attempt);
   // classifyRow above reads the rich attempt status; the request row stores the
   // collapsed canonical outcome. A non-terminal request is still `pending`.
@@ -382,16 +382,16 @@ function classifyRow(row: Partial<AgentMessage>): {
   if (normalizeStatus(row.status) === PENDING_STATUS) {
     return { error_origin: null, error_class: null, superseded: false };
   }
-  // A stamped Manifest error_code is the authoritative origin signal. A
+  // A stamped Tuple error_code is the authoritative origin signal. A
   // credential-hop failure (M100/M102) carries a synthetic 401 and rides the
   // fallback recorder, whose routing_reason is the *tier* reason ('scored',
-  // 'default', …) — classifying off that alone would bucket a Manifest config
+  // 'default', …) — classifying off that alone would bucket a Tuple config
   // error as a provider 401 and inflate provider_error_rate / billing. Derive
   // the reason from the code so it classifies as config even though
   // routing_reason keeps the tier reason for display.
-  const code = row.error_code as ManifestErrorCode | null | undefined;
+  const code = row.error_code as TupleErrorCode | null | undefined;
   const codeReason =
-    code && isRecordableManifestCode(code) ? MANIFEST_CODE_TO_REASON[code] : undefined;
+    code && isRecordableTupleCode(code) ? TUPLE_CODE_TO_REASON[code] : undefined;
   return classifyMessageError({
     status: row.status ?? 'ok',
     errorHttpStatus: row.error_http_status,
@@ -442,10 +442,10 @@ export class ProxyMessageRecorder implements OnModuleDestroy {
     // repositories always expose manager.getRepository().
     const getRepository = this.messageRepo.manager?.getRepository?.bind(this.messageRepo.manager);
     if (!getRepository) return false;
-    const repo = getRepository(ManifestRequest);
+    const repo = getRepository(TupleRequest);
     if (typeof repo.createQueryBuilder !== 'function') return false;
     const row = buildRequestRow(ctx, requestId, attempt, terminal, autofix);
-    const insert = repo.createQueryBuilder().insert().into(ManifestRequest).values(row);
+    const insert = repo.createQueryBuilder().insert().into(TupleRequest).values(row);
     if (terminal) {
       await insert
         .orUpdate(
@@ -560,7 +560,7 @@ export class ProxyMessageRecorder implements OnModuleDestroy {
     return true;
   }
 
-  /** Finish caller-disconnected work without attributing an error to Manifest or the provider. */
+  /** Finish caller-disconnected work without attributing an error to Tuple or the provider. */
   async recordCancelledRequest(ctx: IngestionContext, opts: CancelledRequestOpts): Promise<void> {
     const row = buildMessageRow(ctx, {
       request_id: opts.requestId,
@@ -600,7 +600,7 @@ export class ProxyMessageRecorder implements OnModuleDestroy {
       {
         status: normalizeStatus(richStatus),
         error_message: errorMessage,
-        error_code: extractManifestErrorCode(errorMessage),
+        error_code: extractTupleErrorCode(errorMessage),
         error_http_status: status,
         duration_ms: Math.max(0, (attempt.completedAtMs ?? Date.now()) - attempt.startedAtMs),
         ...classified,
@@ -695,20 +695,20 @@ export class ProxyMessageRecorder implements OnModuleDestroy {
   }
 
   /**
-   * The single writer for every Manifest-authored failure row: setup errors
+   * The single writer for every Tuple-authored failure row: setup errors
    * (M100/M101), limits (M200/M204), rate limits (M201–M203), malformed requests
    * (M300), internal errors (M500), and expired keys (M004).
    *
    * `provider` and `routing_tier` are deliberately left NULL — no provider was
    * contacted and no tier was chosen. (The old canned-stub path wrote a
-   * placeholder `provider='manifest'` / `routing_tier='simple'`, which put a
-   * meaningless SIMPLE badge on setup errors and a phantom "manifest" entry in
+   * placeholder `provider='tuple'` / `routing_tier='simple'`, which put a
+   * meaningless SIMPLE badge on setup errors and a phantom "tuple" entry in
    * the Messages provider dropdown.) `model` keeps the model the caller asked
    * for, which is real information.
    */
-  async recordManifestBlockedRequest(
+  async recordTupleBlockedRequest(
     ctx: IngestionContext,
-    opts: ManifestBlockedRequestOpts,
+    opts: TupleBlockedRequestOpts,
   ): Promise<void> {
     const {
       requestId = uuid(),
@@ -759,8 +759,8 @@ export class ProxyMessageRecorder implements OnModuleDestroy {
       header_tier_name: null,
       header_tier_color: null,
     });
-    // A Manifest-level rejection normally has zero provider attempts. An M302
-    // patched retry is real provider work, though, even when Manifest ultimately
+    // A Tuple-level rejection normally has zero provider attempts. An M302
+    // patched retry is real provider work, though, even when Tuple ultimately
     // returns its friendly stub; finish that pending Attempt from the audit.
     const wroteRequest = await this.persistRequest(ctx, requestId, row, true, autofix);
     const retry = getAutofixRetry(autofix);
@@ -865,7 +865,7 @@ export class ProxyMessageRecorder implements OnModuleDestroy {
           // Credential hop failures embed M100/M102 in the body; stamp the
           // code so filters/analytics do not have to parse error_message.
           error_code:
-            extractManifestErrorCode(errorMessage) ?? extractManifestErrorCode(f.errorBody),
+            extractTupleErrorCode(errorMessage) ?? extractTupleErrorCode(f.errorBody),
           error_http_status: f.status,
           model: canonical.model,
           provider: canonical.provider,
@@ -951,9 +951,9 @@ export class ProxyMessageRecorder implements OnModuleDestroy {
       status: 'fallback_error',
       ...autofixColumns(opts?.autofix, terminalAutofixRole(opts?.autofix)),
       error_message: errorMessage,
-      // Credential failures (M100/M102) land here with a peacock body; stamp
+      // Credential failures (M100/M102) land here with a Tuple-branded body; stamp
       // error_code so Messages filters and analytics can group on it.
-      error_code: extractManifestErrorCode(errorMessage) ?? extractManifestErrorCode(errorBody),
+      error_code: extractTupleErrorCode(errorMessage) ?? extractTupleErrorCode(errorBody),
       error_http_status: opts?.httpStatus ?? null,
       model: canonical.model,
       provider: canonical.provider,
@@ -1131,8 +1131,8 @@ export class ProxyMessageRecorder implements OnModuleDestroy {
 
     const normalizedSessionKey = normalizeSessionKey(sessionKey);
 
-    // Manifest's own canned stubs never reach here — the controller routes them
-    // to recordManifestBlockedRequest, which is the sole writer of Manifest rows.
+    // Tuple's own canned stubs never reach here — the controller routes them
+    // to recordTupleBlockedRequest, which is the sole writer of Tuple rows.
     const status = 'ok';
     const errorMessage = null;
 

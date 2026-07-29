@@ -24,7 +24,7 @@ import {
   type ProviderModelParamSpec,
   type ProviderParamSpec,
   type ProviderParamSpecCatalog,
-} from 'manifest-shared';
+} from 'tuple-shared';
 
 const MODELPARAMS_PACKAGE_JSON = 'modelparams/package.json';
 const MODELPARAMS_DATA_RELATIVE_PATH = 'dist/generated/data.js';

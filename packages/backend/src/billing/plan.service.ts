@@ -1,14 +1,14 @@
 import { BadRequestException, HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
-import { MANIFEST_ERROR_ORIGINS, PLAN_LIMITS, UNLIMITED_PLAN_LIMITS } from 'manifest-shared';
+import { TUPLE_ERROR_ORIGINS, PLAN_LIMITS, UNLIMITED_PLAN_LIMITS } from 'tuple-shared';
 import type {
   BillingEmailPreferences,
   BillingPrice,
   BillingStatus,
   Plan,
   PlanLimits,
-} from 'manifest-shared';
+} from 'tuple-shared';
 import type Stripe from 'stripe';
 import { Tenant } from '../entities/tenant.entity';
 import type { TenantContext } from '../common/decorators/tenant-context.decorator';
@@ -32,7 +32,7 @@ const BILLING_PRICE_UNAVAILABLE: BillingPrice = Object.freeze({
 // the true rate stays visible.
 const COUNT_FAILURE_WARN_WINDOW_MS = 60 * 1000;
 const LIMIT_FAILURE_WARN_WINDOW_MS = 60 * 1000;
-const MANIFEST_ERROR_ORIGIN_SQL_LIST = MANIFEST_ERROR_ORIGINS.map((origin) => `'${origin}'`).join(
+const TUPLE_ERROR_ORIGIN_SQL_LIST = TUPLE_ERROR_ORIGINS.map((origin) => `'${origin}'`).join(
   ', ',
 );
 
@@ -241,7 +241,7 @@ export class PlanService {
                      AND pa."timestamp" < c.local_timestamp
                      AND (
                        pa."error_origin" IS NULL
-                       OR pa."error_origin" NOT IN (${MANIFEST_ERROR_ORIGIN_SQL_LIST})
+                       OR pa."error_origin" NOT IN (${TUPLE_ERROR_ORIGIN_SQL_LIST})
                      )
                 )
                 AND NOT EXISTS (
@@ -261,7 +261,7 @@ export class PlanService {
                 AND COALESCE(m."superseded", false) = false
                 AND (
                   m."error_origin" IS NULL
-                  OR m."error_origin" NOT IN (${MANIFEST_ERROR_ORIGIN_SQL_LIST})
+                  OR m."error_origin" NOT IN (${TUPLE_ERROR_ORIGIN_SQL_LIST})
                 )
                 AND NOT EXISTS (
                   SELECT 1

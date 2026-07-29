@@ -180,7 +180,7 @@ describe('ErrorPagesService', () => {
       expect(saved.category_label).toBe('');
       expect(saved.body_what).toBe('');
       expect(saved.body_fix).toBe('');
-      expect(saved.body_manifest).toBe('');
+      expect(saved.body_tuple).toBe('');
       expect(saved.sample_message).toBe('');
       expect(saved.faq).toEqual([]);
       expect(saved.related).toEqual([]);
@@ -197,7 +197,7 @@ describe('ErrorPagesService', () => {
         category_label: 'Rate limit',
         body_what: 'what',
         body_fix: 'fix',
-        body_manifest: 'manifest',
+        body_tuple: 'tuple',
         faq: [{ q: 'why?', a: 'because' }],
         related: [{ slug: 'other', title: 'Other' }],
         noindex: true,
@@ -212,7 +212,7 @@ describe('ErrorPagesService', () => {
       expect(saved.category_label).toBe('Rate limit');
       expect(saved.body_what).toBe('what');
       expect(saved.body_fix).toBe('fix');
-      expect(saved.body_manifest).toBe('manifest');
+      expect(saved.body_tuple).toBe('tuple');
       expect(saved.faq).toEqual([{ q: 'why?', a: 'because' }]);
       expect(saved.related).toEqual([{ slug: 'other', title: 'Other' }]);
       expect(saved.noindex).toBe(true);

@@ -63,7 +63,7 @@ describe('UsageLimitBanner', () => {
 
   it('stays hidden when the warning was already dismissed today', async () => {
     localStorage.setItem(
-      'manifest_usage_banner_dismissed:u1',
+      'tuple_usage_banner_dismissed:u1',
       new Date().toISOString().slice(0, 10),
     );
     const { container } = render(() => <UsageLimitBanner />);
@@ -75,7 +75,7 @@ describe('UsageLimitBanner', () => {
 
   it('does not reuse another user dismissal', async () => {
     localStorage.setItem(
-      'manifest_usage_banner_dismissed:u2',
+      'tuple_usage_banner_dismissed:u2',
       new Date().toISOString().slice(0, 10),
     );
     const { container } = render(() => <UsageLimitBanner />);

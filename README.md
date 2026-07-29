@@ -1,48 +1,46 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/mnfst/manifest/HEAD/.github/assets/logo-white.svg" />
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/mnfst/manifest/HEAD/.github/assets/logo-dark.svg" />
-    <img src="https://raw.githubusercontent.com/mnfst/manifest/HEAD/.github/assets/logo-dark.svg" alt="Manifest" height="53" title="Manifest"/>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/tupleai/tuple/HEAD/.github/assets/wordmark-white.png" />
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/tupleai/tuple/HEAD/.github/assets/wordmark-dark.png" />
+    <img src="https://raw.githubusercontent.com/tupleai/tuple/HEAD/.github/assets/wordmark-dark.png" alt="Tuple" height="53" title="Tuple"/>
   </picture>
 </p>
 <p align="center">
 AI Agents that don't break
 </p>
 
-![manifest-gh](https://github.com/user-attachments/assets/7dd74fc2-f7d6-4558-a95a-014ed754a125)
+> **Fork notice:** Tuple is a fork of [mnfst/manifest](https://github.com/mnfst/manifest). Original copyright and MIT license notices are preserved.
+
+![Tuple routing illustration](.github/assets/tuple-routing-hero.png)
 
 <p align="center">
-  <a href="https://render.com/deploy?repo=https://github.com/mnfst/manifest" target="_blank" rel="nofollow"><img src="https://img.shields.io/badge/Deploy%20on-Render-46E3B7?style=for-the-badge&amp;logo=render&amp;logoColor=white" alt="Deploy on Render" /></a>
+  <a href="https://render.com/deploy?repo=https://github.com/tupleai/tuple" target="_blank" rel="nofollow"><img src="https://img.shields.io/badge/Deploy%20on-Render-46E3B7?style=for-the-badge&amp;logo=render&amp;logoColor=white" alt="Deploy on Render" /></a>
   <a href="https://railway.com/deploy/wild-wild" target="_blank" rel="nofollow"><img src="https://img.shields.io/badge/Deploy%20on-Railway-0B0D0E?style=for-the-badge&amp;logo=railway&amp;logoColor=white" alt="Deploy on Railway" /></a>
-  <a href="https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?stackName=manifest&amp;templateURL=https%3A%2F%2Fmnfst-manifest-deploy-templates.s3.us-east-1.amazonaws.com%2Fmanifest.yaml" target="_blank" rel="nofollow"><img src="https://img.shields.io/badge/Deploy%20on-AWS-232F3E?style=for-the-badge&amp;logo=amazonwebservices&amp;logoColor=white" alt="Deploy on AWS" /></a>
-  <a href="https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Fmnfst%2Fmanifest&amp;cloudshell_workspace=deploy%2Fgcp&amp;cloudshell_tutorial=TUTORIAL.md&amp;cloudshell_image=gcr.io/ds-artifacts-cloudshell/deploystack_custom_image&amp;shellonly=true" target="_blank" rel="nofollow"><img src="https://img.shields.io/badge/Deploy%20on-GCP-4285F4?style=for-the-badge&amp;logo=googlecloud&amp;logoColor=white" alt="Deploy on GCP" /></a>
+  <a href="https://console.aws.amazon.com/cloudformation/home?region=us-east-1#/stacks/quickcreate?stackName=tuple&amp;templateURL=https%3A%2F%2Ftupleai-tuple-deploy-templates.s3.us-east-1.amazonaws.com%2Ftuple.yaml" target="_blank" rel="nofollow"><img src="https://img.shields.io/badge/Deploy%20on-AWS-232F3E?style=for-the-badge&amp;logo=amazonwebservices&amp;logoColor=white" alt="Deploy on AWS" /></a>
+  <a href="https://ssh.cloud.google.com/cloudshell/editor?cloudshell_git_repo=https%3A%2F%2Fgithub.com%2Ftupleai%2Ftuple&amp;cloudshell_workspace=deploy%2Fgcp&amp;cloudshell_tutorial=TUTORIAL.md&amp;cloudshell_image=gcr.io/ds-artifacts-cloudshell/deploystack_custom_image&amp;shellonly=true" target="_blank" rel="nofollow"><img src="https://img.shields.io/badge/Deploy%20on-GCP-4285F4?style=for-the-badge&amp;logo=googlecloud&amp;logoColor=white" alt="Deploy on GCP" /></a>
 </p>
 
 <p align="center">
   <span><img src="https://img.shields.io/badge/status-beta-yellow" alt="beta" /></span>
   &nbsp;
-  <a href="https://github.com/mnfst/manifest/stargazers"><img src="https://img.shields.io/github/stars/mnfst/manifest?style=flat" alt="GitHub stars" /></a>
+  <a href="https://github.com/tupleai/tuple/stargazers"><img src="https://img.shields.io/github/stars/tupleai/tuple?style=flat" alt="GitHub stars" /></a>
   &nbsp;
-  <a href="https://hub.docker.com/r/manifestdotbuild/manifest"><img src="https://img.shields.io/docker/pulls/manifestdotbuild/manifest?color=2496ED&label=docker%20pulls" alt="Docker pulls" /></a>
+  <a href="https://hub.docker.com/r/tupleai/tuple"><img src="https://img.shields.io/docker/pulls/tupleai/tuple?color=2496ED&label=docker%20pulls" alt="Docker pulls" /></a>
   &nbsp;
-  <a href="https://hub.docker.com/r/manifestdotbuild/manifest/tags"><img src="https://img.shields.io/docker/image-size/manifestdotbuild/manifest/latest?color=2496ED&label=image%20size" alt="Docker image size" /></a>
+  <a href="https://hub.docker.com/r/tupleai/tuple/tags"><img src="https://img.shields.io/docker/image-size/tupleai/tuple/latest?color=2496ED&label=image%20size" alt="Docker image size" /></a>
   &nbsp;
-  <a href="https://github.com/mnfst/manifest/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/mnfst/manifest/ci.yml?branch=main&label=CI" alt="CI status" /></a>
+  <a href="https://github.com/tupleai/tuple/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/tupleai/tuple/ci.yml?branch=main&label=CI" alt="CI status" /></a>
   &nbsp;
-  <a href="https://app.codecov.io/gh/mnfst/manifest"><img src="https://img.shields.io/codecov/c/github/mnfst/manifest?label=coverage" alt="Codecov" /></a>
+  <a href="https://app.codecov.io/gh/tupleai/tuple"><img src="https://img.shields.io/codecov/c/github/tupleai/tuple?label=coverage" alt="Codecov" /></a>
   &nbsp;
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/mnfst/manifest?color=blue" alt="license" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/github/license/tupleai/tuple?color=blue" alt="license" /></a>
   &nbsp;
   <a href="https://discord.gg/FepAked3W7"><img src="https://img.shields.io/badge/Discord-Join-5865F2?logo=discord&logoColor=white" alt="Discord" /></a>
 </p>
 
-<p align="center">
-<a href="https://trendshift.io/repositories/12890" target="_blank"><img src="https://trendshift.io/api/badge/repositories/12890" alt="mnfst%2Fmanifest | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
-</p>
+## What is Tuple?
 
-## What is Manifest?
-
-Manifest is an open-source LLM gateway for AI agents and apps. Connect your API keys, subscriptions, and local models to one OpenAI-compatible endpoint, and each query goes to the right model. No single-provider lock-in.
+Tuple is an open-source LLM gateway for AI agents and apps. Connect your API keys, subscriptions, and local models to one OpenAI-compatible endpoint, and each query goes to the right model. No single-provider lock-in.
 
 - 🔀 Custom Routing: API keys, Subscriptions, Local models, Custom providers
 - 💾 Full Body Logs for Success and Error Messages
@@ -53,14 +51,14 @@ Manifest is an open-source LLM gateway for AI agents and apps. Connect your API 
 
 ### Cloud version
 
-Go to [app.manifest.build](https://app.manifest.build) and follow the guide.
+Go to [app.tuple.ai](https://app.tuple.ai) and follow the guide.
 
 ### Self-hosted
 
-Manifest ships as a [Docker image](https://hub.docker.com/r/manifestdotbuild/manifest). One command:
+Tuple ships as a [Docker image](https://hub.docker.com/r/tupleai/tuple). One command:
 
 ```bash
-bash <(curl -sSL https://raw.githubusercontent.com/mnfst/manifest/main/docker/install.sh)
+bash <(curl -sSL https://raw.githubusercontent.com/tupleai/tuple/main/docker/install.sh)
 ```
 
 Open [http://localhost:2099](http://localhost:2099) and sign up — the first account you create becomes the admin. Full self-hosting guide: [docker/DOCKER_README.md](docker/DOCKER_README.md).
@@ -69,19 +67,19 @@ Open [http://localhost:2099](http://localhost:2099) and sign up — the first ac
 
 | Platform                                                                   | Notes                                                                   |
 | -------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| [Railway](https://railway.com/deploy/wild-wild)                            | Best path. Template includes Manifest and PostgreSQL.                   |
-| [Render](https://render.com/deploy?repo=https://github.com/mnfst/manifest) | Blueprint includes Manifest and Render PostgreSQL.                      |
-| [DigitalOcean](deploy/digitalocean/TUTORIAL.md)                            | App Platform button includes Manifest and a Dev PostgreSQL database.    |
+| [Railway](https://railway.com/deploy/wild-wild)                            | Best path. Template includes Tuple and PostgreSQL.                   |
+| [Render](https://render.com/deploy?repo=https://github.com/tupleai/tuple) | Blueprint includes Tuple and Render PostgreSQL.                      |
+| [DigitalOcean](deploy/digitalocean/TUTORIAL.md)                            | App Platform button includes Tuple and a Dev PostgreSQL database.    |
 | [AWS](deploy/aws/TUTORIAL.md)                                              | CloudFormation quick-create for ECS, RDS, and Secrets Manager.          |
 | [GCP](deploy/gcp/TUTORIAL.md)                                              | Cloud Shell guided deploy for Cloud Run, Cloud SQL, and Secret Manager. |
 
-Full deployment guides: [Railway](https://manifest.build/docs/deploy/railway), [Render](https://manifest.build/docs/deploy/render), [DigitalOcean](https://manifest.build/docs/deploy/digitalocean), [AWS](https://manifest.build/docs/deploy/aws), [GCP](https://manifest.build/docs/deploy/gcp), [Fly.io](https://manifest.build/docs/deploy/fly), [Coolify](https://manifest.build/docs/deploy/coolify), [Easypanel](https://manifest.build/docs/deploy/easypanel), [Heroku](https://manifest.build/docs/deploy/heroku), and [Koyeb](https://manifest.build/docs/deploy/koyeb).
+Full deployment guides: [Railway](https://tuple.ai/docs/deploy/railway), [Render](https://tuple.ai/docs/deploy/render), [DigitalOcean](https://tuple.ai/docs/deploy/digitalocean), [AWS](https://tuple.ai/docs/deploy/aws), [GCP](https://tuple.ai/docs/deploy/gcp), [Fly.io](https://tuple.ai/docs/deploy/fly), [Coolify](https://tuple.ai/docs/deploy/coolify), [Easypanel](https://tuple.ai/docs/deploy/easypanel), [Heroku](https://tuple.ai/docs/deploy/heroku), and [Koyeb](https://tuple.ai/docs/deploy/koyeb).
 
 > The old npm-based self-hosting path is no longer supported. Use the Docker image or one of the deployment guides above.
 
 ## Providers
 
-Manifest connects to **300+ models through 32 built-in provider connections** plus any custom OpenAI/Anthropic-compatible endpoint. Bring your own API key, reuse one of **18 subscription flows**, or run models locally. Everything is routed through the same OpenAI-compatible endpoint — send `"model": "auto"` and Manifest picks the model.
+Tuple connects to **300+ models through 32 built-in provider connections** plus any custom OpenAI/Anthropic-compatible endpoint. Bring your own API key, reuse one of **18 subscription flows**, or run models locally. Everything is routed through the same OpenAI-compatible endpoint — send `"model": "auto"` and Tuple picks the model.
 
 Provider catalogs are discovered dynamically when credentials are connected. The examples below are representative, not exhaustive.
 
@@ -122,11 +120,11 @@ Provider catalogs are discovered dynamically when credentials are connected. The
 
 ## Quick links
 
-- [Docs](https://manifest.build/docs)
+- [Docs](https://tuple.ai/docs)
 - [Discord](https://discord.com/invite/FepAked3W7)
-- [Discussions](https://github.com/mnfst/manifest/discussions)
+- [Discussions](https://github.com/tupleai/tuple/discussions)
 - [Contributing](CONTRIBUTING.md)
-- [GitHub](https://github.com/mnfst/manifest)
+- [GitHub](https://github.com/tupleai/tuple)
 
 ## License
 

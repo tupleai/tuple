@@ -2,7 +2,7 @@ import { Injectable, NotFoundException, Optional } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AgentMessage } from '../../entities/agent-message.entity';
-import { ManifestRequest } from '../../entities/request.entity';
+import { TupleRequest } from '../../entities/request.entity';
 
 @Injectable()
 export class MessageFeedbackService {
@@ -10,8 +10,8 @@ export class MessageFeedbackService {
     @InjectRepository(AgentMessage)
     private readonly messageRepo: Repository<AgentMessage>,
     @Optional()
-    @InjectRepository(ManifestRequest)
-    private readonly requestRepo?: Repository<ManifestRequest>,
+    @InjectRepository(TupleRequest)
+    private readonly requestRepo?: Repository<TupleRequest>,
   ) {}
 
   async setFeedback(
@@ -51,7 +51,7 @@ export class MessageFeedbackService {
   private async findFeedbackTarget(
     messageId: string,
     tenantId: string | null,
-  ): Promise<{ request: ManifestRequest | null; message: AgentMessage | null }> {
+  ): Promise<{ request: TupleRequest | null; message: AgentMessage | null }> {
     if (!tenantId) throw new NotFoundException('Message not found');
     if (this.requestRepo) {
       const request = await this.findOwnedRequest(messageId, tenantId);
@@ -70,7 +70,7 @@ export class MessageFeedbackService {
   private async findOwnedRequest(
     requestId: string,
     tenantId: string | null,
-  ): Promise<ManifestRequest | null> {
+  ): Promise<TupleRequest | null> {
     if (!tenantId) return null;
     return this.requestRepo!.findOne({
       where: { id: requestId, tenant_id: tenantId },

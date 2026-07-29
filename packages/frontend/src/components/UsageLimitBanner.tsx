@@ -3,7 +3,7 @@ import { Show, createEffect, createResource, createSignal, type Component } from
 import { getBillingStatus } from '../services/api/billing.js';
 import { authClient } from '../services/auth-client.js';
 
-const DISMISS_KEY = 'manifest_usage_banner_dismissed';
+const DISMISS_KEY = 'tuple_usage_banner_dismissed';
 
 function isDismissedToday(key: string | null): boolean {
   if (!key) return false;

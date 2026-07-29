@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, fireEvent } from "@solidjs/testing-library";
 
-vi.mock("manifest-shared", () => ({
+vi.mock("tuple-shared", () => ({
   AGENT_CATEGORIES: ["personal", "app", "coding"],
   CATEGORY_LABELS: {
     personal: "AI agents",

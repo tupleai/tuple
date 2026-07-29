@@ -67,12 +67,12 @@ describe('initSseHeaders', () => {
     const { res, headers } = mockResponse();
 
     initSseHeaders(res as never, {
-      'X-Manifest-Tier': 'complex',
-      'X-Manifest-Model': 'gpt-4o',
+      'X-Tuple-Tier': 'complex',
+      'X-Tuple-Model': 'gpt-4o',
     });
 
-    expect(headers['X-Manifest-Tier']).toBe('complex');
-    expect(headers['X-Manifest-Model']).toBe('gpt-4o');
+    expect(headers['X-Tuple-Tier']).toBe('complex');
+    expect(headers['X-Tuple-Model']).toBe('gpt-4o');
     expect(headers['Content-Type']).toBe('text/event-stream');
   });
 

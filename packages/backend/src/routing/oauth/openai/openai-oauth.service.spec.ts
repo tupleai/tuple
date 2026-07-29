@@ -513,7 +513,7 @@ describe('OpenaiOauthService', () => {
       // Wait for async exchange
       await new Promise((r) => setTimeout(r, 50));
       expect(res.writeHead).toHaveBeenCalledWith(200, { 'Content-Type': 'text/html' });
-      expect(res.end).toHaveBeenCalledWith(expect.stringContaining('manifest-oauth-success'));
+      expect(res.end).toHaveBeenCalledWith(expect.stringContaining('tuple-oauth-success'));
     });
 
     it('callback server returns 404 for non-callback paths', async () => {
@@ -569,7 +569,7 @@ describe('OpenaiOauthService', () => {
       );
 
       expect(res.writeHead).toHaveBeenCalledWith(200, { 'Content-Type': 'text/html' });
-      expect(res.end).toHaveBeenCalledWith(expect.stringContaining('manifest-oauth-error'));
+      expect(res.end).toHaveBeenCalledWith(expect.stringContaining('tuple-oauth-error'));
       expect(service.getPendingCount()).toBe(0);
     });
 
@@ -597,7 +597,7 @@ describe('OpenaiOauthService', () => {
 
       await new Promise((r) => setTimeout(r, 50));
       expect(res.writeHead).toHaveBeenCalledWith(200, { 'Content-Type': 'text/html' });
-      expect(res.end).toHaveBeenCalledWith(expect.stringContaining('manifest-oauth-error'));
+      expect(res.end).toHaveBeenCalledWith(expect.stringContaining('tuple-oauth-error'));
     });
 
     it('always uses localhost:1455 as redirect_uri (Codex CLI OAuth app constraint)', async () => {
@@ -606,7 +606,7 @@ describe('OpenaiOauthService', () => {
       const url = await service.generateAuthorizationUrl(
         'agent-1',
         'user-1',
-        'https://app.manifest.build',
+        'https://app.tuple.ai',
       );
 
       expect(url).toContain(
@@ -645,7 +645,7 @@ describe('OpenaiOauthService', () => {
       await new Promise((r) => setTimeout(r, 50));
       // No backendUrl → inline error HTML, not a redirect
       expect(res.writeHead).toHaveBeenCalledWith(200, { 'Content-Type': 'text/html' });
-      expect(res.end).toHaveBeenCalledWith(expect.stringContaining('manifest-oauth-error'));
+      expect(res.end).toHaveBeenCalledWith(expect.stringContaining('tuple-oauth-error'));
     });
 
     it('redirects to localhost backendUrl on success', async () => {
@@ -727,7 +727,7 @@ describe('OpenaiOauthService', () => {
       await new Promise((r) => setTimeout(r, 50));
       // Should NOT redirect to external URL — falls back to HTML
       expect(res.writeHead).toHaveBeenCalledWith(200, { 'Content-Type': 'text/html' });
-      expect(res.end).toHaveBeenCalledWith(expect.stringContaining('manifest-oauth-success'));
+      expect(res.end).toHaveBeenCalledWith(expect.stringContaining('tuple-oauth-success'));
     });
 
     it('falls back to HTML when backendUrl is an invalid URL', async () => {
@@ -764,7 +764,7 @@ describe('OpenaiOauthService', () => {
       await new Promise((r) => setTimeout(r, 50));
       // Invalid URL → falls back to HTML
       expect(res.writeHead).toHaveBeenCalledWith(200, { 'Content-Type': 'text/html' });
-      expect(res.end).toHaveBeenCalledWith(expect.stringContaining('manifest-oauth-success'));
+      expect(res.end).toHaveBeenCalledWith(expect.stringContaining('tuple-oauth-success'));
     });
   });
 });

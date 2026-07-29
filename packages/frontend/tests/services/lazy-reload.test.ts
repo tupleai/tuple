@@ -6,7 +6,7 @@ vi.mock('solid-js', () => ({
 
 import { lazyReload, clearReloadFlag } from '../../src/services/lazy-reload.js';
 
-const RELOAD_KEY = 'manifest:chunk-reload';
+const RELOAD_KEY = 'tuple:chunk-reload';
 
 describe('lazyReload', () => {
   const reloadMock = vi.fn();

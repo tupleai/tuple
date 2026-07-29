@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AgentMessage } from '../../entities/agent-message.entity';
-import { SpecificityCategory, SPECIFICITY_CATEGORIES } from 'manifest-shared';
+import { SpecificityCategory, SPECIFICITY_CATEGORIES } from 'tuple-shared';
 
 /**
  * Aggregates user-flagged miscategorizations (from the Messages log) into a

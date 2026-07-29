@@ -96,7 +96,7 @@ export interface ForwardOptions {
   body: Record<string, unknown>;
   resolveChatBody?: ResolveChatBody;
   apiMode?: ProxyApiMode;
-  /** Stable Manifest conversation/session key for provider prompt-cache affinity. */
+  /** Stable Tuple conversation/session key for provider prompt-cache affinity. */
   sessionKey?: string;
   stream: boolean;
   signal?: AbortSignal;
@@ -133,7 +133,7 @@ export interface ProxyRequestOptions {
    */
   userId: string | null;
   body: Record<string, unknown>;
-  /** Body used for Manifest-owned routing/scoring/recording; large inline media may be redacted. */
+  /** Body used for Tuple-owned routing/scoring/recording; large inline media may be redacted. */
   routingBody?: Record<string, unknown>;
   apiMode?: ProxyApiMode;
   sessionKey: string;
@@ -142,6 +142,6 @@ export interface ProxyRequestOptions {
   specificityOverride?: string;
   callerAttribution?: CallerAttribution | null;
   headers?: IncomingHttpHeaders;
-  /** Called immediately before Manifest invokes one upstream provider transport. */
+  /** Called immediately before Tuple invokes one upstream provider transport. */
   startProviderAttempt?: StartProviderAttempt;
 }

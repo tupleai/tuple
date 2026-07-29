@@ -1,8 +1,8 @@
-# Contributing to Manifest
+# Contributing to Tuple
 
-Thanks for your interest in contributing to Manifest! This guide will help you get up and running.
+Thanks for your interest in contributing to Tuple! This guide will help you get up and running.
 
-[![codecov](https://img.shields.io/codecov/c/github/mnfst/manifest?color=brightgreen)](https://codecov.io/gh/mnfst/manifest)
+[![codecov](https://img.shields.io/codecov/c/github/tupleai/tuple?color=brightgreen)](https://codecov.io/gh/tupleai/tuple)
 
 ## Tech Stack
 
@@ -14,7 +14,7 @@ Thanks for your interest in contributing to Manifest! This guide will help you g
 | Routing  | OpenAI-compatible proxy (`/v1/chat/completions`) |
 | Build    | Turborepo + npm workspaces                       |
 
-The full NestJS + SolidJS stack runs locally against PostgreSQL, and the same database backend is used in the [cloud version](https://app.manifest.build). For local development, the simplest option is to run PostgreSQL in Docker and point `DATABASE_URL` at it.
+The full NestJS + SolidJS stack runs locally against PostgreSQL, and the same database backend is used in the [cloud version](https://app.tuple.ai). For local development, the simplest option is to run PostgreSQL in Docker and point `DATABASE_URL` at it.
 
 ## Prerequisites
 
@@ -23,7 +23,7 @@ The full NestJS + SolidJS stack runs locally against PostgreSQL, and the same da
 
 ## Repository Structure
 
-Manifest is a monorepo managed with [Turborepo](https://turbo.build/) and npm workspaces.
+Tuple is a monorepo managed with [Turborepo](https://turbo.build/) and npm workspaces.
 
 ```
 packages/
@@ -34,21 +34,21 @@ packages/
 
 > The Wingman gateway tester now lives in its own repository at
 > [`mnfst/wingman`](https://github.com/mnfst/wingman) and is hosted at
-> [`wingman.manifest.build`](https://wingman.manifest.build). The dashboard
+> [`wingman.tuple.ai`](https://wingman.tuple.ai). The dashboard
 > embeds it as an iframe drawer **in dev mode only** — it is dead-code-
 > eliminated from production / self-hosted bundles. To run Wingman
 > locally instead of the hosted SPA, clone that repo and set
 > `VITE_WINGMAN_URL=http://localhost:3002` when building the frontend.
 
-Self-hosting is supported via the [Docker image](https://hub.docker.com/r/manifestdotbuild/manifest).
+Self-hosting is supported via the [Docker image](https://hub.docker.com/r/tupleai/tuple).
 
 ## Getting Started
 
 1. Fork and clone the repository:
 
 ```bash
-git clone https://github.com/<your-username>/manifest.git
-cd manifest
+git clone https://github.com/<your-username>/tuple.git
+cd tuple
 npm install
 ```
 
@@ -75,7 +75,7 @@ SEED_DATA=true
 If you already have PostgreSQL running, you can skip this step and reuse it. Otherwise, the quickest option is Docker:
 
 ```bash
-docker run --name manifest-postgres \
+docker run --name tuple-postgres \
   -e POSTGRES_USER=myuser \
   -e POSTGRES_PASSWORD=mypassword \
   -e POSTGRES_DB=mydatabase \
@@ -92,9 +92,9 @@ DATABASE_URL=postgresql://myuser:mypassword@localhost:5432/mydatabase
 Useful commands:
 
 ```bash
-docker start manifest-postgres   # start again later
-docker stop manifest-postgres    # stop without deleting data
-docker rm -f manifest-postgres   # remove the container
+docker start tuple-postgres   # start again later
+docker stop tuple-postgres    # stop without deleting data
+docker rm -f tuple-postgres   # remove the container
 ```
 
 4. Start the development servers (in separate terminals):
@@ -108,35 +108,35 @@ cd packages/backend && NODE_OPTIONS='-r dotenv/config' npx nest start --watch
 npm run dev
 ```
 
-The frontend runs on `http://localhost:3000` and proxies API requests to the backend on `http://localhost:3001`. The Wingman drawer in the bottom-right (FAB or `⌘/Ctrl+Shift+W`) embeds the hosted SPA at `https://wingman.manifest.build` — no local setup required. It only renders in dev mode and is stripped from production bundles.
+The frontend runs on `http://localhost:3000` and proxies API requests to the backend on `http://localhost:3001`. The Wingman drawer in the bottom-right (FAB or `⌘/Ctrl+Shift+W`) embeds the hosted SPA at `https://wingman.tuple.ai` — no local setup required. It only renders in dev mode and is stripped from production bundles.
 
-`npm run dev` is filtered to exactly `manifest-frontend` — adding a new workspace with a `dev` script will not silently join the dev set.
+`npm run dev` is filtered to exactly `tuple-frontend` — adding a new workspace with a `dev` script will not silently join the dev set.
 
-5. With `SEED_DATA=true`, you can log in with `admin@manifest.build` / `manifest`.
+5. With `SEED_DATA=true`, you can log in with `admin@tuple.ai` / `tuple`.
 
 ## Testing Routing with AI agents
 
-Manifest is a smart router for any AI agent that speaks OpenAI-compatible HTTP. The list of supported agents lives in `packages/shared/src/agent-type.ts` — OpenClaw, Hermes, OpenAI SDK, Vercel AI SDK, LangChain, and cURL are all first-class. The dashboard's "Connect Agent" flow generates the right setup snippet for whichever platform you pick.
+Tuple is a smart router for any AI agent that speaks OpenAI-compatible HTTP. The list of supported agents lives in `packages/shared/src/agent-type.ts` — OpenClaw, Hermes, OpenAI SDK, Vercel AI SDK, LangChain, and cURL are all first-class. The dashboard's "Connect Agent" flow generates the right setup snippet for whichever platform you pick.
 
 This section walks through **OpenClaw** because it's the deepest integration and the easiest to wire up end-to-end. The same backend also handles all other agents — just follow the dashboard instructions after creating the agent, or grab the snippet shown by the setup modal.
 
-To test routing against your local backend, add Manifest as a model provider in your OpenClaw config:
+To test routing against your local backend, add Tuple as a model provider in your OpenClaw config:
 
 1. Build and start the backend in self-hosted mode:
 
 ```bash
 npm run build
-MANIFEST_MODE=selfhosted PORT=38238 BIND_ADDRESS=127.0.0.1 \
+TUPLE_MODE=selfhosted PORT=38238 BIND_ADDRESS=127.0.0.1 \
   node -r dotenv/config packages/backend/dist/main.js
 ```
 
 2. Create an agent in the dashboard at `http://localhost:38238` and get the API key.
 
-3. Add Manifest as a provider in OpenClaw:
+3. Add Tuple as a provider in OpenClaw:
 
 ```bash
-openclaw config set models.providers.manifest '{"baseUrl":"http://localhost:38238/v1","api":"openai-completions","apiKey":"mnfst_YOUR_KEY","models":[{"id":"auto","name":"Manifest Auto"}]}'
-openclaw config set agents.defaults.model.primary manifest/auto
+openclaw config set models.providers.tuple '{"baseUrl":"http://localhost:38238/v1","api":"openai-completions","apiKey":"tuple_YOUR_KEY","models":[{"id":"auto","name":"Tuple Auto"}]}'
+openclaw config set agents.defaults.model.primary tuple/auto
 openclaw gateway restart
 ```
 
@@ -150,11 +150,11 @@ The backend runs standalone and OpenClaw talks to it as a regular OpenAI-compati
 
 ## Wingman — gateway tester (dev only)
 
-**Wingman** is an in-browser playground for sending one-shot requests at the gateway while impersonating any of the agents/SDKs Manifest tracks (OpenClaw, Hermes, OpenAI SDK, Vercel AI SDK, LangChain, cURL, Raw). It lives in its own repo at [`mnfst/wingman`](https://github.com/mnfst/wingman) and is hosted at [`wingman.manifest.build`](https://wingman.manifest.build). The dashboard embeds it as an iframe drawer (FAB at bottom-right, or `⌘/Ctrl + Shift + W`) **only in dev mode** — it is dead-code-eliminated from production / self-hosted bundles via the `__DEV_MODE__` build constant in `packages/frontend/vite.config.ts`.
+**Wingman** is an in-browser playground for sending one-shot requests at the gateway while impersonating any of the agents/SDKs Tuple tracks (OpenClaw, Hermes, OpenAI SDK, Vercel AI SDK, LangChain, cURL, Raw). It lives in its own repo at [`mnfst/wingman`](https://github.com/mnfst/wingman) and is hosted at [`wingman.tuple.ai`](https://wingman.tuple.ai). The dashboard embeds it as an iframe drawer (FAB at bottom-right, or `⌘/Ctrl + Shift + W`) **only in dev mode** — it is dead-code-eliminated from production / self-hosted bundles via the `__DEV_MODE__` build constant in `packages/frontend/vite.config.ts`.
 
 Pick a profile, type a message, see the request and response side by side with the assistant's text, status pill, latency, tokens, and full headers/body dumps. Each send is saved to a localStorage history sidebar so you can compare runs and replay any of them.
 
-The hosted SPA is a static bundle with no first-party backend. Your API key is sent directly from the browser to whatever Manifest backend you configure as the base URL (the same endpoint the key is already used against); nothing is proxied through wingman.manifest.build. To point the drawer at a locally-running Wingman build instead, set `VITE_WINGMAN_URL=http://localhost:3002` when building the frontend, and run Wingman from the `mnfst/wingman` repo.
+The hosted SPA is a static bundle with no first-party backend. Your API key is sent directly from the browser to whatever Tuple backend you configure as the base URL (the same endpoint the key is already used against); nothing is proxied through wingman.tuple.ai. To point the drawer at a locally-running Wingman build instead, set `VITE_WINGMAN_URL=http://localhost:3002` when building the frontend, and run Wingman from the `mnfst/wingman` repo.
 
 ## Available Scripts
 
@@ -200,14 +200,14 @@ The hosted SPA is a static bundle with no first-party backend. Your API key is s
 
 ```bash
 npx changeset
-# → select "manifest"
+# → select "tuple"
 # → choose patch / minor / major
 # → write a one-line summary
 ```
 
-Always target `manifest` — it's the canonical release version for the whole project, and it's the only package changesets will accept. `manifest-backend`, `manifest-frontend`, and `manifest-shared` are ignored regardless of what you pick. Commit the generated `.changeset/*.md` alongside your code. Changesets are optional for internal/tooling changes; skip this step if the change doesn't need a CHANGELOG entry.
+Always target `tuple` — it's the canonical release version for the whole project, and it's the only package changesets will accept. `tuple-backend`, `tuple-frontend`, and `tuple-shared` are ignored regardless of what you pick. Commit the generated `.changeset/*.md` alongside your code. Changesets are optional for internal/tooling changes; skip this step if the change doesn't need a CHANGELOG entry.
 
-See [`packages/manifest/README.md`](packages/manifest/README.md) for why this package exists.
+See [`packages/tuple/README.md`](packages/tuple/README.md) for why this package exists.
 
 5. Run the test suite to make sure everything passes:
 
@@ -228,11 +228,11 @@ npm run build
 
 ### Cutting a Docker release
 
-Manifest ships as the Docker image at [`manifestdotbuild/manifest`](https://hub.docker.com/r/manifestdotbuild/manifest). Releases are manual:
+Tuple ships as the Docker image at [`tupleai/tuple`](https://hub.docker.com/r/tupleai/tuple). Releases are manual:
 
-1. After merging PRs with changesets, a `chore: version packages` PR will be open on `main` — merge it to land the version bump in `packages/manifest/package.json` and update `packages/manifest/CHANGELOG.md`.
+1. After merging PRs with changesets, a `chore: version packages` PR will be open on `main` — merge it to land the version bump in `packages/tuple/package.json` and update `packages/tuple/CHANGELOG.md`.
 2. Go to **GitHub Actions → Docker → Run workflow**, leave the `version` input blank, click Run.
-3. The workflow reads the version from `packages/manifest/package.json` and pushes `manifestdotbuild/manifest:{version}` (plus `{major}.{minor}`, `{major}`, and a `sha-<short>` rollback tag).
+3. The workflow reads the version from `packages/tuple/package.json` and pushes `tupleai/tuple:{version}` (plus `{major}.{minor}`, `{major}`, and a `sha-<short>` rollback tag).
 
 If you need to retag an older commit or publish a version that doesn't match the current `package.json`, pass a semver string in the `version` input and it overrides the auto-detected value.
 
@@ -256,7 +256,7 @@ Write clear, concise commit messages that explain **why** the change was made. U
 
 ## Reporting Issues
 
-Found a bug or have a feature request? [Open an issue](https://github.com/mnfst/manifest/issues) with as much detail as possible.
+Found a bug or have a feature request? [Open an issue](https://github.com/tupleai/tuple/issues) with as much detail as possible.
 
 ## Code of Conduct
 

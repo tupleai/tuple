@@ -21,7 +21,7 @@ import { IngestionContext } from '../../otlp/interfaces/ingestion-context.interf
 import { ProxyService, type RoutingMeta } from './proxy.service';
 import { ProxyRateLimiter } from './proxy-rate-limiter';
 import { ProviderClient } from './provider-client';
-import { ProxyMessageRecorder, type ManifestBlockedRequestReason } from './proxy-message-recorder';
+import { ProxyMessageRecorder, type TupleBlockedRequestReason } from './proxy-message-recorder';
 import { ThoughtSignatureCache } from './thought-signature-cache';
 import { ThinkingBlockCache } from './thinking-block-cache';
 import { ReasoningContentCache } from './reasoning-content-cache';
@@ -46,12 +46,12 @@ import {
 } from './proxy-response-handler';
 import { ProxyExceptionFilter, isChatRenderingClient } from './proxy-exception.filter';
 import { sendFriendlyResponse } from './proxy-friendly-response';
-import { formatManifestError, type ManifestErrorCode } from '../../common/errors/error-codes';
+import { formatTupleError, type TupleErrorCode } from '../../common/errors/error-codes';
 import {
-  MANIFEST_CODE_TO_REASON,
-  ManifestError,
-  isRecordableManifestCode,
-} from '../../common/errors/manifest-error';
+  TUPLE_CODE_TO_REASON,
+  TupleError,
+  isRecordableTupleCode,
+} from '../../common/errors/tuple-error';
 import type {
   ProviderAttemptRef,
   ProviderAttemptStart,
@@ -162,7 +162,7 @@ export class ProxyController {
         id: 'auto',
         object: 'model',
         created: MODEL_CREATED_UNKNOWN,
-        owned_by: 'manifest',
+        owned_by: 'tuple',
       },
     ];
     const seen = new Set(data.map((model) => model.id));
@@ -250,7 +250,7 @@ export class ProxyController {
     res.once('close', () => clientAbort.abort());
     const startTime = Date.now();
 
-    // The Request exists as pending from ingress, before Manifest routes it or
+    // The Request exists as pending from ingress, before Tuple routes it or
     // starts any provider call. A recording failure must not reject user traffic.
     await this.recorder
       .recordPendingRequest(req.ingestionContext, {
@@ -323,15 +323,15 @@ export class ProxyController {
     };
 
     // Plan request-limit gate. A 402 must reach ProxyExceptionFilter (friendly
-    // upgrade message / real 402), but still gets a Manifest-policy row in
+    // upgrade message / real 402), but still gets a Tuple-policy row in
     // agent_messages so the Messages tab explains why the request never routed.
-    // Billing counters exclude Manifest-origin rows, so this does not consume
+    // Billing counters exclude Tuple-origin rows, so this does not consume
     // quota or push the tenant further over the limit.
     try {
       await this.planService.assertWithinRequestLimit(req.ingestionContext);
     } catch (err: unknown) {
       if (err instanceof HttpException && err.getStatus() === HttpStatus.PAYMENT_REQUIRED) {
-        this.recordManifestBlockedRequest(
+        this.recordTupleBlockedRequest(
           err,
           req,
           requestId,
@@ -363,7 +363,7 @@ export class ProxyController {
     }
 
     try {
-      // Each of these throws its own ManifestError (M201 per-user, M202 per-IP,
+      // Each of these throws its own TupleError (M201 per-user, M202 per-IP,
       // M203 concurrency), so handleProxyError records which limit actually
       // fired instead of collapsing all three into one reason.
       this.rateLimiter.checkLimit(tenantId);
@@ -371,7 +371,7 @@ export class ProxyController {
       this.rateLimiter.acquireSlot(tenantId);
       slotAcquired = true;
       routingBody = redactInlineImageDataUrls(body);
-      const specificityOverride = req.headers['x-manifest-specificity'] as string | undefined;
+      const specificityOverride = req.headers['x-tuple-specificity'] as string | undefined;
       const { forward, meta, failedFallbacks, autofix } = await this.proxyService.proxyRequest({
         agentId: req.ingestionContext.agentId,
         tenantId,
@@ -507,9 +507,9 @@ export class ProxyController {
 
       // A friendly stub (no provider key, no providers, usage limit) leaves the
       // proxy as an HTTP 200 assistant message, so it lands here — but it is a
-      // Manifest failure, not a completion. Record it as one.
-      if (meta.manifest_error_code) {
-        this.recordManifestStub(
+      // Tuple failure, not a completion. Record it as one.
+      if (meta.tuple_error_code) {
+        this.recordTupleStub(
           req,
           meta,
           requestId,
@@ -562,12 +562,12 @@ export class ProxyController {
   }
 
   /**
-   * Record the HTTP-200 friendly stub Manifest returned in place of a completion.
-   * `meta.manifest_error_message` is the rendered `[🦚 Manifest M100] …` text the
+   * Record the HTTP-200 friendly stub Tuple returned in place of a completion.
+   * `meta.tuple_error_message` is the rendered `[↗ Tuple M100] …` text the
    * caller actually saw — persisting it verbatim (rather than a generic
    * "Provider API key missing") is what makes the row debuggable.
    */
-  private recordManifestStub(
+  private recordTupleStub(
     req: Request & { ingestionContext: IngestionContext },
     meta: RoutingMeta,
     requestId: string,
@@ -578,14 +578,14 @@ export class ProxyController {
     autofix: AutofixRecord | undefined,
     durationMs: number,
   ): void {
-    const code = meta.manifest_error_code;
-    if (!code || !isRecordableManifestCode(code)) return;
+    const code = meta.tuple_error_code;
+    if (!code || !isRecordableTupleCode(code)) return;
     this.recorder
-      .recordManifestBlockedRequest(req.ingestionContext, {
+      .recordTupleBlockedRequest(req.ingestionContext, {
         requestId,
-        errorMessage: meta.manifest_error_message ?? formatManifestError(code),
+        errorMessage: meta.tuple_error_message ?? formatTupleError(code),
         errorCode: code,
-        reason: MANIFEST_CODE_TO_REASON[code],
+        reason: TUPLE_CODE_TO_REASON[code],
         model: this.extractRequestedModel(req.body as Record<string, unknown> | undefined),
         traceId,
         sessionKey,
@@ -596,7 +596,7 @@ export class ProxyController {
         attempt: meta.attempt,
         durationMs,
       })
-      .catch((e) => this.logger.warn(`Failed to record Manifest stub: ${e}`));
+      .catch((e) => this.logger.warn(`Failed to record Tuple stub: ${e}`));
   }
 
   private async handleProxyError(
@@ -642,24 +642,24 @@ export class ProxyController {
     const providerErrorBody = err instanceof ResponsesSseError ? err.body : message;
     this.logger.error(`Proxy error: ${message}`);
 
-    // Who failed? A ManifestError says so explicitly. Pre-response dead sockets
+    // Who failed? A TupleError says so explicitly. Pre-response dead sockets
     // and timeouts become synthetic 503/504 responses in proxy-transport. A
     // socket that dies after streaming starts is thrown as StreamFailure.
-    // Other non-HTTP throws are Manifest's own bugs (M500).
+    // Other non-HTTP throws are Tuple's own bugs (M500).
     //
-    // An unrecordable ManifestError (M001–M003, M005) writes NOTHING: it has no
+    // An unrecordable TupleError (M001–M003, M005) writes NOTHING: it has no
     // tenant to attribute, and falling through to recordProviderError would blame
     // the provider for someone presenting a bad key.
-    if (err instanceof ManifestError) {
-      if (isRecordableManifestCode(err.code)) {
-        this.recordManifestBlockedRequest(
+    if (err instanceof TupleError) {
+      if (isRecordableTupleCode(err.code)) {
+        this.recordTupleBlockedRequest(
           err,
           req,
           requestId,
           traceId,
           callerAttribution,
           requestHeaders,
-          MANIFEST_CODE_TO_REASON[err.code],
+          TUPLE_CODE_TO_REASON[err.code],
           status,
           err.code,
           startTime == null ? undefined : Date.now() - startTime,
@@ -670,15 +670,15 @@ export class ProxyController {
       !(err instanceof ResponsesSseError) &&
       !(err instanceof HttpException)
     ) {
-      // A non-HTTP throw is Manifest's own bug, never a provider fault.
-      this.recordManifestBlockedRequest(
+      // A non-HTTP throw is Tuple's own bug, never a provider fault.
+      this.recordTupleBlockedRequest(
         err,
         req,
         requestId,
         traceId,
         callerAttribution,
         requestHeaders,
-        MANIFEST_CODE_TO_REASON.M500,
+        TUPLE_CODE_TO_REASON.M500,
         status,
         'M500',
         startTime == null ? undefined : Date.now() - startTime,
@@ -743,12 +743,12 @@ export class ProxyController {
     // Rate limit errors stay as HTTP 429 so clients can backoff
     if (status === 429) {
       // Never return the exception response object itself: framework and
-      // provider exceptions can carry stack traces or markup. Manifest's
+      // provider exceptions can carry stack traces or markup. Tuple's
       // rate-limit messages come from our static catalogue; provider failures
       // use a stable public message.
       const rateLimitMessage =
-        err instanceof ManifestError
-          ? formatManifestError(err.code)
+        err instanceof TupleError
+          ? formatTupleError(err.code)
           : 'Rate limited by upstream provider';
       const responseBody = {
         error: { message: rateLimitMessage, type: 'rate_limit_error' },
@@ -760,7 +760,7 @@ export class ProxyController {
 
     const isStream = (req.body as Record<string, unknown>)?.stream === true;
     if (isChatRenderingClient(req)) {
-      const clientMessage = status >= 500 ? formatManifestError('M500') : message;
+      const clientMessage = status >= 500 ? formatTupleError('M500') : message;
       sendFriendlyResponse(res, clientMessage, isStream);
       return;
     }
@@ -769,7 +769,7 @@ export class ProxyController {
     // envelope so CI pipelines can detect failures instead of treating the
     // friendly stub as success.
     const errorMessage =
-      status >= 500 ? 'Manifest encountered an internal error. Try again shortly.' : message;
+      status >= 500 ? 'Tuple encountered an internal error. Try again shortly.' : message;
     const responseBody = {
       error: {
         message: errorMessage,
@@ -857,21 +857,21 @@ export class ProxyController {
     return err instanceof Error ? err.message : String(err);
   }
 
-  private recordManifestBlockedRequest(
+  private recordTupleBlockedRequest(
     err: unknown,
     req: Request & { ingestionContext: IngestionContext },
     requestId: string,
     traceId: string | undefined,
     callerAttribution: ReturnType<typeof classifyCaller>,
     requestHeaders: ReturnType<typeof sanitizeRequestHeaders>,
-    reason: ManifestBlockedRequestReason,
+    reason: TupleBlockedRequestReason,
     httpStatus?: number,
-    errorCode?: ManifestErrorCode,
+    errorCode?: TupleErrorCode,
     durationMs?: number,
   ): void {
     const body = req.body as Record<string, unknown> | undefined;
     this.recorder
-      .recordManifestBlockedRequest(req.ingestionContext, {
+      .recordTupleBlockedRequest(req.ingestionContext, {
         requestId,
         httpStatus: httpStatus ?? (err instanceof HttpException ? err.getStatus() : 500),
         // The raw internal message, not the friendly M500 text the caller saw —
@@ -886,7 +886,7 @@ export class ProxyController {
         requestHeaders,
         durationMs,
       })
-      .catch((e) => this.logger.warn(`Failed to record Manifest-blocked request: ${e}`));
+      .catch((e) => this.logger.warn(`Failed to record Tuple-blocked request: ${e}`));
   }
 
   private trackFirstProxyRequest(tenantId: string): void {

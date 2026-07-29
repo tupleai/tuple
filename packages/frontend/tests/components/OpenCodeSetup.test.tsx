@@ -18,7 +18,7 @@ describe("OpenCodeSetup", () => {
     const { container } = render(() => (
       <OpenCodeSetup
         apiKey={null}
-        keyPrefix="mnfst_live"
+        keyPrefix="tuple_live"
         baseUrl="http://localhost:38240/v1"
       />
     ));
@@ -26,9 +26,9 @@ describe("OpenCodeSetup", () => {
     expect(container.textContent).toContain("~/.config/opencode/opencode.json");
     expect(container.textContent).not.toContain("project root");
     expect(container.textContent).toContain('"baseURL": "http://localhost:38240/v1"');
-    expect(container.textContent).toContain('"apiKey": "mnfst_YOUR_KEY"');
-    expect(container.textContent).not.toContain('"apiKey": "mnfst_live..."');
-    expect(container.textContent).toContain('"model": "manifest/auto"');
+    expect(container.textContent).toContain('"apiKey": "tuple_YOUR_KEY"');
+    expect(container.textContent).not.toContain('"apiKey": "tuple_live..."');
+    expect(container.textContent).toContain('"model": "tuple/auto"');
     expect(screen.queryByLabelText("Reveal API key")).toBeNull();
 
     const copyConfig = container.querySelector(
@@ -37,28 +37,28 @@ describe("OpenCodeSetup", () => {
     expect(copyConfig).not.toBeNull();
     fireEvent.click(copyConfig!);
     await vi.waitFor(() => {
-      expect(writeText).toHaveBeenCalledWith(expect.stringContaining('"apiKey": "mnfst_YOUR_KEY"'));
+      expect(writeText).toHaveBeenCalledWith(expect.stringContaining('"apiKey": "tuple_YOUR_KEY"'));
     });
-    expect(writeText).not.toHaveBeenCalledWith(expect.stringContaining("mnfst_live..."));
+    expect(writeText).not.toHaveBeenCalledWith(expect.stringContaining("tuple_live..."));
   });
 
   it("reveals and hides the full API key without changing the copy payload", async () => {
     const { container } = render(() => (
       <OpenCodeSetup
-        apiKey="mnfst_secret"
-        keyPrefix="mnfst_live"
+        apiKey="tuple_secret"
+        keyPrefix="tuple_live"
         baseUrl="http://localhost:38240/v1"
       />
     ));
 
-    expect(container.textContent).toContain('"apiKey": "mnfst_live..."');
-    expect(container.textContent).not.toContain("mnfst_secret");
+    expect(container.textContent).toContain('"apiKey": "tuple_live..."');
+    expect(container.textContent).not.toContain("tuple_secret");
 
     fireEvent.click(screen.getByLabelText("Reveal API key"));
-    expect(container.textContent).toContain('"apiKey": "mnfst_secret"');
+    expect(container.textContent).toContain('"apiKey": "tuple_secret"');
 
     fireEvent.click(screen.getByLabelText("Hide API key"));
-    expect(container.textContent).toContain('"apiKey": "mnfst_live..."');
+    expect(container.textContent).toContain('"apiKey": "tuple_live..."');
 
     const copyFullConfig = container.querySelector(
       '.setup-cli-block__actions [aria-label="Copy to clipboard"]',
@@ -66,7 +66,7 @@ describe("OpenCodeSetup", () => {
     expect(copyFullConfig).not.toBeNull();
     fireEvent.click(copyFullConfig!);
     await vi.waitFor(() => {
-      expect(writeText).toHaveBeenCalledWith(expect.stringContaining('"apiKey": "mnfst_secret"'));
+      expect(writeText).toHaveBeenCalledWith(expect.stringContaining('"apiKey": "tuple_secret"'));
     });
   });
 });

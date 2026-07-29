@@ -237,7 +237,7 @@ vi.mock('../../src/services/routing-utils.js', () => ({
   stripCustomPrefix: (m: string) => m.replace(/^custom:[^/]+\//, ''),
 }));
 
-vi.mock('manifest-shared', () => ({
+vi.mock('tuple-shared', () => ({
   platformIcon: () => 'robot',
 }));
 
@@ -265,7 +265,7 @@ const overviewResponse = {
     successful: 17,
     success_rate: 94.4,
     attempt_success_rate: 88.9,
-    manifest_lift_pct: 5.5,
+    tuple_lift_pct: 5.5,
     recovered: 1,
     previous_total: 16,
   },
@@ -317,7 +317,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   localStorage.clear();
   sessionStorage.clear();
-  localStorage.setItem('manifest_global_group', 'provider');
+  localStorage.setItem('tuple_global_group', 'provider');
   mockIsSelfHosted = false;
   filterSelectProps = null;
   providerChartProps = null;
@@ -418,7 +418,7 @@ describe('GlobalOverview filter onUnselectAll', () => {
     try {
       render(() => <GlobalOverview />);
 
-      await waitFor(() => expect(localStorage.getItem('manifest_plan_chosen_u1')).toBe('1'));
+      await waitFor(() => expect(localStorage.getItem('tuple_plan_chosen_u1')).toBe('1'));
       await waitFor(() =>
         expect(document.body.textContent).toContain("You're now on the Pro plan"),
       );
@@ -444,7 +444,7 @@ describe('GlobalOverview filter onUnselectAll', () => {
     ) as HTMLButtonElement;
     fireEvent.click(later);
 
-    expect(localStorage.getItem('manifest:user-discovery-modal-dismissed:v1')).toBe('true');
+    expect(localStorage.getItem('tuple:user-discovery-modal-dismissed:v1')).toBe('true');
     await waitFor(() =>
       expect(document.body.textContent).not.toContain('Book my slot to get $10'),
     );

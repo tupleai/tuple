@@ -14,7 +14,7 @@ export class NotificationEmailService {
   constructor(private readonly configService: ConfigService) {
     this.fromEmail =
       this.configService.get<string>('app.emailFrom') ||
-      this.configService.get<string>('app.notificationFromEmail', 'noreply@manifest.build');
+      this.configService.get<string>('app.notificationFromEmail', 'noreply@tuple.ai');
   }
 
   async sendThresholdAlert(
@@ -33,8 +33,8 @@ export class NotificationEmailService {
     if (providerConfig) {
       const defaultFrom = this.fromEmail;
       const from = providerConfig.domain
-        ? `Manifest <noreply@${providerConfig.domain}>`
-        : `Manifest <${defaultFrom}>`;
+        ? `Tuple <noreply@${providerConfig.domain}>`
+        : `Tuple <${defaultFrom}>`;
       const config: EmailProviderConfig = {
         provider: providerConfig.provider as EmailProviderConfig['provider'],
         apiKey: providerConfig.apiKey,
@@ -48,7 +48,7 @@ export class NotificationEmailService {
       return sent;
     }
 
-    const from = `Manifest <${this.fromEmail}>`;
+    const from = `Tuple <${this.fromEmail}>`;
     const sent = await sendEmail({ to, subject, html, text, from });
     if (sent) {
       this.logger.log(`Threshold alert sent to ${to} for agent ${props.agentName}`);

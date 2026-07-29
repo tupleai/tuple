@@ -26,7 +26,7 @@ describe('WaitlistSyncService', () => {
     await service.syncClaim('user@example.com');
 
     expect(fetchSpy).toHaveBeenCalledWith(
-      'https://app.manifest.build/api/v1/waitlist/autofix/claim',
+      'https://app.tuple.ai/api/v1/waitlist/autofix/claim',
       expect.objectContaining({
         method: 'POST',
         body: JSON.stringify({ email: 'user@example.com' }),

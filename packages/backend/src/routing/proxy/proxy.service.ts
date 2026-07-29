@@ -21,7 +21,7 @@ import type {
   OutputModality,
   SpecificityCategory,
   TierSlot,
-} from 'manifest-shared';
+} from 'tuple-shared';
 import {
   DEFAULT_RESPONSE_MODE,
   SPECIFICITY_CATEGORIES,
@@ -29,7 +29,7 @@ import {
   modelParamsScopeForRouting,
   routeEquals,
   snapshotRequestParams,
-} from 'manifest-shared';
+} from 'tuple-shared';
 import type { ParamMergeContext } from './proxy-fallback.service';
 import {
   ProxyFallbackService,
@@ -52,8 +52,8 @@ import { ReasoningContentCache } from './reasoning-content-cache';
 import { AgentModelParamsService } from '../routing-core/agent-model-params.service';
 import { ProviderParamSpecService } from '../routing-core/provider-param-spec.service';
 import { buildFriendlyResponse, getDashboardUrl } from './proxy-friendly-response';
-import { formatManifestError, type ManifestErrorCode } from '../../common/errors/error-codes';
-import { ManifestError } from '../../common/errors/manifest-error';
+import { formatTupleError, type TupleErrorCode } from '../../common/errors/error-codes';
+import { TupleError } from '../../common/errors/tuple-error';
 import {
   buildCredentialFailureForward,
   presentCredentialFailure,
@@ -92,11 +92,11 @@ export interface RoutingMeta {
   confidence: number;
   reason: string;
   /**
-   * Present when the "response" is really a Manifest error rendered as an
+   * Present when the "response" is really a Tuple error rendered as an
    * assistant message (no provider was contacted). See buildFriendlyResponse.
    */
-  manifest_error_code?: ManifestErrorCode;
-  manifest_error_message?: string;
+  tuple_error_code?: TupleErrorCode;
+  tuple_error_message?: string;
   auth_type?: AuthType;
   specificity_category?: string;
   header_tier_id?: string;
@@ -391,8 +391,8 @@ export class ProxyService {
       );
       // A synthetic provider attempt is only recorded by the fallback chain
       // (recordPrimaryFailure completes it). When no chain will run — explicit
-      // model override, no merge context, or zero fallback routes — the Manifest
-      // stub is the sole record (a Manifest rejection has zero provider
+      // model override, no merge context, or zero fallback routes — the Tuple
+      // stub is the sole record (a Tuple rejection has zero provider
       // attempts), so DON'T start one here: it would INSERT a pending
       // agent_messages row that nothing ever completes (orphan).
       const willRunChain =
@@ -828,15 +828,15 @@ export class ProxyService {
               (!!item && typeof item === 'object' && !Array.isArray(item)),
           ));
       if (hasInstructions || hasInput) return;
-      throw new ManifestError('M300', HttpStatus.BAD_REQUEST);
+      throw new TupleError('M300', HttpStatus.BAD_REQUEST);
     }
 
     const messages = body.messages;
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
-      // A ManifestError, not a bare BadRequestException: the proxy needs to tell
-      // "Manifest refused this body" from "the provider returned a 400", or the
+      // A TupleError, not a bare BadRequestException: the proxy needs to tell
+      // "Tuple refused this body" from "the provider returned a 400", or the
       // row lands in agent_messages blamed on the provider.
-      throw new ManifestError('M300', HttpStatus.BAD_REQUEST);
+      throw new TupleError('M300', HttpStatus.BAD_REQUEST);
     }
     if (apiMode === 'chat_completions') {
       sanitizeNullContent(messages as Record<string, unknown>[]);
@@ -1138,7 +1138,7 @@ export class ProxyService {
     }
 
     // All fallbacks exhausted — preserve the primary provider's real HTTP status.
-    // The gateway uses the X-Manifest-Fallback-Exhausted header (set by the
+    // The gateway uses the X-Tuple-Fallback-Exhausted header (set by the
     // response handler) to detect this case.
     const safeHeaders = new Headers(forward.response.headers);
     safeHeaders.delete('content-encoding');
@@ -1240,7 +1240,7 @@ export class ProxyService {
         ? `$${Number(exceeded.threshold).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
         : Number(exceeded.threshold).toLocaleString(undefined, { maximumFractionDigits: 0 });
     const dashboardUrl = getDashboardUrl(this.config, agentName, 'limits');
-    return formatManifestError('M200', {
+    return formatTupleError('M200', {
       metric: exceeded.metricType,
       used: fmt,
       threshold: threshFmt,
@@ -1301,7 +1301,7 @@ export class ProxyService {
 
   private buildNoProviderResult(stream: boolean, agentName?: string): ProxyResult {
     const dashboardUrl = getDashboardUrl(this.config, agentName, 'routing');
-    const content = formatManifestError('M101', { dashboardUrl });
+    const content = formatTupleError('M101', { dashboardUrl });
     return buildFriendlyResponse(content, stream, 'no_provider', 'M101');
   }
 
@@ -1318,7 +1318,7 @@ export class ProxyService {
   ): Promise<ProxyResult> {
     const { requestedModel, stream, agentName } = ctx;
     const dashboardUrl = getDashboardUrl(this.config, agentName, 'routing');
-    const content = formatManifestError('M302', { model: requestedModel, dashboardUrl });
+    const content = formatTupleError('M302', { model: requestedModel, dashboardUrl });
     const friendly = () => buildFriendlyResponse(content, stream, 'model_not_available', 'M302');
 
     let healedRoute: HealedRouteInfo | null = null;
@@ -1327,8 +1327,8 @@ export class ProxyService {
       agentId: ctx.agentId,
       tenantId: ctx.tenantId,
       // No provider was resolved — fingerprint under the vendor the model id
-      // implies (`openrouter/x` → openrouter), or `manifest` for bare names.
-      provider: inferProviderFromModel(requestedModel) ?? 'manifest',
+      // implies (`openrouter/x` → openrouter), or `tuple` for bare names.
+      provider: inferProviderFromModel(requestedModel) ?? 'tuple',
       model: requestedModel,
       // No connection resolved, so there is no real credential type to report.
       // Use the protocol's non-subscription baseline for this synthetic error.
@@ -1357,7 +1357,7 @@ export class ProxyService {
 
     const autofix: AutofixRecord = {
       ...attempt.record,
-      manifestOrigin: { code: 'M302', message: content, model: requestedModel },
+      tupleOrigin: { code: 'M302', message: content, model: requestedModel },
     };
     if (attempt.record.outcome === 'healed' && healedRoute) {
       const { resolved, model, tenantProviderId } = healedRoute as HealedRouteInfo;

@@ -48,7 +48,7 @@ describe('AuthGuard', () => {
   });
 
   it('renders children without a billing call when the user already chose a plan', async () => {
-    localStorage.setItem('manifest_plan_chosen_u1', '1');
+    localStorage.setItem('tuple_plan_chosen_u1', '1');
     render(() => (
       <AuthGuard>
         <span>Protected content</span>
