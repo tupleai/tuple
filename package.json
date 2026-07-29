@@ -1,7 +1,7 @@
 {
   "name": "tuple",
   "private": true,
-  "description": "Open-source observability for AI agents — track costs, tokens, messages, and performance",
+  "description": "The peer-to-peer LLM gateway for selling unused tokens and buying verified model access",
   "homepage": "https://tuple.ai",
   "repository": {
     "type": "git",

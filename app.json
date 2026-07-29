@@ -1,12 +1,12 @@
 {
   "name": "Tuple",
-  "description": "Open-source AI model router for agents and apps. Connect your providers to one OpenAI-compatible endpoint.",
+  "description": "The peer-to-peer LLM gateway for selling unused tokens and buying verified model access.",
   "repository": "https://github.com/tupleai/tuple",
   "website": "https://tuple.ai",
   "logo": "https://raw.githubusercontent.com/tupleai/tuple/HEAD/.github/assets/logo-dark.png",
   "success_url": "/setup",
   "stack": "container",
-  "keywords": ["ai", "llm", "model-router", "agents", "postgres"],
+  "keywords": ["ai", "llm", "p2p", "model-marketplace", "model-router", "agents", "postgres"],
   "formation": {
     "web": {
       "quantity": 1,

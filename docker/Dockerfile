@@ -65,7 +65,7 @@ FROM gcr.io/distroless/nodejs24-debian13:nonroot@sha256:b087b405441cd3e8eab9bd53
 WORKDIR /app
 
 LABEL org.opencontainers.image.title="Tuple" \
-      org.opencontainers.image.description="Open-source AI model router. Plug your agents into any provider and send each query to the right model." \
+      org.opencontainers.image.description="The peer-to-peer LLM gateway for selling unused tokens and buying verified model access." \
       org.opencontainers.image.url="https://tuple.ai" \
       org.opencontainers.image.documentation="https://tuple.ai/docs" \
       org.opencontainers.image.source="https://github.com/tupleai/tuple" \
