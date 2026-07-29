@@ -225,7 +225,7 @@ describe('Login', () => {
     await vi.waitFor(() => {
       expect(mockSendVerificationEmail).toHaveBeenCalledWith({
         email: 'user@test.com',
-        callbackURL: '/',
+        callbackURL: '/overview',
       });
     });
   });

@@ -8,6 +8,7 @@ import {
   enterpriseFeatures,
 } from '../components/PlanPicker.jsx';
 import { authClient } from '../services/auth-client.js';
+import { DASHBOARD_PATH } from '../services/auth-redirects.js';
 import { getBillingStatus } from '../services/api/billing.js';
 import { toast } from '../services/toast-store.js';
 import { FREE_REQUEST_LIMIT_LABEL, formatBillingPrice } from '../services/billing-display.js';
@@ -34,13 +35,13 @@ const Upgrade: Component = () => {
   createEffect(() => {
     const current = status();
     if (current && !current.enabled) {
-      navigate('/', { replace: true });
+      navigate(DASHBOARD_PATH, { replace: true });
     }
   });
 
   const handlePlanSelect = async (plan: PlanId) => {
     if (plan === 'free') {
-      navigate('/');
+      navigate(DASHBOARD_PATH);
       return;
     }
     if (plan === 'enterprise') {
@@ -77,7 +78,7 @@ const Upgrade: Component = () => {
               if (referrer && new URL(referrer).origin === window.location.origin) {
                 window.history.back();
               } else {
-                navigate('/');
+                navigate(DASHBOARD_PATH);
               }
             }}
           >
@@ -124,7 +125,7 @@ const Upgrade: Component = () => {
             </div>
             <div class="settings-card__footer billing-footer">
               <span class="billing-footer__note">You can continue to the dashboard.</span>
-              <button class="btn btn--outline btn--sm" onClick={() => navigate('/')}>
+              <button class="btn btn--outline btn--sm" onClick={() => navigate(DASHBOARD_PATH)}>
                 Dashboard
               </button>
             </div>
@@ -147,7 +148,7 @@ const Upgrade: Component = () => {
                     </div>
                     <p class="upgrade-plan-card__desc">For prototypes and small projects.</p>
                     <div class="upgrade-plan-card__cta">
-                      <button class="btn btn--outline" onClick={() => navigate('/')}>
+                      <button class="btn btn--outline" onClick={() => navigate(DASHBOARD_PATH)}>
                         Use Tuple for free
                       </button>
                     </div>

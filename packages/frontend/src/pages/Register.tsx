@@ -12,7 +12,7 @@ import {
 import SocialButtons from '../components/SocialButtons.jsx';
 import PlanPicker, { type PlanId } from '../components/PlanPicker.jsx';
 import { authClient } from '../services/auth-client.js';
-import { appendSearch } from '../services/auth-redirects.js';
+import { appendSearch, DASHBOARD_PATH } from '../services/auth-redirects.js';
 import { getLastAuthMethod, setLastAuthMethod } from '../services/last-auth-method.js';
 import { checkSocialProviders } from '../services/setup-status.js';
 import { getBillingStatus } from '../services/api/billing.js';
@@ -56,7 +56,7 @@ const Register: Component = () => {
       .then((status) => {
         if (status?.plan === 'pro') {
           markPlanChosen(userId());
-          navigate('/', { replace: true });
+          navigate(DASHBOARD_PATH, { replace: true });
         } else {
           setProPrice(formatBillingPrice(status?.priceMonthly));
         }
@@ -120,7 +120,7 @@ const Register: Component = () => {
       } catch {
         /* billing unavailable — skip plan step */
       }
-      window.location.href = '/';
+      window.location.href = DASHBOARD_PATH;
       return;
     }
 
@@ -131,7 +131,7 @@ const Register: Component = () => {
   const handlePlanSelect = async (plan: PlanId) => {
     if (plan === 'free') {
       markPlanChosen(userId());
-      window.location.replace('/');
+      window.location.replace(DASHBOARD_PATH);
       return;
     }
     if (plan === 'enterprise') {
@@ -175,7 +175,7 @@ const Register: Component = () => {
       <Title>Sign Up - Tuple</Title>
       <Meta
         name="description"
-        content="Create a Tuple account to start monitoring your AI harnesses."
+        content="Create a Tuple account to sell unused tokens or buy verified model access."
       />
       <Show
         when={!emailSent()}
@@ -222,7 +222,7 @@ const Register: Component = () => {
             <>
               <div class="auth-header">
                 <h1 class="auth-header__title">Create an account</h1>
-                <p class="auth-header__subtitle">Monitor your AI harnesses' costs and usage</p>
+                <p class="auth-header__subtitle">Put idle access to work or buy verified models</p>
               </div>
 
               <SocialButtons enabledProviders={socialProviders()} lastUsed={lastAuthMethod()} />
@@ -336,7 +336,7 @@ const Register: Component = () => {
             <p class="auth-header__subtitle">
               {searchParams.context === 'login'
                 ? 'Tuple now offers Free and Pro plans. Select the one that fits your needs.'
-                : 'Monitor your AI harnesses\' costs and usage'}
+                : 'Put idle access to work or buy verified models'}
             </p>
           </div>
 

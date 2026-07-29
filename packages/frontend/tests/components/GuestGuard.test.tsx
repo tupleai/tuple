@@ -44,7 +44,7 @@ describe('GuestGuard', () => {
     });
   });
 
-  it('redirects to home when session exists', async () => {
+  it('redirects to the dashboard when session exists', async () => {
     mockSessionData = {
       data: { user: { id: 'u1', name: 'Test' } },
       isPending: false,
@@ -55,7 +55,7 @@ describe('GuestGuard', () => {
       </GuestGuard>
     ));
     await vi.waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith('/', { replace: true });
+      expect(mockNavigate).toHaveBeenCalledWith('/overview', { replace: true });
     });
   });
 

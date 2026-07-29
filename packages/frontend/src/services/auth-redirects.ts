@@ -1,7 +1,7 @@
 type SearchParams = Record<string, string | string[] | undefined>;
 
 const UPGRADE_PATH = '/upgrade';
-const HOME_PATH = '/';
+export const DASHBOARD_PATH = '/overview';
 
 function firstParam(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
@@ -25,7 +25,7 @@ export function isSafeInternalRedirect(value: string | undefined): value is stri
 export function getAuthDestination(searchParams: SearchParams): string {
   const redirect = firstParam(searchParams.redirect);
   if (isSafeInternalRedirect(redirect)) return redirect;
-  return firstParam(searchParams.plan) === 'pro' ? UPGRADE_PATH : HOME_PATH;
+  return firstParam(searchParams.plan) === 'pro' ? UPGRADE_PATH : DASHBOARD_PATH;
 }
 
 export function buildLoginRedirect(pathname: string, search = ''): string {

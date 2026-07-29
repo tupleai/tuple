@@ -3,7 +3,7 @@ import { Title, Meta } from '@solidjs/meta';
 import { type Component, createSignal, createUniqueId, onCleanup, onMount, Show } from 'solid-js';
 import SocialButtons from '../components/SocialButtons.jsx';
 import { authClient } from '../services/auth-client.js';
-import { appendSearch, getAuthDestination } from '../services/auth-redirects.js';
+import { appendSearch, DASHBOARD_PATH, getAuthDestination } from '../services/auth-redirects.js';
 import { getLastAuthMethod, setLastAuthMethod } from '../services/last-auth-method.js';
 import { checkSocialProviders } from '../services/setup-status.js';
 
@@ -107,7 +107,7 @@ const Login: Component = () => {
       return;
     }
     setLastAuthMethod('email');
-    window.location.href = '/';
+    window.location.href = DASHBOARD_PATH;
   };
 
   const handleResendVerification = async () => {
@@ -130,10 +130,13 @@ const Login: Component = () => {
   return (
     <>
       <Title>Sign In - Tuple</Title>
-      <Meta name="description" content="Sign in to Tuple to monitor your AI harnesses." />
+      <Meta
+        name="description"
+        content="Sign in to sell unused tokens or buy verified model access."
+      />
       <div class="auth-header">
         <h1 class="auth-header__title">Welcome back</h1>
-        <p class="auth-header__subtitle">Take control of your AI harness costs</p>
+        <p class="auth-header__subtitle">Your verified model market is ready</p>
       </div>
 
       <SocialButtons enabledProviders={socialProviders()} lastUsed={lastAuthMethod()} />

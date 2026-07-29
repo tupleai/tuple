@@ -2,6 +2,7 @@ import { useNavigate } from '@solidjs/router';
 import { Title, Meta } from '@solidjs/meta';
 import { type Component, createSignal, onMount, Show } from 'solid-js';
 import { authClient } from '../services/auth-client.js';
+import { DASHBOARD_PATH } from '../services/auth-redirects.js';
 import { checkNeedsSetup, createFirstAdmin } from '../services/setup-status.js';
 
 const Setup: Component = () => {
@@ -50,7 +51,7 @@ const Setup: Component = () => {
         navigate('/login', { replace: true });
         return;
       }
-      window.location.href = '/';
+      window.location.href = DASHBOARD_PATH;
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Setup failed');
     } finally {

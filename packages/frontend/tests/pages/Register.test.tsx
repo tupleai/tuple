@@ -237,7 +237,7 @@ describe('Register', () => {
     render(() => <Register />);
 
     await vi.waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith('/', { replace: true });
+      expect(mockNavigate).toHaveBeenCalledWith('/overview', { replace: true });
     });
   });
 
@@ -264,7 +264,7 @@ describe('Register', () => {
     fireEvent.click(freeCard);
     fireEvent.click(container.querySelector('.plan-picker__cta')!);
 
-    expect(replace).toHaveBeenCalledWith('/');
+    expect(replace).toHaveBeenCalledWith('/overview');
     locationSpy.mockRestore();
   });
 

@@ -36,10 +36,8 @@ const SseConnector: ParentComponent = (props) => {
 const AppInner: ParentComponent = (props) => {
   const location = useLocation();
   const [mobileNavOpen, setMobileNavOpen] = createSignal(false);
-  // The sidebar is global and rendered identically on every authenticated
-  // route. Guest/setup routes never reach this component, so we show the
-  // sidebar everywhere except the root redirect ("/") which navigates away
-  // immediately and needs no nav chrome.
+  // AppInner only mounts for authenticated product routes. Keep the pathname
+  // check defensive in case the authenticated shell is ever mounted at root.
   const showSidebar = () => location.pathname !== '/';
   const { content: rightSidebar } = useRightSidebar();
 
@@ -96,14 +94,18 @@ const AppInner: ParentComponent = (props) => {
 };
 
 const App: ParentComponent = (props) => {
+  const location = useLocation();
+
   return (
-    <AuthGuard>
-      <SseConnector>
-        <RightSidebarProvider>
-          <AppInner>{props.children}</AppInner>
-        </RightSidebarProvider>
-      </SseConnector>
-    </AuthGuard>
+    <Show when={location.pathname !== '/'} fallback={props.children}>
+      <AuthGuard>
+        <SseConnector>
+          <RightSidebarProvider>
+            <AppInner>{props.children}</AppInner>
+          </RightSidebarProvider>
+        </SseConnector>
+      </AuthGuard>
+    </Show>
   );
 };
 

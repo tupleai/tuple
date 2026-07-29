@@ -30,8 +30,8 @@ describe('auth redirect helpers', () => {
     expect(getAuthDestination({ plan: 'pro' })).toBe('/upgrade');
   });
 
-  it('falls back to home without safe redirect or pro intent', () => {
-    expect(getAuthDestination({ redirect: 'https://evil.test' })).toBe('/');
+  it('falls back to the dashboard without safe redirect or pro intent', () => {
+    expect(getAuthDestination({ redirect: 'https://evil.test' })).toBe('/overview');
   });
 
   it('builds encoded login redirects from path and search', () => {

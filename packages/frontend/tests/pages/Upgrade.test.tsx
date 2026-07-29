@@ -139,7 +139,7 @@ describe('Upgrade', () => {
 
     fireEvent.click(await screen.findByText('Back'));
 
-    expect(mockNavigate).toHaveBeenCalledWith('/');
+    expect(mockNavigate).toHaveBeenCalledWith('/overview');
   });
 
   it('continues on Free by navigating to the dashboard', async () => {
@@ -148,7 +148,7 @@ describe('Upgrade', () => {
     const button = await screen.findByText('Use Tuple for free');
     fireEvent.click(button);
 
-    expect(mockNavigate).toHaveBeenCalledWith('/');
+    expect(mockNavigate).toHaveBeenCalledWith('/overview');
   });
 
   it('starts checkout with the current upgrade URL as cancel URL', async () => {
@@ -193,7 +193,7 @@ describe('Upgrade', () => {
     mockGetBillingStatus.mockResolvedValue(disabledStatus);
     render(() => <Upgrade />);
 
-    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/', { replace: true }));
+    await waitFor(() => expect(mockNavigate).toHaveBeenCalledWith('/overview', { replace: true }));
     expect(screen.queryByText('$20')).toBeNull();
   });
 
@@ -219,6 +219,6 @@ describe('Upgrade', () => {
 
     await screen.findByText('Could not load billing status. Please try again.');
     fireEvent.click(screen.getByText('Dashboard'));
-    expect(mockNavigate).toHaveBeenCalledWith('/');
+    expect(mockNavigate).toHaveBeenCalledWith('/overview');
   });
 });
